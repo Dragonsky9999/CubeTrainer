@@ -2,37 +2,37 @@ export class Cubies {
     constructor(){
         this.state = {
             "corner":[
-                {id:0,where:0,pos:[1,1,1],ori:0,faces:["+X","+Y","+Z"],colors:["red","white","green"]},
-                {id:1,where:1,pos:[-1,1,1],ori:0,faces:["-X","+Z","+Y"],colors:["orange","green","white"]},
-                {id:2,where:2,pos:[-1,1,-1],ori:0,faces:["-X","+Y","-Z"],colors:["orange","white","blue"]},
-                {id:3,where:3,pos:[1,1,-1],ori:0,faces:["+X","-Z","+Y"],colors:["red","blue","white"]},
-                {id:4,where:4,pos:[1,-1,1],ori:0,faces:["+X","+Z","-Y"],colors:["red","green","yellow"]},
-                {id:5,where:5,pos:[-1,-1,1],ori:0,faces:["-X","-Y","+Z"],colors:["orange","yellow","green"]},
-                {id:6,where:6,pos:[-1,-1,-1],ori:0,faces:["-X","-Z","-Y"],colors:["orange","blue","yellow"]},
-                {id:7,where:7,pos:[1,-1,-1],ori:0,faces:["+X","-Y","-Z"],colors:["red","yellow","blue"]},
+                {id:0,where:0,pos:[1,1,1],ori:0,faces:["+X","+Y","+Z"],colors:["+X","+Y","+Z"],sticker:true},
+                {id:1,where:1,pos:[-1,1,1],ori:0,faces:["-X","+Z","+Y"],colors:["-X","+Z","+Y"],sticker:true},
+                {id:2,where:2,pos:[-1,1,-1],ori:0,faces:["-X","+Y","-Z"],colors:["-X","+Y","-Z"],sticker:true},
+                {id:3,where:3,pos:[1,1,-1],ori:0,faces:["+X","-Z","+Y"],colors:["+X","-Z","+Y"],sticker:true},
+                {id:4,where:4,pos:[1,-1,1],ori:0,faces:["+X","+Z","-Y"],colors:["+X","+Z","-Y"],sticker:true},
+                {id:5,where:5,pos:[-1,-1,1],ori:0,faces:["-X","-Y","+Z"],colors:["-X","-Y","+Z"],sticker:true},
+                {id:6,where:6,pos:[-1,-1,-1],ori:0,faces:["-X","-Z","-Y"],colors:["-X","-Z","-Y"],sticker:true},
+                {id:7,where:7,pos:[1,-1,-1],ori:0,faces:["+X","-Y","-Z"],colors:["+X","-Y","-Z"],sticker:true},
             ],
             "edge":[
-                {id:0,where:0,pos:[1,1,0],ori:0,faces:["+X","+Y"],colors:["red","white"]},
-                {id:1,where:1,pos:[0,1,1],ori:0,faces:["+Y","+Z"],colors:["white","green"]},
-                {id:2,where:2,pos:[-1,1,0],ori:0,faces:["-X","+Y"],colors:["orange","white"]},
-                {id:3,where:3,pos:[0,1,-1],ori:0,faces:["+Y","-Z"],colors:["white","blue"]},
-                {id:4,where:4,pos:[1,-1,0],ori:0,faces:["+X","-Y"],colors:["red","yellow"]},
-                {id:5,where:5,pos:[0,-1,1],ori:0,faces:["-Y","+Z"],colors:["yellow","green"]},
-                {id:6,where:6,pos:[-1,-1,0],ori:0,faces:["-X","-Y"],colors:["orange","yellow"]},
-                {id:7,where:7,pos:[0,-1,-1],ori:0,faces:["-Y","-Z"],colors:["yellow","blue"]},
-                {id:8,where:4,pos:[1,0,1],ori:0,faces:["+X","+Z"],colors:["red","green"]},
-                {id:9,where:5,pos:[-1,0,1],ori:0,faces:["-X","+Z"],colors:["orange","green"]},
-                {id:10,where:6,pos:[-1,0,-1],ori:0,faces:["-X","-Z"],colors:["orange","blue"]},
-                {id:11,where:7,pos:[1,0,-1],ori:0,faces:["+X","-Z"],colors:["red","blue"]},
+                {id:0,where:0,pos:[1,1,0],ori:0,faces:["+X","+Y"],colors:["+X","+Y"],sticker:true},
+                {id:1,where:1,pos:[0,1,1],ori:0,faces:["+Y","+Z"],colors:["+Y","+Z"],sticker:true},
+                {id:2,where:2,pos:[-1,1,0],ori:0,faces:["-X","+Y"],colors:["-X","+Y"],sticker:true},
+                {id:3,where:3,pos:[0,1,-1],ori:0,faces:["+Y","-Z"],colors:["+Y","-Z"],sticker:true},
+                {id:4,where:4,pos:[1,-1,0],ori:0,faces:["+X","-Y"],colors:["+X","-Y"],sticker:true},
+                {id:5,where:5,pos:[0,-1,1],ori:0,faces:["-Y","+Z"],colors:["-Y","+Z"],sticker:true},
+                {id:6,where:6,pos:[-1,-1,0],ori:0,faces:["-X","-Y"],colors:["-X","-Y"],sticker:true},
+                {id:7,where:7,pos:[0,-1,-1],ori:0,faces:["-Y","-Z"],colors:["-Y","-Z"],sticker:true},
+                {id:8,where:4,pos:[1,0,1],ori:0,faces:["+X","+Z"],colors:["+X","+Z"],sticker:true},
+                {id:9,where:5,pos:[-1,0,1],ori:0,faces:["-X","+Z"],colors:["-X","+Z"],sticker:true},
+                {id:10,where:6,pos:[-1,0,-1],ori:0,faces:["-X","-Z"],colors:["-X","-Z"],sticker:true},
+                {id:11,where:7,pos:[1,0,-1],ori:0,faces:["+X","-Z"],colors:["+X","-Z"],sticker:true},
                 
             ],
             "center":[
-                {id:0,where:0,pos:[1,0,0],ori:0,faces:["+X"],colors:["red"]},
-                {id:1,where:1,pos:[-1,0,0],ori:0,faces:["-X"],colors:["orange"]},
-                {id:2,where:2,pos:[0,1,0],ori:0,faces:["+Y"],colors:["white"]},
-                {id:3,where:3,pos:[0,-1,0],ori:0,faces:["-Y"],colors:["yellow"]},
-                {id:4,where:4,pos:[0,0,1],ori:0,faces:["+Z"],colors:["green"]},
-                {id:5,where:5,pos:[0,0,-1],ori:0,faces:["-Z"],colors:["blue"]},
+                {id:0,where:0,pos:[1,0,0],ori:0,faces:["+X"],colors:["+X"],sticker:true},
+                {id:1,where:1,pos:[-1,0,0],ori:0,faces:["-X"],colors:["-X"],sticker:true},
+                {id:2,where:2,pos:[0,1,0],ori:0,faces:["+Y"],colors:["+Y"],sticker:true},
+                {id:3,where:3,pos:[0,-1,0],ori:0,faces:["-Y"],colors:["-Y"],sticker:true},
+                {id:4,where:4,pos:[0,0,1],ori:0,faces:["+Z"],colors:["+Z"],sticker:true},
+                {id:5,where:5,pos:[0,0,-1],ori:0,faces:["-Z"],colors:["-Z"],sticker:true},
             ],
         }
     }
@@ -48,7 +48,7 @@ export class Cubies {
                 CubieState[n][where].where = i
                 CubieState[n][where].pos =  positions[n][i]
                 CubieState[n][where].faces = Faces[n][i]
-                CubieState[n][where].colors = [...Colors[n][where]]
+                CubieState[n][where].colors = [...Faces[n][where]]
                 if ((n == 0) || (n == 1)) CubieState[n][where].ori = CubeOrientations[n][i]
                 
                 //ori適用

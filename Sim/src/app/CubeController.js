@@ -39,14 +39,4 @@ export class CubeController {
         this.orchestrator.isRunning = false
         this.orchestrator.isProcessing = false
     }
-    resize(container) {
-
-        const width = container.clientWidth
-        const height = container.clientHeight
-
-        this.orchestrator.renderer.renderer.setSize(width, height)
-
-        this.orchestrator.renderer.camera.aspect = width / height
-        this.orchestrator.renderer.camera.updateProjectionMatrix()
-    }
 }

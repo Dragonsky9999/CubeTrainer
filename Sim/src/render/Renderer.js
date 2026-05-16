@@ -18,7 +18,7 @@ export class Renderer {
             0.1,
             1000
         )
-        this.camera.position.set(3, 3, 5)
+        this.camera.position.set(1.49 * 2, 1.49 * 2, 1.49 *2)
 
         // -- light -- //
         const light = new THREE.DirectionalLight(0xffffff, 1.5);
@@ -52,6 +52,32 @@ export class Renderer {
         // -- 初期mesh生成 -- //
         this.Mesh.init()
         this.Mesh.meshes.forEach(mesh => this.scene.add(mesh))
+
+        //音
+        this.sound = new Audio("/sounds/move.m4a")
+
+        // -- resize検知 --//
+        this.initResizeObserver(container)
+    }
+
+    initResizeObserver(container) {
+
+        this.resizeObserver = new ResizeObserver(() => {
+            this.setSize(container)
+        })
+
+        this.resizeObserver.observe(container)
+    }
+
+    setSize(container) {
+
+        const width = container.clientWidth
+        const height = container.clientHeight
+
+        this.renderer.setSize(width, height)
+
+        this.camera.aspect = width / height
+        this.camera.updateProjectionMatrix()
     }
     
     getFrontFace(){
@@ -77,10 +103,9 @@ export class Renderer {
         return new Promise((resolve) => {
 
             // 音
-            const sound = new Audio("/sounds/move.m4a")
-            sound.playbackRate = 0.95 + Math.random() * 0.1
-            sound.currentTime = 0
-            sound.play()
+            this.sound.playbackRate = 0.95 + Math.random() * 0.1
+            this.sound.currentTime = 0
+            this.sound.play()
         
             const group = new THREE.Group()
             this.scene.add(group)
@@ -127,7 +152,6 @@ export class Renderer {
         })
     }
 
-
     // -- loop -- //
     updateRenderer(){
         this.controls.update()
@@ -135,10 +159,13 @@ export class Renderer {
         this.getFrontFace()
     }
 
-    quit(){
+    quit() {
+        this.resizeObserver?.disconnect()
+
         this.renderer.dispose()
-        this.scene.clear()
         this.controls.dispose()
+
+        this.scene.clear()
         this.renderer.domElement.remove()
     }
 }

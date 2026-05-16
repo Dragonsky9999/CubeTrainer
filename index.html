@@ -1,54 +1,15 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ja">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Rubik's Cube Simulator</title>
-    <link rel="stylesheet" href="./src/styles/style.css">
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Cube Trainer</title>
+
+    <link rel="stylesheet" href="./src/css/style.css" />
 </head>
 <body>
-    <div id="sceneContainer" class="hidden"></div>
 
-    <main id="homePage" class="page">
-        <div class="content">
-            <h1>CubeTrainer</h1>
-            <button id="startBtn" class="startBtn">START</button>
-        </div>
-    </main>
-        
-    <main id="menuPage" class="page hidden">
-        <div class="top">
-            <button id="backToHomeBtn" class="backBtn backToHomeBtn">← Back</button>
-            <button id="settings" class="settings">Settings</button>
-        </div>
-
-        <div class="content">
-            <h1>Menu</h1>
-
-            <button id="PllTrainerBtn" class="menuContent">PLL Trainer</button>
-            <button id="freeSimulatorBtn" class="menuContent">Free Simulator</button>
-        </div>
-
-    </main>
-
-    <main id="PLLTrainerPage" class="page hidden">
-        <div class="top">
-            <button class="backBtn backToMenuBtn">← Menu</button>
-            <h1>PLL TRAINER</h1>
-        </div>
-        <div class="content">
-            <div id="trainerCubeArea" class="trainerCubeArea"></div>
-        </div>
-    </main>
-    
-    <main id="freeSimulatorPage" class="page hidden">
-        <div class="top">
-            <button class="backBtn backToMenuBtn">← Menu</button>
-            <h1>FREE SIMULATION</h1>
-        </div>
-    </main>
-
-</body>
+    <div id="app"></div>
 
     <script type="module" src="./src/main.js"></script>
 </body>

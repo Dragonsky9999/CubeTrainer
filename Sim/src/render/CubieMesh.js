@@ -1,7 +1,7 @@
 import * as THREE from 'three'
 import { RoundedBoxGeometry } from 'three/examples/jsm/geometries/RoundedBoxGeometry.js';
 import { Cubies } from '../domain/cube/Cubies.js' 
-import { color } from 'three/tsl'
+import { cubeColors, faceIndexMap } from '../data/data.js'
 
 const cubies = new Cubies()
 
@@ -25,9 +25,11 @@ export class Mesh {
                 // -- color 作成　-- //
                 let colors = [black,black,black,black,black,black]
     
-                cubie.faces.forEach((axis, index) => {
-                    colors[AxisMap[axis]] = colorMap[cubie.colors[index]]
-                });
+                if (cubie.sticker){
+                    cubie.faces.forEach((axis, index) => {
+                        colors[faceIndexMap[axis]] = colorMap[cubie.colors[index]]
+                    });
+                }
     
                 // -- color 貼り付け -- //
                 mesh[0].material = [...colors]
@@ -46,7 +48,7 @@ export class Mesh {
                 const geo = new RoundedBoxGeometry(0.98,0.98,0.98,2,0.1)
     
                 cubie.faces.forEach((axis, i) => {
-                    colors[AxisMap[axis]] = colorMap[cubie.colors[i]]
+                    colors[faceIndexMap[axis]] = colorMap[cubie.colors[i]]
                 });
                 const mat = [...colors]
                 const mesh = new THREE.Mesh(geo,mat)
@@ -60,30 +62,16 @@ export class Mesh {
 
 const state = [cubies.state.corner,cubies.state.edge,cubies.state.center]
 
-// const black = new THREE.MeshBasicMaterial({ color: "black" })
-// const red = new THREE.MeshBasicMaterial({ color: "red" })
-// const orange = new THREE.MeshBasicMaterial({ color: "orange" })
-// const white = new THREE.MeshBasicMaterial({ color: "white" })
-// const yellow = new THREE.MeshBasicMaterial({ color: "yellow" })
-// const green = new THREE.MeshBasicMaterial({ color: "green" })
-// const blue = new THREE.MeshBasicMaterial({ color: "blue" })
-
-const black = new THREE.MeshStandardMaterial({ color: 0x111111, roughness: 0.6 })
-const red = new THREE.MeshStandardMaterial({ color: 0xcc4444, roughness: 0.5 })
-const orange = new THREE.MeshStandardMaterial({ color: 0xdd8844, roughness: 0.5 })
-const white = new THREE.MeshStandardMaterial({ color: 0xf0f0f0, roughness: 0.4 })
-const yellow = new THREE.MeshStandardMaterial({ color: 0xdddd55, roughness: 0.5 })
-const green = new THREE.MeshStandardMaterial({ color: 0x44aa44, roughness: 0.5 })
-const blue = new THREE.MeshStandardMaterial({ color: 0x4466cc, roughness: 0.5 })
-
-const AxisMap = {
-    "+X":0,"-X":1,
-    "+Y":2,"-Y":3,
-    "+Z":4,"-Z":5
-}
+const black = new THREE.MeshStandardMaterial({ color: "black", roughness: 0.6 })
+const colorPX = new THREE.MeshStandardMaterial({ color: cubeColors[0], roughness: 0.5 })     //+X
+const colorNX = new THREE.MeshStandardMaterial({ color: cubeColors[1], roughness: 0.5 })  //-X
+const colorPY = new THREE.MeshStandardMaterial({ color: cubeColors[2], roughness: 0.4 })   //+Y
+const colorNY = new THREE.MeshStandardMaterial({ color: cubeColors[3], roughness: 0.5 })  //-Y
+const colorPZ = new THREE.MeshStandardMaterial({ color: cubeColors[4], roughness: 0.5 })   //+Z
+const colorNZ = new THREE.MeshStandardMaterial({ color: cubeColors[5], roughness: 0.5 })    //-Z
 
 const colorMap = {
-    "red": red, "orange": orange,
-    "white": white, "yellow": yellow,
-    "green": green, "blue": blue,
+    "+X": colorPX, "-X": colorNX,
+    "+Y": colorPY, "-Y": colorNY,
+    "+Z": colorPZ, "-Z": colorNZ,
 }

@@ -59,9 +59,14 @@ export class MoveOrchestrator {
 
     applyMove(move){
         this.cube.applyMove(move)
+        
         this.cube.Cubies.update(this.cube)
-
+        
         this.renderer.Mesh.update(this.cube.Cubies)
+    }
+
+    applyMoves(moves){
+        moves.forEach(move => this.applyMove(move))
     }
 
     scramble(){
@@ -73,11 +78,11 @@ export class MoveOrchestrator {
             "R","R'","R2",
             "L","L'","L2",
         ]
-
+        
         const scramble = []
-
+        
         let prevFace = null
-
+        
         for (let i = 0; i < 20; i++) {
             
             const candidates = moves.filter(move => {
@@ -91,42 +96,41 @@ export class MoveOrchestrator {
             
             prevFace = move[0]
         }
-
+        
         scramble.forEach(m => this.enqueue(m))
         console.log("scramble: ",scramble.join(" "))
     }
-
+    
     loop(){
         if (!this.isRunning) return
         this.renderer.updateRenderer(this.isRunning)
-
+        
         this.frontIndex = this.renderer.bestFace
         this.face = this.cube.state.CenterP[this.frontIndex]
         if (this.frontFaceIndicator) updateFrontFace(this.face,this.frontFaceIndicator)
-
-        requestAnimationFrame(() => this.loop())
-    }
-
-    undo(){
-        const move = this.history.pop()
-        if (!move) return
-
-        let suffix = move[1]
-        suffix = flipSuffix(suffix)
-
-        this.redoStack.push(move)
-
-        const convertedMove = !suffix ? move[0] : move[0] + suffix
-        this.enqueue(convertedMove, {recordHistory:false})
-    }
-
-    redo(){
-        const move = this.redoStack.pop()
+            
+            requestAnimationFrame(() => this.loop())
+        }
+        
+        undo(){
+            const move = this.history.pop()
+            if (!move) return
+            
+            let suffix = move[1]
+            suffix = flipSuffix(suffix)
+            
+            this.redoStack.push(move)
+            
+            const convertedMove = !suffix ? move[0] : move[0] + suffix
+            this.enqueue(convertedMove, {recordHistory:false})
+        }
+        
+        redo(){
+            const move = this.redoStack.pop()
         if (!move) return
         this.enqueue(move, {clearRedo:false})
     }
     
-
     reset(){
         this.queue = []
         this.history = []
