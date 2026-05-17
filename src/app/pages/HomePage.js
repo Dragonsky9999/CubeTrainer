@@ -14,7 +14,7 @@ export class HomePage {
             <div class="glass card hero-card">
                 <h1 class="title">Cube Trainer</h1>
                 <p class="subtitle">
-                    PLL Training & Free Simulation
+                    Train Smarter, Solve Faster
                 </p>
 
                 <button class="main-button" id="startButton">

@@ -1,4 +1,4 @@
-import { CubeController } from "../../../Sim/src/app/index.js"
+import { Sim } from "../../../Sim/src/app/index.js"
 import { cubeColors, faceIndexMap } from "../../../Sim/src/data/data.js"
 import { PllAlgs } from "../../../Sim/src/domain/index.js"
 
@@ -10,7 +10,7 @@ export class PLLTrainerPage {
         this.loop = new Loop((time) => {
 
             this.timer.update()
-            this.cells.update(this.cubeController.orchestrator.frontIndex)
+            this.cells.update(this.Sim.frontIndex)
 
             this.timerEl.innerHTML = this.timer.format()
         })
@@ -97,6 +97,15 @@ export class PLLTrainerPage {
         this.cells = new Cells(this.element)
         this.cells.init(this.element)
 
+        this.cells.cellMap = new Map()
+
+        const dirs = ["top","left","right","bottom"]
+        dirs.forEach(dir => {
+            this.cells[dir].forEach(cell => {
+                this.cells.cellMap.set(cell.dom, cell)
+            })
+        })
+
         this.setupCube()
         this.setupEvents()
     }
@@ -136,21 +145,32 @@ export class PLLTrainerPage {
             dirs.forEach(dir => {
                 this.cells[dir].forEach(c => {
                     c.dom.addEventListener("click", () => {
-                        this.changeColor(c)
+                        this.cells.changeColor(c)
                     })
                 })
             })
+
+        this.element.addEventListener("wheel", (e) => {
+            const target = this.cells.cellMap.get(e.target)
+            if (target){
+                e.preventDefault()
+                this.cells.changeColor(target,{dir:Math.sign(e.deltaY)})
+            }
+            
+        }, {passive:false})
     }
 
     setupCube() {
 
         const sceneContainer = this.element.querySelector("#pllCube")
 
-        this.cubeController = new CubeController(sceneContainer, {RenderFrontFace:false})
+        this.Sim = new Sim(sceneContainer, {renderFrontFace:false})
 
-        this.cubeController.start()
+        this.Sim.enableKeyboard = false
+        this.Sim.loop.start()
 
-        const cubies = this.cubeController.orchestrator.cube.Cubies
+        const cubies = this.Sim.cube.Cubies
+
         const types = {"corner":8,"edge":12,"center":6}
         for (const [type, length] of Object.entries(types)){
             for (let i=0;i<length;i++){
@@ -168,17 +188,17 @@ export class PLLTrainerPage {
         this.cells.reset()
         
         const AUF = ["U","U'","U2",""][Math.floor(Math.random() * 4)]
-        if (AUF != "") this.cubeController.orchestrator.applyMove(AUF)
+        if (AUF != "") this.Sim.applyMove(AUF)
             
-            const tmp = PLLIndex[Math.floor(Math.random() * 21)]
-            const PLL = PllAlgs[tmp][0]
-            this.cubeController.orchestrator.reset()
-            this.cubeController.orchestrator.applyMoves(PLL)
-            this.cubeController.orchestrator.renderer.camera.position.set(1.49 * 2, 1.49 * 2, 1.49 *2)
+        const tmp = PLLIndex[Math.floor(Math.random() * 21)]
+        const PLL = PllAlgs[tmp][0]
+        this.Sim.reset()
+        this.Sim.applyMoves(PLL)
+        this.Sim.renderer.camera.position.set(1.49 * 2, 1.49 * 2, 1.49 *2)
  
         this.timer.reset()
         this.timer.start()
-        this.cells.setCorrectColor(this.cubeController.orchestrator.cube)
+        this.cells.setCorrectColor(this.Sim.cube)
     }
 
     submit(){

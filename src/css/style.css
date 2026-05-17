@@ -4,7 +4,8 @@
     box-sizing: border-box;
 }
 
-html,body {
+html,
+body {
     touch-action: none;
 }
 
@@ -21,14 +22,19 @@ body {
 
     min-height: 100vh;
 
-    overflow-y: auto;
     overflow-x: hidden;
+    overflow-y: auto;
 }
 
 #app {
+
     width: 100dvw;
     height: 100dvh;
 }
+
+/* =========================
+   Layout
+========================= */
 
 .page {
 
@@ -38,6 +44,44 @@ body {
     display: flex;
     flex-direction: column;
 }
+
+.content {
+
+    flex: 1;
+    min-height: 0;
+
+    display: grid;
+
+    grid-template-columns: 1fr 1fr;
+
+    gap: 16px;
+
+    padding: 16px;
+}
+
+.home-page,
+.menu-page {
+
+    min-height: 0;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.free-layout {
+
+    width: 100%;
+    height: 100%;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+/* =========================
+   Glass System
+========================= */
 
 .glass {
 
@@ -53,40 +97,115 @@ body {
 
 .card {
 
-    border-radius: 28px;
-
     padding: 40px;
+
+    border-radius: 28px;
 }
 
-.home-page,
-.menu-page {
-
-    min-height: 0;
-    justify-content: center;
-    align-items: center;
-}
-
-.hero-card,
-.menu-card {
-
-    width: 420px;
-
-    display: flex;
-    flex-direction: column;
-    gap: 24px;
-
-    align-items: center;
-}
+/* =========================
+   Typography
+========================= */
 
 .title {
+
     font-size: 48px;
     font-weight: bold;
 }
 
 .subtitle {
+
     opacity: 0.7;
 }
 
+/* =========================
+   Shared Button Style
+========================= */
+
+.main-button,
+.menu-button,
+.submit-button,
+.sim-button,
+.icon-button,
+.header button,
+.pll-buttons button {
+
+    border: 1px solid rgba(255,255,255,0.12);
+
+    background:
+        linear-gradient(
+            180deg,
+            rgba(255,255,255,0.16),
+            rgba(255,255,255,0.06)
+        );
+
+    color: white;
+
+    backdrop-filter: blur(18px);
+
+    box-shadow:
+        0 8px 24px rgba(0,0,0,0.25),
+        inset 0 1px 0 rgba(255,255,255,0.15);
+
+    cursor: pointer;
+
+    transition:
+        transform 0.18s ease,
+        background 0.18s ease,
+        box-shadow 0.18s ease;
+}
+
+.main-button:hover,
+.menu-button:hover,
+.submit-button:hover,
+.sim-button:hover,
+.icon-button:hover,
+.header button:hover,
+.pll-buttons button:hover {
+
+    transform:
+        translateY(-3px)
+        scale(1.02);
+
+    background:
+        linear-gradient(
+            180deg,
+            rgba(255,255,255,0.22),
+            rgba(255,255,255,0.08)
+        );
+
+    box-shadow:
+        0 14px 32px rgba(0,0,0,0.32),
+        inset 0 1px 0 rgba(255,255,255,0.2);
+}
+
+.main-button:active,
+.menu-button:active,
+.submit-button:active,
+.sim-button:active,
+.icon-button:active,
+.header button:active,
+.pll-buttons button:active {
+
+    transform:
+        translateY(1px)
+        scale(0.98);
+}
+
+/* =========================
+   Main / Menu
+========================= */
+
+.hero-card,
+.menu-card {
+
+    width: min(420px, 92vw);
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    gap: 24px;
+}
 .main-button,
 .menu-button,
 .submit-button {
@@ -95,90 +214,61 @@ body {
 
     padding: 16px;
 
-    border: none;
-
-    border-radius: 18px;
-
-    background: rgba(255,255,255,0.12);
-
-    color: white;
+    border-radius: 20px;
 
     font-size: 18px;
-
-    cursor: pointer;
-
-    transition: 0.2s;
 }
 
-.main-button:hover,
-.menu-button:hover,
-.submit-button:hover {
-
-    transform: translateY(-2px);
-
-    background: rgba(255,255,255,0.2);
-}
+/* =========================
+   Header
+========================= */
 
 .header {
 
-    margin: 16px;
+    margin: 10px 12px;
 
-    padding: 16px 24px;
+    padding: 10px 16px;
 
     border-radius: 24px;
 
     display: flex;
     justify-content: space-between;
     align-items: center;
+
+    gap: 12px;
+}
+
+.header h1,
+.header .title {
+
+    font-size: clamp(20px, 5vw, 32px);
+
+    white-space: nowrap;
+
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
 .header button {
 
-    width: 48px;
-    height: 48px;
+    width: 42px;
+    height: 42px;
 
-    font-size: 25px;
+    border-radius: 18px;
 
-    border: none;
-
-    border-radius: 16px;
-
-    background: rgba(255,255,255,0.08);
-
-    color: white;
-
-    cursor: pointer;
+    font-size: 20px;
 }
 
-.header button:hover {
-
-    cursor: pointer;
-    transform: 
-        translateY(-2px);
-    background: rgba(255,255,255,0.09);
-}
-
-.content {
-
-    min-height: 0;
-    
-    flex: 1;
-
-    display: grid;
-
-    grid-template-columns: 1fr 1fr;
-
-    gap: 16px;
-
-    padding: 16px;
-}
+/* =========================
+   Trainer Layout
+========================= */
 
 .problem-area,
 .answer-area {
 
-    border-radius: 28px;
-
     padding: 24px;
+
+    border-radius: 28px;
 
     display: flex;
     flex-direction: column;
@@ -189,11 +279,14 @@ body {
 .timer {
 
     font-size: 48px;
+    font-weight: bold;
 
     text-align: center;
-
-    font-weight: bold;
 }
+
+/* =========================
+   3D Cube
+========================= */
 
 .cube-container {
 
@@ -201,95 +294,165 @@ body {
 
     min-height: 0;
 
-    border-radius: 24px;
-
     overflow: hidden;
+
+    border-radius: 24px;
 
     background: rgba(0,0,0,0.2);
 }
 
-.twoDCube {
-    height: min(55vh, 400px);
+.simulator-container {
+
+    width: 100%;
+    height: 100%;
+
+    overflow: hidden;
+
+    border-radius: 28px;
+}
+
+.simulator-container-wrapper {
+
     position: relative;
+
+    width: min(95vw, 1100px);
+    height: min(78vh, 800px);
+
+    padding: 14px;
+
+    overflow: hidden;
+
+    border-radius: 36px;
+}
+
+.frontFaceIndicator {
+
+    position: absolute;
+
+    top: 5%;
+    left: 5%;
+
+    width: 8%;
+    height: 15%;
+
+    border-radius: 10%;
+}
+
+/* =========================
+   2D Cube
+========================= */
+
+.twoDCube {
+
+    --cube-size: min(15vw, 60px);
+    --gap: calc(var(--cube-size) * 0.1);
+
+    height: min(55vh, 400px);
+
+    position: relative;
+
     transform: rotate(45deg);
 }
 
 .upper-face-grid {
 
-    transform: translate(-50%, -50%);
     position: absolute;
+
     top: 50%;
     left: 50%;
+
+    transform: translate(-50%, -50%);
+
     display: grid;
-    
-    grid-template-columns: repeat(3, 60px);
 
-    gap: 6px;
+    grid-template-columns: repeat(3, var(--cube-size));
 
-    justify-content: center;
+    gap: var(--gap);
 }
 
 .cell {
 
-    width: 60px;
-    height: 60px;
+    width: var(--cube-size);
+    height: var(--cube-size);
 
-    border-radius: 10px;
+    border-radius: calc(var(--cube-size) * 0.16);
 
     background: rgba(255,255,255,0.1);
 }
 
+/* =========================
+   Side Strips
+========================= */
+
 .side-strips {
+
     display: flex;
     justify-content: center;
+
     gap: 12px;
+
     cursor: pointer;
 }
 
 .strip {
 
-    width: 55px;
-    height: 55px;
-    
-    border-radius: 12px;
-    
+    width: calc(var(--cube-size) * 0.92);
+    height: calc(var(--cube-size) * 0.92);
+
+    border-radius: calc(var(--cube-size) * 0.2);
+
     background: rgba(255,255,255,0.12);
-    
-    user-select: none;
-    -webkit-user-select: none; /* Safari */
-    -ms-user-select: none;     /* IE */
-    user-select: none;
+}
+
+.top-stripes,
+.bottom-stripes,
+.left-stripes,
+.right-stripes {
+
+    position: absolute;
+
+    transform: translate(-50%, -50%);
 }
 
 .top-stripes {
-    transform: translate(-50%, -50%);
-    position: absolute;
-    left: calc(50%);
-    top: calc(50% - 132px);
+    left: 50%;
+    top: calc(
+        50% - (var(--cube-size) * 2.2)
+    );
 }
 
 .bottom-stripes {
-    transform: translate(-50%, -50%);
-    position: absolute;
-    left: calc(50%);
-    top: calc(50% + 132px);
+    left: 50%;
+    top: calc(
+        50% + (var(--cube-size) * 2.2)
+    );
 }
 
 .left-stripes {
-    transform: translate(-50%, -50%);
+
+    left: calc(
+        50% - (var(--cube-size) * 2.2)
+    );
+
+    top: 50%;
+
     flex-direction: column;
-    position: absolute;
-    left: calc(50% - 132px);
-    top: calc(50%)
 }
 
 .right-stripes {
-    transform: translate(-50%, -50%);
+
+    left: calc(
+        50% + (var(--cube-size) * 2.2)
+    );
+
+    top: 50%;
+
     flex-direction: column;
-    position: absolute;
-    left: calc(50% + 132px);
-    top: calc(50%)
 }
+
+/* =========================
+   PLL Buttons
+========================= */
 
 .pll-buttons {
 
@@ -304,65 +467,18 @@ body {
 
     padding: 14px;
 
-    border: none;
-
-    border-radius: 14px;
-
-    background: rgba(255,255,255,0.08);
-
-    color: white;
-
-    cursor: pointer;
+    border-radius: 16px;
 }
+
+/* =========================
+   Free Simulator
+========================= */
 
 .free-content {
 
     flex: 1;
 
     padding: 16px;
-}
-
-.simulator-container {
-
-    width: 100%;
-    height: 100%;
-
-    border-radius: 28px;
-
-    overflow: hidden;
-}
-
-.frontFaceIndicator {
-  position: absolute;
-  top: 5%;
-  left: 5%;
-  width: 8%;
-  height: 15%;
-  border-radius: 10%;
-}
-
-.free-layout {
-
-    width: 100%;
-    height: 100%;
-
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
-
-.simulator-container-wrapper {
-
-    position: relative;
-
-    width: min(95vw, 1100px);
-    height: min(78vh, 800px);
-
-    padding: 14px;
-
-    border-radius: 36px;
-
-    overflow: hidden;
 }
 
 .control-overlay {
@@ -391,11 +507,7 @@ body {
     pointer-events: auto;
 }
 
-.left-controls {
-
-    align-items: center;
-}
-
+.left-controls,
 .right-controls {
 
     align-items: center;
@@ -405,31 +517,10 @@ body {
 
     padding: 16px 24px;
 
-    border: none;
-
-    border-radius: 18px;
-
-    background: rgba(255,255,255,0.12);
-
-    color: white;
+    border-radius: 22px;
 
     font-size: 16px;
     font-weight: 600;
-
-    backdrop-filter: blur(12px);
-
-    cursor: pointer;
-
-    transition:
-        transform 0.15s,
-        background 0.15s;
-}
-
-.sim-button:hover {
-
-    transform: translateY(-2px);
-
-    background: rgba(255,255,255,0.2);
 }
 
 .icon-button {
@@ -437,41 +528,34 @@ body {
     width: 62px;
     height: 62px;
 
-    border: none;
-
-    border-radius: 20px;
-
-    background: rgba(255,255,255,0.12);
-
-    color: white;
+    border-radius: 24px;
 
     font-size: 26px;
-
-    backdrop-filter: blur(12px);
-
-    cursor: pointer;
-
-    transition:
-        transform 0.15s,
-        background 0.15s;
-}
-
-.icon-button:hover {
-
-    transform: translateY(-2px);
-
-    background: rgba(255,255,255,0.2);
 }
 
 .stop-button {
 
-    background: rgba(255,80,80,0.18);
+    background:
+        linear-gradient(
+            180deg,
+            rgba(255,120,120,0.22),
+            rgba(255,80,80,0.12)
+        );
 }
 
 .stop-button:hover {
 
-    background: rgba(255,80,80,0.28);
+    background:
+        linear-gradient(
+            180deg,
+            rgba(255,140,140,0.28),
+            rgba(255,90,90,0.16)
+        );
 }
+
+/* =========================
+   Responsive
+========================= */
 
 @media (max-width: 700px) {
 
@@ -504,10 +588,42 @@ body {
 @media (max-width: 500px) {
 
     .content {
+
         grid-template-columns: 1fr;
     }
 
     .cube-container {
+
         min-height: 300px;
+    }
+
+    .header {
+
+        margin: 8px;
+
+        padding: 8px 12px;
+    }
+
+    .header button {
+
+        width: 36px;
+        height: 36px;
+
+        font-size: 18px;
+    }
+
+    .card {
+
+        padding: 28px 22px;
+    }
+
+    .title {
+
+        font-size: 36px;
+    }
+
+    .subtitle {
+
+        text-align: center;
     }
 }

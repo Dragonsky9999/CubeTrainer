@@ -1,4 +1,4 @@
-import { CubeController } from "../../../Sim/src/app/index.js"
+import { Sim } from "../../../Sim/src/app/index.js"
 
 export class FreeSimulatorPage {
 
@@ -81,13 +81,13 @@ export class FreeSimulatorPage {
     }  
 
     activate(){
-        this.cubeController.orchestrator.reset()
-        this.cubeController.enableKeyboard = true
+        this.Sim.reset()
+        this.Sim.enableKeyboard = true
     }
 
     deactivate(){
-        this.cubeController.orchestrator.reset()
-        this.cubeController.enableKeyboard = false
+        this.Sim.reset()
+        this.Sim.enableKeyboard = false
     }
     
     setupEvent(){
@@ -98,26 +98,23 @@ export class FreeSimulatorPage {
             })
 
         this.element.querySelector("#resetButton").addEventListener("click", () => {
-            this.cubeController.reset()
+            this.Sim.reset()
         })
 
         this.element.querySelector("#scrambleButton").addEventListener("click", () => {
-            this.cubeController.orchestrator.scramble()
+            this.Sim.scramble()
         })
 
         this.element.querySelector("#undoButton").addEventListener("click", () => {
-            this.cubeController.orchestrator.undo()
+            this.Sim.undo()
         })
         
         this.element.querySelector("#stopButton").addEventListener("click", () => {
-            this.cubeController.orchestrator.isProcessing = !this.cubeController.orchestrator.isProcessing
-            this.cubeController.orchestrator.processQueue()
-            if (!this.cubeController.orchestrator.isAnimating) this.cubeController.orchestrator.isProcessing = true
-            
+            this.Sim.stop()
         })
 
         this.element.querySelector("#redoButton").addEventListener("click", () => {
-            this.cubeController.orchestrator.redo()
+            this.Sim.redo()
         })
     }
 
@@ -125,11 +122,10 @@ export class FreeSimulatorPage {
 
         const sceneContainer = this.element.querySelector("#freeCube")
 
-        this.cubeController = new CubeController(sceneContainer)
+        this.Sim = new Sim(sceneContainer)
 
-        this.cubeController.start()
-        this.cubeController.orchestrator.applyMove("z")
-        this.cubeController.orchestrator.applyMove("z")
+        this.Sim.loop.start()
+        this.Sim.applyMove("z")
+        this.Sim.applyMove("z")
     }
-
 }
