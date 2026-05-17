@@ -7,16 +7,10 @@ export class PLLTrainerPage {
     constructor(pageManager) {
         this.pageManager = pageManager
 
-        this.cells = {
-            top:[],left:[],right:[],bottom:[],center:[]
-        }
-
-        this.correctState = null
-        this.result = null
-
         this.loop = new Loop((time) => {
 
             this.timer.update()
+            this.cells.update(this.cubeController.orchestrator.frontIndex)
 
             this.timerEl.innerHTML = this.timer.format()
         })
@@ -92,7 +86,6 @@ export class PLLTrainerPage {
                 </section>
             </main>
         `
-        
 
         return this.element
     }
@@ -100,13 +93,15 @@ export class PLLTrainerPage {
     mount(){
         this.timer = new Timer()
         this.timerEl = this.element.querySelector(".timer")
-        this.initCells()
+        
+        this.cells = new Cells(this.element)
+        this.cells.init(this.element)
+
         this.setupCube()
         this.setupEvents()
     }
     
     activate() {
-        this.timer.reset()
         this.nextProblem()
         this.loop.start()
     }
@@ -151,10 +146,7 @@ export class PLLTrainerPage {
 
         const sceneContainer = this.element.querySelector("#pllCube")
 
-        this.cubeController = new CubeController(sceneContainer, {
-            enableKeyboard: false,
-            renderFrontFace: false,
-        })
+        this.cubeController = new CubeController(sceneContainer, {RenderFrontFace:false})
 
         this.cubeController.start()
 
@@ -171,60 +163,9 @@ export class PLLTrainerPage {
         }    
         cubies.state.center[2].sticker = true
     }
-    
-    initCells(){
-        const dirs = ["top","left","right","bottom","center"]
-        dirs.forEach(dir => {
-            const doms = this.element.querySelectorAll(`.${dir}-cell`)
-            this.cells[dir] = Array.from(doms).map((dom,i) => new Cell(dom,i))
-        })
-
-        this.cells.center.forEach(centerCell => {
-            centerCell.setUserColor(toHexColor(cubeColors[2]))
-            centerCell.setCorrectColor(toHexColor(cubeColors[2]))
-        })
-    }
-    
-    updateCells(){
-        const cubeState = this.cubeController.orchestrator.cube.state
-        const cubieState = this.cubeController.orchestrator.cube.Cubies.state
-        
-        for (let i=0;i<3;i++) this.cells["top"][i].setCorrectColor([faceToColors[cubieState.corner[cubeState.CP[2]].colors[2]],faceToColors[cubieState.edge[cubeState.EP[3]].colors[1]],faceToColors[cubieState.corner[cubeState.CP[3]].colors[1]]][i])
-        for (let i=0;i<3;i++) this.cells["left"][i].setCorrectColor([faceToColors[cubieState.corner[cubeState.CP[2]].colors[0]],faceToColors[cubieState.edge[cubeState.EP[2]].colors[0]],faceToColors[cubieState.corner[cubeState.CP[1]].colors[0]]][i])
-        for (let i=0;i<3;i++) this.cells["right"][i].setCorrectColor([faceToColors[cubieState.corner[cubeState.CP[3]].colors[0]],faceToColors[cubieState.edge[cubeState.EP[0]].colors[0]],faceToColors[cubieState.corner[cubeState.CP[0]].colors[0]]][i])
-        for (let i=0;i<3;i++) this.cells["bottom"][i].setCorrectColor([faceToColors[cubieState.corner[cubeState.CP[1]].colors[1]],faceToColors[cubieState.edge[cubeState.EP[1]].colors[1]],faceToColors[cubieState.corner[cubeState.CP[0]].colors[2]]][i])
-    }
-
-    changeColor(cell, { dir = 1 } = {}) {
-        if (cell.isfinished) return
-        cell.dom.textContent = ""
-
-        const sideIndex = [4, 0, 5, 1]
-        const sideColors = sideIndex.map(i => toHexColor(cubeColors[i]))
-
-        if (!cell.userColor) {
-                const first = dir === 1 ? 0 : 3
-                cell.setUserColor(sideColors[first])
-                return
-            }
-            
-            let i = sideColors.indexOf(cell.userColor)
-            
-            if (i === -1) i = 0  // 保険
-            
-            const next = (i + dir + 4) % 4
-            
-            cell.setUserColor(sideColors[next])
-        }
-    
+ 
     nextProblem(){
-        const dirs = ["top","left","right","bottom"]
-        dirs.forEach(dir => {
-            this.cells[dir].forEach(cell => {
-                cell.reset()
-            })
-        })
-        
+        this.cells.reset()
         
         const AUF = ["U","U'","U2",""][Math.floor(Math.random() * 4)]
         if (AUF != "") this.cubeController.orchestrator.applyMove(AUF)
@@ -235,10 +176,9 @@ export class PLLTrainerPage {
             this.cubeController.orchestrator.applyMoves(PLL)
             this.cubeController.orchestrator.renderer.camera.position.set(1.49 * 2, 1.49 * 2, 1.49 *2)
  
-        
         this.timer.reset()
         this.timer.start()
-        this.updateCells()
+        this.cells.setCorrectColor(this.cubeController.orchestrator.cube)
     }
 
     submit(){
@@ -281,20 +221,13 @@ export class PLLTrainerPage {
             this.timer.stop()
             setTimeout(() => {
                 this.nextProblem()
-            }, 3000);
+            }, 2000);
         }
     }
 }
 
 function toHexColor(num) {
     return "#" + num.toString(16).padStart(6, "0")
-}
-
-const faceToSideCells = {
-    4:"bottom",
-    0:"right",
-    5:"top",
-    1:"left",
 }
 
 const faceToColors = {
@@ -327,6 +260,93 @@ const PLLIndex = {
     20:"Gd",
 }
 
+class Cells {
+    constructor(element){
+        this.element = element
+
+        this.top = []
+        this.left = []
+        this.right = []
+        this.bottom = []
+        this.center = []
+    }
+
+    init(){
+        const dirs = ["top","left","right","bottom","center"]
+        dirs.forEach(dir => {
+            const doms = this.element.querySelectorAll(`.${dir}-cell`)
+            this[dir] = Array.from(doms).map((dom,i) => new Cell(dom,i))
+        })
+
+        this.center.forEach(centerCell => {
+            centerCell.setUserColor(toHexColor(cubeColors[2]))
+            centerCell.setCorrectColor(toHexColor(cubeColors[2]))
+        })
+    }
+
+    setCorrectColor(cube){
+        const cubeState = cube.state
+        const cubieState = cube.Cubies.state
+        
+        for (let i=0;i<3;i++) this["top"][i].setCorrectColor([faceToColors[cubieState.corner[cubeState.CP[2]].colors[2]],faceToColors[cubieState.edge[cubeState.EP[3]].colors[1]],faceToColors[cubieState.corner[cubeState.CP[3]].colors[1]]][i])
+        for (let i=0;i<3;i++) this["left"][i].setCorrectColor([faceToColors[cubieState.corner[cubeState.CP[2]].colors[0]],faceToColors[cubieState.edge[cubeState.EP[2]].colors[0]],faceToColors[cubieState.corner[cubeState.CP[1]].colors[0]]][i])
+        for (let i=0;i<3;i++) this["right"][i].setCorrectColor([faceToColors[cubieState.corner[cubeState.CP[3]].colors[0]],faceToColors[cubieState.edge[cubeState.EP[0]].colors[0]],faceToColors[cubieState.corner[cubeState.CP[0]].colors[0]]][i])
+        for (let i=0;i<3;i++) this["bottom"][i].setCorrectColor([faceToColors[cubieState.corner[cubeState.CP[1]].colors[1]],faceToColors[cubieState.edge[cubeState.EP[1]].colors[1]],faceToColors[cubieState.corner[cubeState.CP[0]].colors[2]]][i])
+
+        for (let i=0; i<3;i++){
+            this["right"][i].isopen = true
+            this["bottom"][i].isopen = true
+        }
+    }
+
+    reset(){
+        const dirs = ["top","left","right","bottom"]
+        dirs.forEach(dir => {
+            this[dir].forEach(cell => {
+                cell.reset()
+            })
+        })
+    }
+
+    update(frontIndex){
+        const dirs = ["top","left","right","bottom"]
+        dirs.forEach(dir => {
+            this[dir].forEach(cell => {
+                if (cell.isopen) cell.setUserColor(cell.correctColor)
+            })
+        })
+
+        const faceToSideCells = {4:"bottom",0:"right",5:"top",1:"left"}
+        const faceIndex = frontIndex
+        this[faceToSideCells[faceIndex]].forEach(cell => {
+            if (cell.isopen) return
+            cell.isopen = true
+        })        
+    }
+    
+    changeColor(cell, { dir = 1 } = {}) {
+        if (cell.isfinished) return
+        cell.dom.textContent = ""
+
+        const sideIndex = [4, 0, 5, 1]
+        const sideColors = sideIndex.map(i => toHexColor(cubeColors[i]))
+
+        if (!cell.userColor) {
+                const first = dir === 1 ? 0 : 3
+                cell.setUserColor(sideColors[first])
+                return
+            }
+            
+            let i = sideColors.indexOf(cell.userColor)
+            
+            if (i === -1) i = 0  // 保険
+            
+            const next = (i + dir + 4) % 4
+            
+            cell.setUserColor(sideColors[next])
+        }
+    
+}
 
 class Cell{
     constructor(dom, index){
@@ -437,7 +457,6 @@ class Timer {
 
     update() {
         if (!this.running) return
-        console.log(this.time)
 
         this.elapsed = this.time - this.startTime
         this.time = performance.now()

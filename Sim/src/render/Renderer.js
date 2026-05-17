@@ -54,8 +54,8 @@ export class Renderer {
         this.Mesh.meshes.forEach(mesh => this.scene.add(mesh))
 
         //音
-        this.sound = new Audio("/sounds/move.m4a")
-
+        this.sound = new Audio(`${import.meta.env.BASE_URL}sounds/move.m4a`)
+        
         // -- resize検知 --//
         this.initResizeObserver(container)
     }

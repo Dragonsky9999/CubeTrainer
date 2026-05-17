@@ -1,0 +1,337 @@
+html, body {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  height: 100vh;
+  display: flex;
+    flex-wrap: wrap;
+
+  justify-content: center;
+}
+
+.sceneContainerParents {
+  width: 90%;
+  height: 95%;
+  margin: 10px 0;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  background-color:coral; 
+}
+
+.sceneContainer {
+  position: relative;
+  display: flex;
+  width: 100%;
+  height: 80%;
+  margin: 10px;
+  justify-content: center;
+  background: transparent;
+  background-color: black;
+}
+
+.canvas {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  background: transparent;
+  z-index: 10;
+}
+
+.frontFaceIndicator {
+  position: absolute;
+  top: 5%;
+  left: 5%;
+  width: 8%;
+  height: 15%;
+  border-radius: 10%;
+}
+
+button {
+    margin: 3px 8px;
+    padding: 12px 24px;
+    border: none;
+    border-radius: 20%;
+    background-color: royalblue;
+    color: white;
+    font-size: 16px;
+    cursor: pointer;
+    box-shadow: 0 2px 10px rgba(256,256,256,1);
+}
+
+button:hover {
+    transform: 
+      scale(1.05)
+      translateY(-1px);
+    border-radius: 25%;
+    transition: 0.2s;
+    opacity: 0.9;
+}
+
+button:active {
+    transform: scale(0.95)
+    translateY(3px);
+}
+
+
+.guide {
+    width: min(800px, 90%);
+
+    margin: 40px auto;
+
+    display: flex;
+
+    flex-direction: column;
+
+    gap: 24px;
+}
+
+.card {
+
+    background: white;
+
+    border-radius: 20px;
+
+    padding: 28px;
+
+    box-shadow:
+        0 6px 18px rgba(0,0,0,0.08);
+}
+
+.card h1 {
+    margin-top: 0;
+
+    margin-bottom: 20px;
+
+    font-size: 32px;
+}
+
+.content {
+    display: flex;
+
+    flex-direction: column;
+
+    gap: 12px;
+}
+
+.content p {
+    margin: 0;
+
+    line-height: 1.7;
+}
+
+.key {
+
+    display: inline-flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    min-width: 28px;
+
+    padding:
+        4px 10px;
+
+    margin:
+        0 2px;
+
+    border-radius: 10px;
+
+    background: #eef2f7;
+
+    border:
+        1px solid #d7dee7;
+
+    font-weight: bold;
+
+    font-size: 14px;
+}
+
+.example {
+
+    margin-top: 12px;
+
+    padding: 16px;
+
+    border-radius: 14px;
+
+    background: #f7f9fc;
+}
+
+.example h3 {
+    margin-top: 0;
+
+    margin-bottom: 12px;
+}
+
+.arrowMap {
+
+    display: grid;
+
+    grid-template-columns:
+        repeat(2, 1fr);
+
+    gap: 12px;
+
+    margin: 8px 0;
+}
+
+.arrowMap div {
+
+    padding: 12px;
+
+    border-radius: 12px;
+
+    background: #f7f9fc;
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 8px;
+}
+
+.feature {
+
+    padding: 16px;
+
+    border-radius: 14px;
+
+    background: #f7f9fc;
+
+    display: flex;
+
+    flex-direction: column;
+
+    gap: 8px;
+}
+
+.featureTitle {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 10px;
+
+    font-weight: bold;
+
+    font-size: 18px;
+}
+
+.memo {
+
+    background: white;
+
+    border-radius: 20px;
+
+    padding: 24px;
+
+    box-shadow:
+        0 6px 18px rgba(0,0,0,0.08);
+}
+
+.memo summary {
+
+    cursor: pointer;
+
+    font-size: 28px;
+
+    font-weight: bold;
+
+    user-select: none;
+}
+
+.memoContent {
+
+    margin-top: 24px;
+
+    display: flex;
+
+    flex-direction: column;
+
+    gap: 32px;
+}
+
+.memoContent h2 {
+
+    margin-top: 0;
+
+    margin-bottom: 12px;
+
+    font-size: 22px;
+}
+
+.memoContent ul {
+
+    margin: 0;
+
+    padding-left: 24px;
+
+    line-height: 1.9;
+}
+
+.flow {
+
+    display: flex;
+
+    flex-direction: column;
+
+    align-items: center;
+
+    gap: 10px;
+
+    padding: 20px;
+
+    border-radius: 16px;
+
+    background: #f7f9fc;
+
+    font-weight: bold;
+}
+
+.flow div {
+
+    padding:
+        10px 18px;
+
+    border-radius: 12px;
+
+    background: white;
+
+    box-shadow:
+        0 2px 6px rgba(0,0,0,0.08);
+}
+
+.flow span {
+
+    font-size: 20px;
+
+    color: #666;
+}
+
+.folderTree {
+
+    padding: 20px;
+
+    border-radius: 16px;
+
+    background: #f7f9fc;
+
+    overflow-x: auto;
+}
+
+.folderTree pre {
+
+    margin: 0;
+
+    font-size: 14px;
+
+    line-height: 1.7;
+
+    font-family:
+        Consolas,
+        monospace;
+}
