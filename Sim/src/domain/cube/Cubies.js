@@ -64,13 +64,6 @@ export class Cubies {
         }
         
     }
-    
-    getState(type){
-        if (type == null) console.log(this.state)
-        if (type == "corner") console.log(this.state["corner"])
-        if (type == "edge") console.log(this.state["edge"])
-        if (type == "center") console.log(this.state["center"])
-    }
 }
             
 const cornerPositions = [
