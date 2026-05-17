@@ -1,7 +1,5 @@
 import { defineConfig } from 'vite'
 
-export default defineConfig(({ mode }) => {
-  return {
-    base: mode === 'production' ? '/CubeTrainer/' : './',
-  }
+export default defineConfig({
+  base: '/CubeTrainer/',
 })
