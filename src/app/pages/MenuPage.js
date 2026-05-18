@@ -8,7 +8,7 @@ export class MenuPage {
 
         this.element = document.createElement("div")
 
-        this.element.className = "menu-page"
+        this.element.classList.add("menu-page")
 
         this.element.innerHTML = `
             <div class="glass card menu-card">

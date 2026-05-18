@@ -1,0 +1,1064 @@
+/* =========================
+   Reset
+========================= */
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+
+    user-select: none;
+    -webkit-user-select: none;
+    -webkit-tap-highlight-color: transparent;
+}
+
+html,
+body {
+
+    width: 100%;
+    height: 100%;
+
+    overflow: hidden;
+
+    -webkit-text-size-adjust: 100%;
+}
+
+body {
+
+    font-family:
+        Inter,
+        system-ui,
+        sans-serif;
+
+    background:
+        radial-gradient(circle at top left, rgba(99,102,241,0.18), transparent 40%),
+        radial-gradient(circle at bottom right, rgba(14,165,233,0.12), transparent 45%),
+        linear-gradient(
+            160deg,
+            #020617 0%,
+            #07111f 45%,
+            #020617 100%
+        );
+
+    color: white;
+}
+
+/* =========================
+   App
+========================= */
+
+#app {
+
+    width: 100%;
+    height: 100dvh;
+
+    overflow: hidden;
+}
+
+/* =========================
+   Shared Layout
+========================= */
+
+.page,
+.home-page,
+.menu-page,
+.pll-page,
+.free-page {
+
+    width: 100%;
+    height: 100%;
+
+    min-width: 0;
+    min-height: 0;
+}
+
+/* =========================
+   Home / Menu
+========================= */
+
+.home-page,
+.menu-page {
+
+    display: flex;
+
+    justify-content: center;
+    align-items: center;
+
+    padding:
+        clamp(16px, 2vw, 28px);
+}
+
+/* =========================
+   Cards
+========================= */
+
+.card {
+
+    width:
+        min(92vw, 540px);
+
+    padding:
+        clamp(28px, 4vw, 46px);
+
+    border-radius: 34px;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    gap:
+        clamp(16px, 2vh, 24px);
+
+    text-align: center;
+
+    position: relative;
+
+    overflow: hidden;
+}
+
+.card::before {
+
+    content: "";
+
+    position: absolute;
+    inset: 0;
+
+    background:
+        linear-gradient(
+            135deg,
+            rgba(255,255,255,0.12),
+            transparent 45%
+        );
+
+    pointer-events: none;
+}
+
+.hero-card {
+
+    min-height:
+        min(70dvh, 560px);
+
+    justify-content: center;
+}
+
+.menu-card {
+
+    justify-content: center;
+}
+
+.title {
+
+    font-size:
+        clamp(38px, 5vw, 62px);
+
+    font-weight: 800;
+
+    letter-spacing: -0.04em;
+}
+
+.subtitle {
+
+    font-size:
+        clamp(15px, 1.7vw, 18px);
+
+    opacity: 0.82;
+
+    margin-bottom: 10px;
+}
+
+/* =========================
+   Glass
+========================= */
+
+.glass {
+
+    background:
+        linear-gradient(
+            180deg,
+            rgba(255,255,255,0.10),
+            rgba(255,255,255,0.05)
+        );
+
+    backdrop-filter: blur(24px);
+
+    border:
+        1px solid rgba(255,255,255,0.08);
+
+    box-shadow:
+        0 12px 48px rgba(0,0,0,0.38),
+        inset 0 1px 0 rgba(255,255,255,0.08);
+}
+
+/* =========================
+   Buttons
+========================= */
+
+button {
+
+    cursor: pointer;
+
+    transition:
+        transform 0.14s ease,
+        background 0.14s ease,
+        opacity 0.14s ease;
+}
+
+button:active {
+
+    transform: scale(0.97);
+}
+
+.main-button,
+.submit-button,
+.menu-button {
+
+    width: 100%;
+
+    height:
+        clamp(48px, 5.6dvh, 58px);
+
+    border: none;
+
+    border-radius: 18px;
+
+    background:
+        linear-gradient(
+            180deg,
+            rgba(255,255,255,0.18),
+            rgba(255,255,255,0.07)
+        );
+
+    color: white;
+
+    font-size:
+        clamp(14px, 1.8vw, 17px);
+
+    font-weight: 700;
+
+    letter-spacing: 0.03em;
+
+    backdrop-filter: blur(18px);
+
+    box-shadow:
+        0 10px 28px rgba(0,0,0,0.22),
+        inset 0 1px 0 rgba(255,255,255,0.16);
+}
+
+.menu-button {
+
+    max-width: 320px;
+}
+
+.back-button {
+
+    opacity: 0.84;
+}
+
+/* =========================
+   PLL / Free Page
+========================= */
+
+.pll-page,
+.free-page {
+
+    display: flex;
+    flex-direction: column;
+
+    gap:
+        clamp(10px, 1.2dvh, 14px);
+
+    padding:
+        clamp(10px, 1.4vw, 18px);
+
+    overflow: hidden;
+}
+
+/* =========================
+   Header
+========================= */
+
+.header {
+
+    height:
+        clamp(56px, 7dvh, 70px);
+
+    flex-shrink: 0;
+
+    border-radius: 24px;
+
+    padding:
+        0 clamp(12px, 1.4vw, 18px);
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    gap: 12px;
+}
+
+.header h1 {
+
+    flex: 1;
+
+    text-align: center;
+
+    font-size:
+        clamp(18px, 2vw, 28px);
+
+    white-space: nowrap;
+
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.header button {
+
+    width:
+        clamp(40px, 4.5dvh, 46px);
+
+    height:
+        clamp(40px, 4.5dvh, 46px);
+
+    flex-shrink: 0;
+
+    border: none;
+
+    border-radius: 14px;
+
+    background:
+        rgba(255,255,255,0.10);
+
+    color: white;
+
+    font-size: 17px;
+}
+
+/* =========================
+   PLL Content
+========================= */
+
+.content {
+
+    flex: 1;
+
+    min-width: 0;
+    min-height: 0;
+
+    display: grid;
+
+    grid-template-columns:
+        minmax(0, 1.15fr)
+        minmax(340px, 0.85fr);
+
+    gap:
+        clamp(10px, 1vw, 16px);
+
+    overflow: hidden;
+}
+
+/* =========================
+   Areas
+========================= */
+
+.problem-area,
+.answer-area {
+
+    min-width: 0;
+    min-height: 0;
+
+    border-radius: 30px;
+
+    padding:
+        clamp(12px, 1.6vw, 20px);
+
+    overflow: hidden;
+}
+
+.problem-area {
+
+    display: grid;
+
+    grid-template-rows:
+        auto
+        minmax(0, 1fr)
+        auto;
+
+    gap:
+        clamp(10px, 1.2vh, 16px);
+}
+
+.answer-area {
+
+    display: grid;
+
+    grid-template-rows:
+        minmax(0, 1fr)
+        auto;
+
+    gap:
+        clamp(10px, 1.2vh, 16px);
+}
+
+/* =========================
+   Timer
+========================= */
+
+.timer {
+
+    text-align: center;
+
+    font-size:
+        clamp(28px, 3.6dvh, 42px);
+
+    font-weight: 800;
+
+    letter-spacing: 0.04em;
+}
+
+/* =========================
+   Cube Container
+========================= */
+
+.cube-container,
+.simulator-container {
+
+    width: 100%;
+    height: 100%;
+
+    min-width: 0;
+    min-height: 0;
+
+    border-radius: 24px;
+
+    overflow: hidden;
+
+    background:
+        radial-gradient(
+            circle at top,
+            rgba(255,255,255,0.08),
+            rgba(0,0,0,0.26)
+        );
+
+    position: relative;
+}
+
+/* =========================
+   2D Cube
+========================= */
+
+.twoDCube {
+
+    width: 100%;
+    height: 100%;
+
+    min-width: 0;
+    min-height: 0;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    overflow: hidden;
+}
+
+.cube-visual {
+
+    position: relative;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    aspect-ratio: 1;
+
+    --cube-size:
+        clamp(
+            26px,
+            min(5.2vw, 5.4dvh),
+            58px
+        );
+
+    --gap:
+        calc(var(--cube-size) * 0.08);
+
+    --face-size:
+        calc(var(--cube-size) * 3 + var(--gap) * 2);
+
+    width:
+        calc(var(--face-size) * 1.85);
+
+    height:
+        calc(var(--face-size) * 1.85);
+}
+
+/* =========================
+   Rotated Cube Group
+========================= */
+
+.cube-rotated {
+
+    position: relative;
+
+    width: var(--face-size);
+    height: var(--face-size);
+
+    transform: rotate(45deg);
+}
+
+/* =========================
+   Center Face
+========================= */
+
+.upper-face-grid {
+
+    position: absolute;
+
+    top: 50%;
+    left: 50%;
+
+    transform:
+        translate(-50%, -50%);
+
+    display: grid;
+
+    grid-template-columns:
+        repeat(3, var(--cube-size));
+
+    grid-template-rows:
+        repeat(3, var(--cube-size));
+
+    gap: var(--gap);
+}
+
+.cell {
+
+    width: var(--cube-size);
+    height: var(--cube-size);
+
+    border-radius:
+        calc(var(--cube-size) * 0.18);
+
+    background:
+        linear-gradient(
+            180deg,
+            rgba(255,255,255,0.16),
+            rgba(255,255,255,0.08)
+        );
+
+    border:
+        1px solid rgba(255,255,255,0.08);
+}
+
+/* =========================
+   Strips
+========================= */
+
+.side-strips {
+
+    position: absolute;
+
+    display: flex;
+
+    gap: var(--gap);
+}
+
+.strip {
+
+    width: var(--cube-size);
+    height: var(--cube-size);
+
+    border-radius:
+        calc(var(--cube-size) * 0.18);
+
+    background:
+        linear-gradient(
+            180deg,
+            rgba(255,255,255,0.16),
+            rgba(255,255,255,0.08)
+        );
+
+    border:
+        1px solid rgba(255,255,255,0.08);
+}
+
+/* ---- Top ---- */
+
+.top-stripes {
+
+    top:
+        calc(var(--cube-size) * -1.12);
+
+    left: 50%;
+
+    transform: translateX(-50%);
+}
+
+/* ---- Bottom ---- */
+
+.bottom-stripes {
+
+    bottom:
+        calc(var(--cube-size) * -1.12);
+
+    left: 50%;
+
+    transform: translateX(-50%);
+}
+
+/* ---- Left ---- */
+
+.left-stripes {
+
+    left:
+        calc(var(--cube-size) * -1.12);
+
+    top: 50%;
+
+    flex-direction: column;
+
+    transform: translateY(-50%);
+}
+
+/* ---- Right ---- */
+
+.right-stripes {
+
+    right:
+        calc(var(--cube-size) * -1.12);
+
+    top: 50%;
+
+    flex-direction: column;
+
+    transform: translateY(-50%);
+}
+
+/* =========================
+   Free Sim
+========================= */
+
+.free-content {
+
+    flex: 1;
+
+    min-width: 0;
+    min-height: 0;
+
+    overflow: hidden;
+}
+
+.free-layout {
+
+    width: 100%;
+    height: 100%;
+
+    min-width: 0;
+    min-height: 0;
+}
+
+.simulator-container-wrapper {
+
+    width: 100%;
+    height: 100%;
+
+    min-width: 0;
+    min-height: 0;
+
+    position: relative;
+
+    padding:
+        clamp(10px, 1vw, 14px);
+
+    border-radius: 30px;
+
+    overflow: hidden;
+}
+
+.control-overlay {
+
+    position: absolute;
+
+    inset: 0;
+
+    padding:
+        clamp(12px, 1.4vw, 18px);
+
+    pointer-events: none;
+
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+}
+
+.control-group {
+
+    display: flex;
+
+    gap: 10px;
+
+    pointer-events: auto;
+}
+
+.left-controls {
+
+    flex-direction: column;
+}
+
+.right-controls {
+
+    align-items: center;
+}
+
+.sim-button,
+.icon-button {
+
+    border: none;
+
+    background:
+        rgba(15,23,42,0.62);
+
+    backdrop-filter: blur(18px);
+
+    color: white;
+
+    box-shadow:
+        0 8px 24px rgba(0,0,0,0.28);
+}
+
+.sim-button {
+
+    min-width: 120px;
+
+    height: 48px;
+
+    padding: 0 20px;
+
+    border-radius: 16px;
+
+    font-size: 14px;
+
+    font-weight: 700;
+}
+
+.icon-button {
+
+    width: 52px;
+    height: 52px;
+
+    border-radius: 16px;
+
+    font-size: 22px;
+}
+
+.stop-button {
+
+    font-size: 18px;
+}
+
+/* =========================
+   Tablet
+========================= */
+
+@media (max-width: 980px) {
+
+    .content {
+
+        grid-template-columns: 1fr;
+
+        grid-template-rows:
+            minmax(280px, 0.9fr)
+            minmax(0, 1.1fr);
+    }
+
+    .cube-visual {
+
+        --cube-size:
+            clamp(
+                22px,
+                min(6vw, 5dvh),
+                46px
+            );
+    }
+}
+
+/* =========================
+   Mobile
+========================= */
+
+@media (max-width: 768px) {
+
+    .header {
+
+        border-radius: 20px;
+    }
+
+    .problem-area,
+    .answer-area,
+    .simulator-container-wrapper {
+
+        border-radius: 22px;
+    }
+
+    .cube-visual {
+
+        --cube-size:
+            clamp(
+                18px,
+                min(7vw, 4.5dvh),
+                38px
+            );
+    }
+
+    .sim-button {
+
+        min-width: 96px;
+        height: 42px;
+    }
+
+    .icon-button {
+
+        width: 44px;
+        height: 44px;
+    }
+}
+
+/* =========================
+   Small Height
+========================= */
+
+@media (max-height: 720px) {
+
+    .pll-page,
+    .free-page {
+
+        gap: 6px;
+
+        padding: 6px;
+    }
+
+    .content {
+
+        gap: 6px;
+    }
+
+    .cube-visual {
+
+        --cube-size:
+            clamp(
+                15px,
+                min(5vw, 3.8dvh),
+                30px
+            );
+    }
+
+    .main-button,
+    .submit-button,
+    .menu-button {
+
+        height: 40px;
+    }
+
+    .timer {
+
+        font-size:
+            clamp(22px, 3dvh, 32px);
+    }
+}
+
+UIを見直して、没入感のあるUI、ちょうどよいサイズ、配置にしてください。
+画面(ブラウザの標準バーを除く)依存でしっかりと収まるようにしてください。
+現在の問題:
+他の問題がないかも探り、合った場合は出力して、修正してください。
+見直しと生成を３回繰り返し、３回目に出来上がったものを出力してください。 
+htmlはこちらです。必要であればhtmlも変更可能です。変更した場合はそれも出力してください。
+
+---
+homePage
+        this.element = document.createElement("div")
+
+        this.element.classList.add("home-page")
+
+        this.element.innerHTML = `
+            <div class="glass card hero-card">
+                <h1 class="title">Cube Trainer</h1>
+                <p class="subtitle">
+                    Train Smarter, Solve Faster
+                </p>
+
+                <button class="main-button" id="startButton">
+                    START
+                </button>
+            </div>
+        `
+
+---
+MenuPage
+        this.element = document.createElement("div")
+
+        this.element.classList.add("menu-page")
+
+        this.element.innerHTML = `
+            <div class="glass card menu-card">
+
+                <h1 class="title">Menu</h1>
+
+                <button class="menu-button" id="pllButton">
+                    PLL Trainer
+                </button>
+
+                <button class="menu-button" id="freeButton">
+                    Free Simulator
+                </button>
+
+                <button class="menu-button back-button" id="backButton">
+                    Back
+                </button>
+            </div>
+        `
+---
+PLL Trainer
+        this.element = document.createElement("div")
+
+        this.element.classList.add("pll-page")
+
+        this.element.innerHTML = `
+
+            <header class="glass header">
+
+                <button id="backButton">←</button>
+
+                <h1>PLL Trainer</h1>
+
+                <button id="settingsButton">⚙</button>
+            </header>
+
+            <main class="content">
+
+                <section class="glass problem-area">
+
+                    <div class="timer">00:00.000</div>
+
+                    <div class="cube-container" id="pllCube"></div>
+
+                    <button class="main-button" id="nextButton">
+                        NEXT
+                    </button>
+
+                </section>
+
+                <section class="glass answer-area">
+
+                    <div class="twoDCube">
+
+                        <div class="cube-visual">
+
+                            <div class="cube-rotated">
+
+                                <div class="side-strips top-stripes">
+                                    <div class="strip top-cell"></div>
+                                    <div class="strip top-cell"></div>
+                                    <div class="strip top-cell"></div>
+                                </div>
+
+                                <div class="side-strips left-stripes">
+                                    <div class="strip left-cell"></div>
+                                    <div class="strip left-cell"></div>
+                                    <div class="strip left-cell"></div>
+                                </div>
+
+                                <div class="upper-face-grid center-stripes">
+                                    ${Array.from({ length: 9 }, () =>
+                                        `<div class="cell center-cell"></div>`
+                                    ).join("")}
+                                </div>
+
+                                <div class="side-strips right-stripes">
+                                    <div class="strip right-cell"></div>
+                                    <div class="strip right-cell"></div>
+                                    <div class="strip right-cell"></div>
+                                </div>
+
+                                <div class="side-strips bottom-stripes">
+                                    <div class="strip bottom-cell"></div>
+                                    <div class="strip bottom-cell"></div>
+                                    <div class="strip bottom-cell"></div>
+                                </div>
+
+                            </div>
+
+                        </div>
+                    </div>
+
+                    <button class="submit-button">
+                        SUBMIT
+                    </button>
+
+                </section>
+
+            </main>
+        `
+
+---
+FreeSim
+        this.element = document.createElement("div")
+
+        this.element.classList.add("free-page")
+
+        this.element.innerHTML = `
+
+            <header class="glass header">
+
+                <button id="backButton">←</button>
+
+                <h1>Free Simulator</h1>
+
+                <button>⚙</button>
+            </header>
+
+            <main class="free-content">
+
+                <div class="free-layout">
+
+                    <div class="glass simulator-container-wrapper">
+
+                        <div
+                            class="glass simulator-container"
+                            id="freeCube">
+                        </div>
+
+                        <div class="control-overlay">
+
+                            <div class="control-group left-controls">
+
+                                <button class="sim-button" id="resetButton">
+                                    Reset
+                                </button>
+
+                                <button class="sim-button" id="scrambleButton">
+                                    Scramble
+                                </button>
+                            </div>
+
+                            <div class="control-group right-controls">
+
+                                <button class="icon-button" id="undoButton">
+                                    ↶
+                                </button>
+
+                                <button class="icon-button stop-button" id="stopButton">
+                                    ■
+                                </button>
+
+                                <button class="icon-button" id="redoButton">
+                                    ↷
+                                </button>
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </main>
+        `

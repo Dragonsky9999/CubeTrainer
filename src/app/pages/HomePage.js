@@ -8,7 +8,7 @@ export class HomePage {
 
         this.element = document.createElement("div")
 
-        this.element.className = "home-page"
+        this.element.classList.add("home-page")
 
         this.element.innerHTML = `
             <div class="glass card hero-card">

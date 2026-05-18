@@ -20,7 +20,7 @@ export class PLLTrainerPage {
 
         this.element = document.createElement("div")
 
-        this.element.className = "pll-page"
+        this.element.classList.add("pll-page")
 
         this.element.innerHTML = `
 
@@ -37,53 +37,65 @@ export class PLLTrainerPage {
 
                 <section class="glass problem-area">
 
-                    <div class="timer">00.00</div>
+                    <div class="timer">00:00.000</div>
 
                     <div class="cube-container" id="pllCube"></div>
 
                     <button class="main-button" id="nextButton">
                         NEXT
                     </button>
+
                 </section>
 
                 <section class="glass answer-area">
 
                     <div class="twoDCube">
-                        <div class="side-strips top-stripes">
-                            <div class="strip top-cell"></div>
-                            <div class="strip top-cell"></div>
-                            <div class="strip top-cell"></div>
-                        </div>
 
-                        <div class="side-strips left-stripes">
-                            <div class="strip left-cell"></div>
-                            <div class="strip left-cell"></div>
-                            <div class="strip left-cell"></div>
-                        </div>
+                        <div class="cube-visual">
 
+                            <div class="cube-rotated">
 
-                        <div class="upper-face-grid center-stripes">
-                            ${Array.from({ length: 9 }, () => `<div class="cell center-cell"></div>`).join("")}
-                        </div>
+                                <div class="side-strips top-stripes">
+                                    <div class="strip top-cell"></div>
+                                    <div class="strip top-cell"></div>
+                                    <div class="strip top-cell"></div>
+                                </div>
 
-                        <div class="side-strips right-stripes">
-                            <div class="strip right-cell"></div>
-                            <div class="strip right-cell"></div>
-                            <div class="strip right-cell"></div>
-                        </div>
+                                <div class="side-strips left-stripes">
+                                    <div class="strip left-cell"></div>
+                                    <div class="strip left-cell"></div>
+                                    <div class="strip left-cell"></div>
+                                </div>
 
-                        <div class="side-strips bottom-stripes">
-                            <div class="strip bottom-cell"></div>
-                            <div class="strip bottom-cell"></div>
-                            <div class="strip bottom-cell"></div>
+                                <div class="upper-face-grid center-stripes">
+                                    ${Array.from({ length: 9 }, () =>
+                                        `<div class="cell center-cell"></div>`
+                                    ).join("")}
+                                </div>
+
+                                <div class="side-strips right-stripes">
+                                    <div class="strip right-cell"></div>
+                                    <div class="strip right-cell"></div>
+                                    <div class="strip right-cell"></div>
+                                </div>
+
+                                <div class="side-strips bottom-stripes">
+                                    <div class="strip bottom-cell"></div>
+                                    <div class="strip bottom-cell"></div>
+                                    <div class="strip bottom-cell"></div>
+                                </div>
+
+                            </div>
+
                         </div>
                     </div>
-
 
                     <button class="submit-button">
                         SUBMIT
                     </button>
+
                 </section>
+
             </main>
         `
 

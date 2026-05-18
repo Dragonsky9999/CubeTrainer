@@ -10,7 +10,7 @@ export class FreeSimulatorPage {
 
         this.element = document.createElement("div")
 
-        this.element.className = "free-page"
+        this.element.classList.add("free-page")
 
         this.element.innerHTML = `
 

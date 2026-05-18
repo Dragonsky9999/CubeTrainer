@@ -1,110 +1,186 @@
 * {
+
     margin: 0;
     padding: 0;
+
     box-sizing: border-box;
 
     user-select: none;
     -webkit-user-select: none;
+
+    -webkit-tap-highlight-color: transparent;
 }
 
-/* PC */
 html,
 body {
-    overflow: hidden;
-}
-
-
-body {
-
-    font-family: sans-serif;
-
-    background:
-        radial-gradient(circle at top left, #1f2937, transparent),
-        radial-gradient(circle at bottom right, #0f172a, transparent),
-        #020617;
-
-    color: white;
-
-    min-height: 100vh;
-
-    overflow-x: hidden;
-    overflow-y: auto;
-}
-
-#app {
-
-    width: 100dvw;
-    height: 100dvh;
-}
-
-/* =========================
-   Layout
-========================= */
-
-.page {
 
     width: 100%;
     height: 100%;
 
-    display: flex;
-    flex-direction: column;
+    overflow: hidden;
+
+    -webkit-text-size-adjust: 100%;
 }
 
-.content {
+body {
 
-    flex: 1;
+    font-family:
+        Inter,
+        system-ui,
+        sans-serif;
+
+    color: white;
+
+    overflow: hidden;
+
+    overscroll-behavior: none;
+
+    background:
+        radial-gradient(
+            circle at top left,
+            rgba(99,102,241,0.22),
+            transparent 24%
+        ),
+
+        radial-gradient(
+            circle at bottom right,
+            rgba(14,165,233,0.16),
+            transparent 30%
+        ),
+
+        linear-gradient(
+            160deg,
+            #020617 0%,
+            #07111f 48%,
+            #020617 100%
+        );
+}
+
+/* =========================
+   App
+========================= */
+
+#app {
+
+    width: 100%;
+    height: 100vh;
+    height: 100dvh;
+
+    overflow: hidden;
+}
+
+/* =========================
+   Shared Page
+========================= */
+
+.page,
+.home-page,
+.menu-page,
+.pll-page,
+.free-page {
+
+    width: 100%;
+    height: 100%;
+
+    min-width: 0;
     min-height: 0;
-
-    display: grid;
-
-    grid-template-columns: 1fr 1fr;
-
-    gap: 16px;
-
-    padding: 16px;
 }
+
+/* =========================
+   Home / Menu
+========================= */
 
 .home-page,
 .menu-page {
 
-    min-height: 0;
-
     display: flex;
+
     justify-content: center;
     align-items: center;
-}
 
-.free-layout {
-
-    width: 100%;
-    height: 100%;
-
-    display: flex;
-    justify-content: center;
-    align-items: center;
+    padding:
+        clamp(12px, 2vw, 28px);
 }
 
 /* =========================
-   Glass System
+   Glass
 ========================= */
 
 .glass {
 
-    background: rgba(255,255,255,0.08);
+    background:
+        linear-gradient(
+            180deg,
+            rgba(255,255,255,0.10),
+            rgba(255,255,255,0.035)
+        );
 
-    backdrop-filter: blur(16px);
+    backdrop-filter: blur(30px);
 
-    border: 1px solid rgba(255,255,255,0.1);
+    border:
+        1px solid rgba(255,255,255,0.08);
 
     box-shadow:
-        0 8px 32px rgba(0,0,0,0.35);
+        0 18px 60px rgba(0,0,0,0.42),
+        inset 0 1px 0 rgba(255,255,255,0.08);
 }
+
+/* =========================
+   Cards
+========================= */
 
 .card {
 
-    padding: 40px;
+    width:
+        min(92vw, 560px);
 
-    border-radius: 28px;
+    padding:
+        clamp(28px, 4vw, 48px);
+
+    border-radius: 36px;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    gap:
+        clamp(16px, 2vh, 24px);
+
+    text-align: center;
+
+    position: relative;
+
+    overflow: hidden;
+}
+
+.card::before {
+
+    content: "";
+
+    position: absolute;
+    inset: 0;
+
+    background:
+        linear-gradient(
+            135deg,
+            rgba(255,255,255,0.08),
+            transparent 45%
+        );
+
+    pointer-events: none;
+}
+
+.hero-card {
+
+    min-height:
+        min(72dvh, 580px);
+
+    justify-content: center;
+}
+
+.menu-card {
+
+    justify-content: center;
 }
 
 /* =========================
@@ -113,63 +189,68 @@ body {
 
 .title {
 
-    font-size: 48px;
-    font-weight: bold;
+    font-size:
+        clamp(42px, 5vw, 68px);
+
+    font-weight: 900;
+
+    letter-spacing: -0.05em;
+
+    text-shadow:
+        0 0 28px rgba(255,255,255,0.12);
 }
 
 .subtitle {
 
-    opacity: 0.7;
+    font-size:
+        clamp(15px, 1.8vw, 18px);
+
+    opacity: 0.82;
+
+    margin-bottom: 10px;
 }
 
 /* =========================
-   Shared Button Style
+   Buttons
 ========================= */
 
-.main-button,
-.menu-button,
-.submit-button,
-.sim-button,
-.icon-button,
-.header button,
-.pll-buttons button {
-
-    border: 1px solid rgba(255,255,255,0.12);
-
-    background:
-        linear-gradient(
-            180deg,
-            rgba(255,255,255,0.16),
-            rgba(255,255,255,0.06)
-        );
-
-    color: white;
-
-    backdrop-filter: blur(18px);
-
-    box-shadow:
-        0 8px 24px rgba(0,0,0,0.25),
-        inset 0 1px 0 rgba(255,255,255,0.15);
+button {
 
     cursor: pointer;
 
+    border: none;
+
+    color: white;
+
     transition:
-        transform 0.18s ease,
+        transform 0.14s ease,
+        opacity 0.14s ease,
         background 0.18s ease,
         box-shadow 0.18s ease;
 }
 
-.main-button:hover,
-.menu-button:hover,
-.submit-button:hover,
-.sim-button:hover,
-.icon-button:hover,
-.header button:hover,
-.pll-buttons button:hover {
+button:active {
 
-    transform:
-        translateY(-3px)
-        scale(1.02);
+    transform: scale(0.96);
+}
+
+.main-button,
+.submit-button,
+.menu-button {
+
+    width: 100%;
+
+    height:
+        clamp(48px, 5.4dvh, 58px);
+
+    border-radius: 18px;
+
+    font-size:
+        clamp(14px, 1.7vw, 16px);
+
+    font-weight: 800;
+
+    letter-spacing: 0.03em;
 
     background:
         linear-gradient(
@@ -178,50 +259,49 @@ body {
             rgba(255,255,255,0.08)
         );
 
+    backdrop-filter: blur(18px);
+
     box-shadow:
-        0 14px 32px rgba(0,0,0,0.32),
-        inset 0 1px 0 rgba(255,255,255,0.2);
+        0 10px 24px rgba(0,0,0,0.24),
+        inset 0 1px 0 rgba(255,255,255,0.16);
 }
 
-.main-button:active,
-.menu-button:active,
-.submit-button:active,
-.sim-button:active,
-.icon-button:active,
-.header button:active,
-.pll-buttons button:active {
+.main-button:hover,
+.submit-button:hover,
+.menu-button:hover {
 
-    transform:
-        translateY(1px)
-        scale(0.98);
+    transform: translateY(-1px);
+
+    background:
+        linear-gradient(
+            180deg,
+            rgba(255,255,255,0.28),
+            rgba(255,255,255,0.10)
+        );
+}
+
+.menu-button {
+
+    max-width: 320px;
 }
 
 /* =========================
-   Main / Menu
+   PLL / Free Page
 ========================= */
 
-.hero-card,
-.menu-card {
-
-    width: min(420px, 92vw);
+.pll-page,
+.free-page {
 
     display: flex;
     flex-direction: column;
-    align-items: center;
 
-    gap: 24px;
-}
-.main-button,
-.menu-button,
-.submit-button {
+    gap:
+        clamp(4px, 0.5dvh, 8px);
 
-    width: 100%;
+    padding:
+        clamp(4px, 0.45vw, 8px);
 
-    padding: 16px;
-
-    border-radius: 20px;
-
-    font-size: 18px;
+    overflow: hidden;
 }
 
 /* =========================
@@ -230,23 +310,45 @@ body {
 
 .header {
 
-    margin: 10px 12px;
+    height:
+        clamp(52px, 6dvh, 64px);
 
-    padding: 10px 16px;
+    flex-shrink: 0;
 
-    border-radius: 24px;
+    border-radius: 22px;
+
+    padding:
+        0 clamp(10px, 1vw, 18px);
 
     display: flex;
-    justify-content: space-between;
     align-items: center;
+    justify-content: space-between;
 
-    gap: 12px;
+    gap: 10px;
+
+    background:
+        linear-gradient(
+            180deg,
+            rgba(255,255,255,0.12),
+            rgba(255,255,255,0.05)
+        );
+
+    backdrop-filter: blur(24px);
+
+    box-shadow:
+        0 10px 30px rgba(0,0,0,0.32);
 }
 
-.header h1,
-.header .title {
+.header h1 {
 
-    font-size: clamp(20px, 5vw, 32px);
+    flex: 1;
+
+    text-align: center;
+
+    font-size:
+        clamp(18px, 2vw, 26px);
+
+    font-weight: 800;
 
     white-space: nowrap;
 
@@ -256,91 +358,167 @@ body {
 
 .header button {
 
-    width: 42px;
-    height: 42px;
+    width:
+        clamp(40px, 4.4dvh, 46px);
 
-    border-radius: 18px;
+    height:
+        clamp(40px, 4.4dvh, 46px);
 
-    font-size: 20px;
+    flex-shrink: 0;
+
+    border-radius: 14px;
+
+    background:
+        rgba(255,255,255,0.10);
+
+    font-size: 17px;
 }
 
 /* =========================
-   Trainer Layout
+   Content
+========================= */
+
+.content {
+
+    flex: 1;
+
+    min-width: 0;
+    min-height: 0;
+
+    display: grid;
+
+    grid-template-columns:
+        minmax(0, 1.02fr)
+        minmax(0, 0.98fr);
+
+    gap:
+        clamp(6px, 0.7vw, 10px);
+
+    overflow-x: hidden;
+    overflow-y: visible;
+}
+
+/* =========================
+   Areas
 ========================= */
 
 .problem-area,
 .answer-area {
 
-    padding: 24px;
-
-    border-radius: 28px;
-
-    display: flex;
-    flex-direction: column;
-
-    gap: 20px;
-}
-
-.timer {
-
-    font-size: 48px;
-    font-weight: bold;
-
-    text-align: center;
-}
-
-/* =========================
-   3D Cube
-========================= */
-
-.cube-container {
-
-    height: min(45vh, 400px);
-
+    min-width: 0;
     min-height: 0;
+
+    border-radius: 30px;
+
+    padding:
+        clamp(8px, 0.9vw, 14px);
 
     overflow: hidden;
 
-    border-radius: 24px;
+    position: relative;
 
-    background: rgba(0,0,0,0.2);
+    background:
+        linear-gradient(
+            180deg,
+            rgba(255,255,255,0.075),
+            rgba(255,255,255,0.025)
+        );
+
+    backdrop-filter: blur(26px);
+
+    box-shadow:
+        0 18px 44px rgba(0,0,0,0.34);
 }
 
+/* =========================
+   Problem Area
+========================= */
+
+.problem-area {
+
+    display: grid;
+
+    grid-template-rows:
+        auto
+        minmax(0, 1fr)
+        auto;
+
+    gap:
+        clamp(6px, 0.7dvh, 10px);
+}
+
+/* =========================
+   Answer Area
+========================= */
+
+.answer-area {
+
+    display: grid;
+
+    grid-template-rows:
+        minmax(0, 1fr)
+        auto;
+
+    gap:
+        clamp(6px, 0.7dvh, 10px);
+}
+
+/* =========================
+   Timer
+========================= */
+
+.timer {
+
+    text-align: center;
+
+    font-size:
+        clamp(60px, 8.8dvh, 108px);
+
+    font-weight: 900;
+
+    letter-spacing: 0.04em;
+
+    line-height: 0.9;
+
+    padding:
+        clamp(2px, 0.2dvh, 6px) 0;
+
+    flex-shrink: 0;
+
+    text-shadow:
+        0 0 26px rgba(255,255,255,0.24),
+        0 0 48px rgba(99,102,241,0.22);
+}
+
+/* =========================
+   Cube Container
+========================= */
+
+.cube-container,
 .simulator-container {
 
     width: 100%;
     height: 100%;
 
-    overflow: hidden;
+    min-width: 0;
+    min-height: 0;
 
     border-radius: 28px;
-}
 
-.simulator-container-wrapper {
+    overflow: hidden;
 
     position: relative;
 
-    width: min(95vw, 1100px);
-    height: min(78vh, 800px);
+    background:
+        radial-gradient(
+            circle at top,
+            rgba(255,255,255,0.12),
+            rgba(0,0,0,0.42)
+        );
 
-    padding: 14px;
-
-    overflow: hidden;
-
-    border-radius: 36px;
-}
-
-.frontFaceIndicator {
-
-    position: absolute;
-
-    top: 5%;
-    left: 5%;
-
-    width: 8%;
-    height: 15%;
-
-    border-radius: 10%;
+    box-shadow:
+        inset 0 1px 0 rgba(255,255,255,0.08),
+        0 20px 40px rgba(0,0,0,0.34);
 }
 
 /* =========================
@@ -349,15 +527,90 @@ body {
 
 .twoDCube {
 
-    --cube-size: min(15vw, 60px);
-    --gap: calc(var(--cube-size) * 0.1);
+    width: 100%;
+    height: 100%;
 
-    height: min(55vh, 400px);
+    min-width: 0;
+    min-height: 0;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    overflow: hidden;
+
+    padding:
+        clamp(2px, 0.2vw, 4px);
+}
+
+/* =========================
+   Cube Visual
+========================= */
+
+.cube-visual {
 
     position: relative;
 
-    transform: rotate(45deg);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    width: 100%;
+    height: 100%;
+
+    min-width: 0;
+    min-height: 0;
+
+    aspect-ratio: 1;
+
+    max-width: 100%;
+    max-height: 100%;
+
+    --cube-size:
+        clamp(
+            78px,
+            min(12.8vw, 13.2dvh),
+            156px
+        );
+    
+    --gap:
+    max(
+        5px,
+        calc(var(--cube-size) * 0.016)
+        );
+        
+    --face-size:
+        calc(var(--cube-size) * 3 + var(--gap) * 2);
+    }
+
+/* =========================
+   Rotated Cube
+========================= */
+
+.cube-rotated {
+
+    position: relative;
+
+    width:
+        calc(var(--face-size) * 1.48);
+
+    height:
+        calc(var(--face-size) * 1.48);
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    transform:
+        rotate(45deg)
+        scale(1.2);
+
+    gap: var(--gap)
 }
+
+/* =========================
+   Center Face
+========================= */
 
 .upper-face-grid {
 
@@ -366,23 +619,58 @@ body {
     top: 50%;
     left: 50%;
 
-    transform: translate(-50%, -50%);
+    transform:
+        translate(-50%, -50%);
 
     display: grid;
 
-    grid-template-columns: repeat(3, var(--cube-size));
+    grid-template-columns:
+        repeat(3, var(--cube-size));
+
+    grid-template-rows:
+        repeat(3, var(--cube-size));
 
     gap: var(--gap);
+}
+
+/* =========================
+   Cells
+========================= */
+
+.cell,
+.strip {
+
+    border-radius:
+        calc(var(--cube-size) * 0.14);
+
+    background:
+        linear-gradient(
+            180deg,
+            rgba(255,255,255,0.28),
+            rgba(255,255,255,0.08)
+        );
+
+    border:
+        1px solid rgba(255,255,255,0.10);
+
+    box-shadow:
+        inset 0 1px 0 rgba(255,255,255,0.18),
+        0 0 14px rgba(255,255,255,0.06);
 }
 
 .cell {
 
     width: var(--cube-size);
     height: var(--cube-size);
+}
 
-    border-radius: calc(var(--cube-size) * 0.16);
+.strip {
 
-    background: rgba(255,255,255,0.1);
+    width:
+        calc(var(--cube-size) * 0.98);
+
+    height:
+        calc(var(--cube-size) * 0.98);
 }
 
 /* =========================
@@ -391,421 +679,379 @@ body {
 
 .side-strips {
 
-    display: flex;
-    justify-content: center;
-
-    gap: 12px;
-
-    cursor: pointer;
-}
-
-.strip {
-
-    width: calc(var(--cube-size) * 0.92);
-    height: calc(var(--cube-size) * 0.92);
-
-    border-radius: calc(var(--cube-size) * 0.2);
-
-    background: rgba(255,255,255,0.12);
-}
-
-.top-stripes,
-.bottom-stripes,
-.left-stripes,
-.right-stripes {
-
     position: absolute;
 
-    transform: translate(-50%, -50%);
+    display: flex;
+
+    gap: var(--gap);
 }
+
+/* ---- Top ---- */
 
 .top-stripes {
+
+    top:
+        calc(var(--cube-size) * -0.35);
+
     left: 50%;
-    top: calc(
-        50% - (var(--cube-size) * 2.2)
-    );
+
+    transform: translateX(-50%);
 }
 
+/* ---- Bottom ---- */
+
 .bottom-stripes {
+
+    bottom:
+        calc(var(--cube-size) * -0.35);
+
     left: 50%;
-    top: calc(
-        50% + (var(--cube-size) * 2.2)
-    );
+
+    transform: translateX(-50%);
 }
+
+/* ---- Left ---- */
 
 .left-stripes {
 
-    left: calc(
-        50% - (var(--cube-size) * 2.2)
-    );
+    left:
+        calc(var(--cube-size) * -0.35);
 
     top: 50%;
 
     flex-direction: column;
+
+    transform: translateY(-50%);
 }
+
+/* ---- Right ---- */
 
 .right-stripes {
 
-    left: calc(
-        50% + (var(--cube-size) * 2.2)
-    );
+    right:
+        calc(var(--cube-size) * -0.35);
 
     top: 50%;
 
     flex-direction: column;
+
+    transform: translateY(-50%);
 }
 
 /* =========================
-   PLL Buttons
-========================= */
-
-.pll-buttons {
-
-    display: grid;
-
-    grid-template-columns: repeat(3, 1fr);
-
-    gap: 12px;
-}
-
-.pll-buttons button {
-
-    padding: 14px;
-
-    border-radius: 16px;
-}
-
-/* =========================
-   Free Simulator
+   Free Sim
 ========================= */
 
 .free-content {
 
     flex: 1;
 
-    padding: 16px;
+    min-width: 0;
+    min-height: 0;
+
+    overflow: hidden;
 }
+
+.free-layout {
+
+    width: 100%;
+    height: 100%;
+
+    min-width: 0;
+    min-height: 0;
+}
+
+.simulator-container-wrapper {
+
+    width: 100%;
+    height: 100%;
+
+    min-width: 0;
+    min-height: 0;
+
+    position: relative;
+
+    padding:
+        clamp(6px, 0.7vw, 12px);
+
+    border-radius: 32px;
+
+    overflow: hidden;
+}
+
+/* =========================
+   Controls
+========================= */
 
 .control-overlay {
 
     position: absolute;
 
-    left: 0;
-    right: 0;
-    bottom: 0;
+    inset: 0;
 
-    padding: 20px;
+    padding:
+        clamp(10px, 1vw, 16px);
+
+    pointer-events: none;
 
     display: flex;
     justify-content: space-between;
-    align-items: end;
-
-    pointer-events: none;
+    align-items: flex-end;
 }
 
 .control-group {
 
     display: flex;
 
-    gap: 14px;
+    gap: 8px;
 
     pointer-events: auto;
 }
 
-.left-controls,
+.left-controls {
+
+    flex-direction: column;
+}
+
 .right-controls {
 
     align-items: center;
 }
 
+/* =========================
+   Floating Buttons
+========================= */
+
+.sim-button,
+.icon-button {
+
+    color: white;
+
+    background:
+        linear-gradient(
+            180deg,
+            rgba(15,23,42,0.84),
+            rgba(15,23,42,0.64)
+        );
+
+    backdrop-filter: blur(26px);
+
+    box-shadow:
+        0 12px 28px rgba(0,0,0,0.34),
+        inset 0 1px 0 rgba(255,255,255,0.08);
+}
+
 .sim-button {
 
-    padding: 16px 24px;
+    min-width: 118px;
 
-    border-radius: 22px;
+    height: 46px;
 
-    font-size: 16px;
-    font-weight: 600;
+    padding: 0 18px;
+
+    border-radius: 18px;
+
+    font-size: 14px;
+
+    font-weight: 700;
 }
 
 .icon-button {
 
-    width: 62px;
-    height: 62px;
+    width: 52px;
+    height: 52px;
 
-    border-radius: 24px;
+    border-radius: 18px;
 
-    font-size: 26px;
+    font-size: 22px;
 }
+
+.icon-button:hover,
+.sim-button:hover {
+
+    transform: translateY(-1px);
+
+    background:
+        linear-gradient(
+            180deg,
+            rgba(30,41,59,0.92),
+            rgba(15,23,42,0.74)
+        );
+}
+
+/* =========================
+   Stop Button
+========================= */
 
 .stop-button {
 
     background:
         linear-gradient(
             180deg,
-            rgba(255,120,120,0.22),
-            rgba(255,80,80,0.12)
-        );
-}
-
-.stop-button:hover {
-
-    background:
-        linear-gradient(
-            180deg,
-            rgba(255,140,140,0.28),
-            rgba(255,90,90,0.16)
+            rgba(220,38,38,0.44),
+            rgba(127,29,29,0.36)
         );
 }
 
 /* =========================
-   Responsive
+   Tablet
 ========================= */
 
-/* =========================
-   Mobile
-========================= */
+@media (max-width: 980px) {
+
+    .content {
+
+        grid-template-columns: 1fr;
+
+        grid-template-rows:
+            minmax(260px, 0.92fr)
+            minmax(340px, 1.08fr);
+    }
+
+    .timer {
+
+        font-size:
+            clamp(52px, 7.8dvh, 88px);
+    }
+
+    .cube-visual {
+
+        --cube-size:
+            clamp(
+                62px,
+                min(14vw, 11.6dvh),
+                128px
+            );
+    }
+}
+
 /* =========================
    Mobile
 ========================= */
 
 @media (max-width: 768px) {
 
-    html,
-    body {
+    .pll-page,
+    .free-page {
 
-        overflow: hidden;
-
-        touch-action: manipulation;
-
-        -webkit-text-size-adjust: 100%;
-    }
-
-    #app {
-
-        width: 100dvw;
-        height: 100dvh;
-    }
-
-    /* =========================
-       Layout
-    ========================= */
-
-    .page {
-
-        width: 100%;
-        height: 100%;
-
-        padding: 8px;
-
-        gap: 8px;
+        padding: 4px;
+        gap: 4px;
     }
 
     .content {
 
-        flex: 1;
-
-        min-height: 0;
-
-        grid-template-columns: 1fr;
-
-        gap: 10px;
-
-        padding: 0;
+        gap: 4px;
     }
 
-    /* =========================
-       Glass
-    ========================= */
-
-    .card,
     .problem-area,
     .answer-area {
 
-        padding: 12px;
+        padding: 7px;
+    }
+
+    .header {
+
+        height: 48px;
 
         border-radius: 18px;
     }
 
-    /* =========================
-       Typography
-    ========================= */
+    .problem-area,
+    .answer-area,
+    .simulator-container-wrapper {
 
-    .title {
-
-        font-size:
-            clamp(22px, 6vw, 32px);
+        border-radius: 22px;
     }
 
-    .subtitle {
+    .cube-visual {
 
-        font-size: 13px;
-
-        text-align: center;
+        --cube-size:
+            clamp(
+                48px,
+                min(16vw, 10dvh),
+                96px
+            );
     }
 
     .timer {
 
         font-size:
-            clamp(28px, 8vw, 40px);
-    }
-
-    /* =========================
-       Header
-    ========================= */
-
-    .header {
-
-        margin: 0;
-
-        padding: 8px 10px;
-
-        border-radius: 18px;
-    }
-
-    .header button {
-
-        width: 34px;
-        height: 34px;
-
-        border-radius: 12px;
-
-        font-size: 16px;
-    }
-
-    /* =========================
-       Cube Area
-    ========================= */
-
-    .cube-container {
-
-        height: min(30dvh, 260px);
-
-        border-radius: 18px;
-    }
-
-    .simulator-container-wrapper {
-
-        width: 100%;
-        height: 100%;
-
-        padding: 8px;
-
-        border-radius: 22px;
-    }
-
-    /* =========================
-       2D Cube
-    ========================= */
-
-    .twoDCube {
-
-        --cube-size: min(10vw, 42px);
-        --gap: calc(var(--cube-size) * 0.1);
-
-        height: min(28dvh, 220px);
-    }
-
-    .side-strips {
-
-        gap: 6px;
-    }
-
-    .strip {
-
-        width: calc(var(--cube-size) * 0.72);
-        height: calc(var(--cube-size) * 0.72);
-
-        border-radius:
-            calc(var(--cube-size) * 0.16);
-    }
-
-    /* =========================
-       PLL Buttons
-    ========================= */
-
-    .pll-buttons {
-
-        gap: 8px;
-    }
-
-    .pll-buttons button {
-
-        padding: 10px;
-
-        border-radius: 12px;
-
-        font-size: 14px;
-    }
-
-    /* =========================
-       Home / Menu
-    ========================= */
-
-    .hero-card,
-    .menu-card {
-
-        width: min(92vw, 360px);
-
-        gap: 16px;
-    }
-
-    .main-button,
-    .menu-button,
-    .submit-button {
-
-        padding: 12px;
-
-        border-radius: 16px;
-
-        font-size: 15px;
-    }
-
-    /* =========================
-       Free Simulator
-    ========================= */
-
-    .free-content {
-
-        padding: 0;
-    }
-
-    .control-overlay {
-
-        padding: 10px;
-
-        gap: 10px;
-
-        flex-direction: column;
-
-        align-items: stretch;
-    }
-
-    .control-group {
-
-        justify-content: center;
-
-        gap: 10px;
+            clamp(42px, 6.8dvh, 70px);
     }
 
     .sim-button {
 
-        flex: 1;
+        min-width: 92px;
 
-        padding: 12px 16px;
+        height: 40px;
 
-        border-radius: 16px;
-
-        font-size: 14px;
+        border-radius: 15px;
     }
 
     .icon-button {
 
-        width: 48px;
-        height: 48px;
+        width: 42px;
+        height: 42px;
 
-        border-radius: 16px;
+        border-radius: 15px;
 
-        font-size: 20px;
+        font-size: 18px;
+    }
+}
+
+/* =========================
+   Small Height
+========================= */
+
+@media (max-height: 720px) {
+
+    .pll-page,
+    .free-page {
+
+        gap: 4px;
+        padding: 4px;
+    }
+
+    .content {
+
+        gap: 4px;
+    }
+
+    .problem-area,
+    .answer-area {
+
+        padding: 7px;
+    }
+
+    .header {
+
+        height: 46px;
+    }
+
+    /*
+      timer圧縮
+    */
+
+    .timer {
+
+        font-size:
+            clamp(34px, 5.8dvh, 58px);
+    }
+
+    .cube-visual {
+
+        --cube-size:
+            clamp(
+                36px,
+                min(8.2vw, 8.2dvh),
+                72px
+            );
+    }
+
+    .main-button,
+    .submit-button,
+    .menu-button {
+
+        height: 38px;
     }
 }
