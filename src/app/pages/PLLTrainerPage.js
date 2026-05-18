@@ -154,7 +154,6 @@ export class PLLTrainerPage {
             const target = this.cells.cellMap.get(e.target)
         
             if (target){
-                console.log("HELLo")
                 e.preventDefault()
                 this.cells.changeColor(target,{dir:Math.sign(e.deltaY)})
             }
