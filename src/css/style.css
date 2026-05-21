@@ -94,6 +94,52 @@ body {
     overflow: hidden;
 }
 
+.card-header {
+
+    width:80%;
+    min-height:3.5rem;
+
+    padding:0 1rem;
+
+    display:flex;
+    align-items:center;
+
+    position:relative;
+
+    border-radius:1rem;
+
+    background:
+    rgba(255,255,255,0.001);
+
+    border:
+        1px solid rgba(255,255,255,0.12);
+
+    backdrop-filter:
+        blur(10px);
+
+    -webkit-backdrop-filter:
+        blur(10px);
+}
+
+.card-header-center{
+
+    position:absolute;
+
+    left:50%;
+    transform:translateX(-50%);
+
+    font-size:
+        clamp(1rem,2vw,1.25rem);
+
+    font-weight:600;
+}
+
+.card-header-right{
+    margin-left:auto;
+}
+
+
+
 .card::before {
     content: "";
     position: absolute;

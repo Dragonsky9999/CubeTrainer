@@ -4,14 +4,14 @@
                 <p class="subtitle">Train Smarter, Solve Faster</p>
                 <button class="main-button" id="startButton">START</button>
             </div>
-        `,this.element}mount(){this.element.querySelector(`#startButton`).addEventListener(`click`,()=>{this.pageManager.show(`menu`)})}},n=new class e{constructor(){if(e.instance)return e.instance;this.configSchema={theme:{category:`general`,label:`UI Theme`,type:`select`,options:[`Dark Glass`,`Pure Dark`,`Light Glass`],value:`Dark Glass`},soundVolume:{category:`general`,label:`Sound Volume`,type:`range`,min:0,max:100,step:5,value:50},tpsLimit:{category:`freeSim`,label:`TPS Limit (UPS)`,type:`select`,options:[`60`,`120`,`Unlimited`],value:`Unlimited`},animationSpeed:{category:`freeSim`,label:`Rotation Speed (ms)`,type:`range`,min:50,max:500,step:25,value:150},showFrontIndicator:{category:`freeSim`,label:`Show Front Guide`,type:`boolean`,value:!0},scrambleLength:{category:`PLLTrainer`,label:`Scramble Length`,type:`range`,min:10,max:30,step:1,value:20},inspectionTime:{category:`PLLTrainer`,label:`Inspection (sec)`,type:`select`,options:[`None`,`8`,`15`],value:`None`},showTimerMillis:{category:`PLLTrainer`,label:`Show Milliseconds`,type:`boolean`,value:!0}},this.settings={},Object.keys(this.configSchema).forEach(e=>{this.settings[e]=this.configSchema[e].value}),this.listeners=new Map,e.instance=this}get(e){return this.settings[e]}set(e,t){this.settings[e]!==t&&(this.configSchema[e].type===`range`?t=Number(t):this.configSchema[e].type===`boolean`&&(t=t===!0||t===`true`),this.settings[e]=t,this.listeners.has(e)&&this.listeners.get(e).forEach(e=>e(t)),this.listeners.has(`*`)&&this.listeners.get(`*`).forEach(n=>n(e,t)))}getSchema(){return this.configSchema}onChange(e,t){this.listeners.has(e)||this.listeners.set(e,[]),this.listeners.get(e).push(t)}},r=class{constructor(){this.element=null,this.configManager=n,this.currentCategory=`all`}render(e=`all`){this.currentCategory=e;let t=document.getElementById(`settingsOverlay`);t&&t.remove(),this.element=document.createElement(`div`),this.element.id=`settingsOverlay`,this.element.classList.add(`settings-overlay`,`is-active`);let r=n.getSchema(),i=[{id:`general`,label:`🌐 General Settings`},{id:`PLLTrainer`,label:`⏱️ PLLTrainer Settings`},{id:`freeSim`,label:`🧱 Free Simulator Settings`}],a=`Global Settings`;e===`general`&&(a=`General Settings`),e===`freeSim`&&(a=`Free Simulator Settings`),e===`PLLTrainer`&&(a=`PLLTrainer Settings`);let o=``;return i.forEach(t=>{let n=Object.entries(r).filter(([e,n])=>n.category===t.id);n.length!==0&&(e!==`all`&&e!==t.id||(o+=`<h3 class="settings-section-title">${t.label}</h3>`,n.forEach(([e,t])=>{o+=this.renderSettingRow(e,t)})))}),this.element.innerHTML=`
+        `,this.element}mount(){this.element.querySelector(`#startButton`).addEventListener(`click`,()=>{this.pageManager.show(`menu`)})}},n=new class e{constructor(){if(e.instance)return e.instance;this.configSchema={theme:{category:`general`,label:`UI Theme`,type:`select`,options:[`Dark Glass`,`Pure Dark`,`Light Glass`],value:`Dark Glass`},soundVolume:{category:`general`,label:`Sound Volume`,type:`range`,min:0,max:100,step:5,value:50},tpsLimit:{category:`freeSim`,label:`TPS Limit (UPS)`,type:`select`,options:[`60`,`120`,`Unlimited`],value:`Unlimited`},animationSpeed:{category:`freeSim`,label:`Rotation Speed (ms)`,type:`range`,min:50,max:500,step:25,value:150},showFrontIndicator:{category:`freeSim`,label:`Show Front Guide`,type:`boolean`,value:!0},scrambleLength:{category:`PLLTrainer`,label:`Scramble Length`,type:`range`,min:10,max:30,step:1,value:20},inspectionTime:{category:`PLLTrainer`,label:`Inspection (sec)`,type:`select`,options:[`None`,`8`,`15`],value:`None`},showTimerMillis:{category:`PLLTrainer`,label:`Show Milliseconds`,type:`boolean`,value:!0}},this.settings={},Object.keys(this.configSchema).forEach(e=>{this.settings[e]=this.configSchema[e].value}),this.listeners=new Map,e.instance=this}get(e){return this.settings[e]}set(e,t){this.settings[e]!==t&&(this.configSchema[e].type===`range`?t=Number(t):this.configSchema[e].type===`boolean`&&(t=t===!0||t===`true`),this.settings[e]=t,this.listeners.has(e)&&this.listeners.get(e).forEach(e=>e(t)),this.listeners.has(`*`)&&this.listeners.get(`*`).forEach(n=>n(e,t)))}getSchema(){return this.configSchema}onChange(e,t){this.listeners.has(e)||this.listeners.set(e,[]),this.listeners.get(e).push(t)}},r=class{constructor(){this.element=null,this.configManager=n,this.currentCategory=`all`}render(e=`all`){this.currentCategory=e;let t=document.getElementById(`settingsOverlay`);t&&t.remove(),this.element=document.createElement(`div`),this.element.id=`settingsOverlay`,this.element.classList.add(`settings-overlay`,`is-active`);let r=n.getSchema(),i=[{id:`general`,label:`🌐 General Settings`},{id:`PLLTrainer`,label:`⏱️ PLLTrainer Settings`},{id:`freeSim`,label:`🧱 Free Simulator Settings`}],a=``;return i.forEach(t=>{let n=Object.entries(r).filter(([e,n])=>n.category===t.id);n.length!==0&&(e!==`all`&&e!==t.id||(a+=`<h3 class="settings-section-title">${t.label}</h3>`,n.forEach(([e,t])=>{a+=this.renderSettingRow(e,t)})))}),this.element.innerHTML=`
             <div class="glass settings-card">
                 <div class="settings-header">
-                    <h2>${a}</h2>
+                    <h2>Settings</h2>
                     <button id="closeSettingsButton" class="close-button">✕</button>
                 </div>
                 <div class="settings-body">
-                    ${o}
+                    ${a}
                 </div>
             </div>
         `,this.setupEvents(),this.element}renderSettingRow(e,t){let r=n.get(e),i=``;return t.type===`select`?i=`
@@ -34,11 +34,15 @@
                 <div class="settings-input-wrapper">${i}</div>
             </div>
         `}setupEvents(){this.element.querySelector(`#closeSettingsButton`).addEventListener(`click`,()=>this.close()),this.element.addEventListener(`click`,e=>{e.target===this.element&&this.close()}),this.element.querySelectorAll(`select, input`).forEach(e=>{let t=e.dataset.key;e.addEventListener(`input`,e=>{let r=e.target.type===`checkbox`?e.target.checked:e.target.value;n.set(t,r);let i=this.element.querySelector(`#val-${t}`);i&&(i.textContent=r)})})}open(e,t=`all`){let n=this.render(t);e.appendChild(n)}close(){this.element.classList.remove(`is-active`),this.element.addEventListener(`transitionend`,()=>{this.element.remove()},{once:!0})}},i=class{constructor(e){this.pageManager=e,this.element=null,this.settingsOverlay=new r(n)}render(){return this.element=document.createElement(`div`),this.element.classList.add(`menu-page`),this.element.innerHTML=`
-            <div class="header">
-                <button id="settingsButton" class="icon-button">⚙</button>
+        <div class="glass card menu-card">
+            <div class="card-header">
+                <div class="card-header-center">
+                    <h1 class="title">Menu</h1>
+                </div>
+                <div class="card-header-right">
+                    <button id="settingsButton" class="icon-button">⚙</button>
+                </div>
             </div>
-            <div class="glass card menu-card">
-                <h1 class="title">Menu</h1>
                 <button class="menu-button" id="pllButton">PLL Trainer</button>
                 <button class="menu-button" id="freeButton">Free Simulator</button>
                 <button class="menu-button back-button" id="backButton">Back</button>

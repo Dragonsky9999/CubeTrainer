@@ -28,12 +28,6 @@ export class SettingsOverlay {
             { id: "freeSim", label: "🧱 Free Simulator Settings" },
         ]
 
-        // カテゴリタイトルの決定
-        let displayTitle = "Global Settings"
-        if (category === "general") displayTitle = "General Settings"
-        if (category === "freeSim") displayTitle = "Free Simulator Settings"
-        if (category === "PLLTrainer") displayTitle = "PLLTrainer Settings"
-
         //  2. カテゴリごとに仕分けしたHTMLを生成する
         let bodyHtml = ""
 
@@ -58,7 +52,7 @@ export class SettingsOverlay {
         this.element.innerHTML = `
             <div class="glass settings-card">
                 <div class="settings-header">
-                    <h2>${displayTitle}</h2>
+                    <h2>Settings</h2>
                     <button id="closeSettingsButton" class="close-button">✕</button>
                 </div>
                 <div class="settings-body">

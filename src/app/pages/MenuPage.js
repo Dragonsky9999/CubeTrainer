@@ -13,11 +13,15 @@ export class MenuPage {
         this.element.classList.add("menu-page")
 
         this.element.innerHTML = `
-            <div class="header">
-                <button id="settingsButton" class="icon-button">⚙</button>
+        <div class="glass card menu-card">
+            <div class="card-header">
+                <div class="card-header-center">
+                    <h1 class="title">Menu</h1>
+                </div>
+                <div class="card-header-right">
+                    <button id="settingsButton" class="icon-button">⚙</button>
+                </div>
             </div>
-            <div class="glass card menu-card">
-                <h1 class="title">Menu</h1>
                 <button class="menu-button" id="pllButton">PLL Trainer</button>
                 <button class="menu-button" id="freeButton">Free Simulator</button>
                 <button class="menu-button back-button" id="backButton">Back</button>
