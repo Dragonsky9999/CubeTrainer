@@ -1,59 +1,29 @@
 * {
-
     margin: 0;
     padding: 0;
-
     box-sizing: border-box;
-
     user-select: none;
     -webkit-user-select: none;
-
     -webkit-tap-highlight-color: transparent;
 }
 
 html,
 body {
-
     width: 100%;
     height: 100%;
-
     overflow: hidden;
-
     -webkit-text-size-adjust: 100%;
 }
 
 body {
-
-    font-family:
-        Inter,
-        system-ui,
-        sans-serif;
-
+    font-family: Inter, system-ui, sans-serif;
     color: white;
-
     overflow: hidden;
-
     overscroll-behavior: none;
-
     background:
-        radial-gradient(
-            circle at top left,
-            rgba(99,102,241,0.22),
-            transparent 24%
-        ),
-
-        radial-gradient(
-            circle at bottom right,
-            rgba(14,165,233,0.16),
-            transparent 30%
-        ),
-
-        linear-gradient(
-            160deg,
-            #020617 0%,
-            #07111f 48%,
-            #020617 100%
-        );
+        radial-gradient(circle at top left, rgba(99,102,241,0.22), transparent 24%),
+        radial-gradient(circle at bottom right, rgba(14,165,233,0.16), transparent 30%),
+        linear-gradient(160deg, #020617 0%, #07111f 48%, #020617 100%);
 }
 
 /* =========================
@@ -61,12 +31,12 @@ body {
 ========================= */
 
 #app {
-
     width: 100%;
     height: 100vh;
     height: 100dvh;
-
     overflow: hidden;
+    display: flex;
+    flex-direction: column;
 }
 
 /* =========================
@@ -78,10 +48,8 @@ body {
 .menu-page,
 .pll-page,
 .free-page {
-
     width: 100%;
     height: 100%;
-
     min-width: 0;
     min-height: 0;
 }
@@ -92,14 +60,10 @@ body {
 
 .home-page,
 .menu-page {
-
     display: flex;
-
     justify-content: center;
     align-items: center;
-
-    padding:
-        clamp(12px, 2vw, 28px);
+    padding: clamp(12px, 2vw, 28px);
 }
 
 /* =========================
@@ -107,22 +71,10 @@ body {
 ========================= */
 
 .glass {
-
-    background:
-        linear-gradient(
-            180deg,
-            rgba(255,255,255,0.10),
-            rgba(255,255,255,0.035)
-        );
-
+    background: linear-gradient(180deg, rgba(255,255,255,0.10), rgba(255,255,255,0.035));
     backdrop-filter: blur(30px);
-
-    border:
-        1px solid rgba(255,255,255,0.08);
-
-    box-shadow:
-        0 18px 60px rgba(0,0,0,0.42),
-        inset 0 1px 0 rgba(255,255,255,0.08);
+    border: 1px solid rgba(255,255,255,0.08);
+    box-shadow: 0 18px 60px rgba(0,0,0,0.42), inset 0 1px 0 rgba(255,255,255,0.08);
 }
 
 /* =========================
@@ -130,56 +82,32 @@ body {
 ========================= */
 
 .card {
-
-    width:
-        min(92vw, 560px);
-
-    padding:
-        clamp(28px, 4vw, 48px);
-
+    width: min(92vw, 560px);
+    padding: clamp(28px, 4vw, 48px);
     border-radius: 36px;
-
     display: flex;
     flex-direction: column;
     align-items: center;
-
-    gap:
-        clamp(16px, 2vh, 24px);
-
+    gap: clamp(16px, 2vh, 24px);
     text-align: center;
-
     position: relative;
-
     overflow: hidden;
 }
 
 .card::before {
-
     content: "";
-
     position: absolute;
     inset: 0;
-
-    background:
-        linear-gradient(
-            135deg,
-            rgba(255,255,255,0.08),
-            transparent 45%
-        );
-
+    background: linear-gradient(135deg, rgba(255,255,255,0.08), transparent 45%);
     pointer-events: none;
 }
 
 .hero-card {
-
-    min-height:
-        min(72dvh, 580px);
-
+    min-height: min(72dvh, 580px);
     justify-content: center;
 }
 
 .menu-card {
-
     justify-content: center;
 }
 
@@ -188,25 +116,15 @@ body {
 ========================= */
 
 .title {
-
-    font-size:
-        clamp(42px, 5vw, 68px);
-
+    font-size: clamp(42px, 5vw, 68px);
     font-weight: 900;
-
     letter-spacing: -0.05em;
-
-    text-shadow:
-        0 0 28px rgba(255,255,255,0.12);
+    text-shadow: 0 0 28px rgba(255,255,255,0.12);
 }
 
 .subtitle {
-
-    font-size:
-        clamp(15px, 1.8vw, 18px);
-
+    font-size: clamp(15px, 1.8vw, 18px);
     opacity: 0.82;
-
     margin-bottom: 10px;
 }
 
@@ -215,13 +133,9 @@ body {
 ========================= */
 
 button {
-
     cursor: pointer;
-
     border: none;
-
     color: white;
-
     transition:
         transform 0.14s ease,
         opacity 0.14s ease,
@@ -229,59 +143,37 @@ button {
         box-shadow 0.18s ease;
 }
 
-button:active {
+button:hover {
+    background: rgba(255,255,255,0.5);
+    transform: translateY(-1px) scale(1.1);
+}
 
-    transform: scale(0.96);
+button:active {
+    transform: scale(0.9);
 }
 
 .main-button,
 .submit-button,
 .menu-button {
-
     width: 100%;
-
-    height:
-        clamp(48px, 5.4dvh, 58px);
-
+    height: clamp(44px, 5dvh, 56px);
     border-radius: 18px;
-
-    font-size:
-        clamp(14px, 1.7vw, 16px);
-
+    font-size: clamp(14px, 1.7vw, 16px);
     font-weight: 800;
-
     letter-spacing: 0.03em;
-
-    background:
-        linear-gradient(
-            180deg,
-            rgba(255,255,255,0.22),
-            rgba(255,255,255,0.08)
-        );
-
+    background: linear-gradient(180deg, rgba(255,255,255,0.22), rgba(255,255,255,0.08));
     backdrop-filter: blur(18px);
-
-    box-shadow:
-        0 10px 24px rgba(0,0,0,0.24),
-        inset 0 1px 0 rgba(255,255,255,0.16);
+    box-shadow: 0 10px 24px rgba(0,0,0,0.24), inset 0 1px 0 rgba(255,255,255,0.16);
 }
 
 .main-button:hover,
 .submit-button:hover,
 .menu-button:hover {
-
     transform: translateY(-1px);
-
-    background:
-        linear-gradient(
-            180deg,
-            rgba(255,255,255,0.28),
-            rgba(255,255,255,0.10)
-        );
+    background: linear-gradient(180deg, rgba(255,255,255,0.28), rgba(255,255,255,0.10));
 }
 
 .menu-button {
-
     max-width: 320px;
 }
 
@@ -291,16 +183,10 @@ button:active {
 
 .pll-page,
 .free-page {
-
     display: flex;
     flex-direction: column;
-
-    gap:
-        clamp(4px, 0.5dvh, 8px);
-
-    padding:
-        clamp(4px, 0.45vw, 8px);
-
+    gap: clamp(4px, 0.5dvh, 8px);
+    padding: clamp(4px, 0.45vw, 8px);
     overflow: hidden;
 }
 
@@ -309,69 +195,36 @@ button:active {
 ========================= */
 
 .header {
-
-    height:
-        clamp(52px, 6dvh, 64px);
-
+    height: clamp(48px, 5.6dvh, 62px);
     flex-shrink: 0;
-
-    border-radius: 22px;
-
-    padding:
-        0 clamp(10px, 1vw, 18px);
-
+    border-radius: clamp(16px, 1.8vw, 22px);
+    padding: 0 clamp(10px, 1vw, 18px);
     display: flex;
     align-items: center;
     justify-content: space-between;
-
     gap: 10px;
-
-    background:
-        linear-gradient(
-            180deg,
-            rgba(255,255,255,0.12),
-            rgba(255,255,255,0.05)
-        );
-
+    background: linear-gradient(180deg, rgba(255,255,255,0.12), rgba(255,255,255,0.05));
     backdrop-filter: blur(24px);
-
-    box-shadow:
-        0 10px 30px rgba(0,0,0,0.32);
+    box-shadow: 0 10px 30px rgba(0,0,0,0.32);
 }
 
 .header h1 {
-
     flex: 1;
-
     text-align: center;
-
-    font-size:
-        clamp(18px, 2vw, 26px);
-
+    font-size: clamp(16px, 1.8vw, 24px);
     font-weight: 800;
-
     white-space: nowrap;
-
     overflow: hidden;
     text-overflow: ellipsis;
 }
 
 .header button {
-
-    width:
-        clamp(40px, 4.4dvh, 46px);
-
-    height:
-        clamp(40px, 4.4dvh, 46px);
-
+    width: clamp(36px, 4dvh, 44px);
+    height: clamp(36px, 4dvh, 44px);
     flex-shrink: 0;
-
-    border-radius: 14px;
-
-    background:
-        rgba(255,255,255,0.10);
-
-    font-size: 17px;
+    border-radius: 13px;
+    background: rgba(255,255,255,0.10);
+    font-size: 16px;
 }
 
 /* =========================
@@ -379,23 +232,13 @@ button:active {
 ========================= */
 
 .content {
-
     flex: 1;
-
     min-width: 0;
     min-height: 0;
-
     display: grid;
-
-    grid-template-columns:
-        minmax(0, 1.02fr)
-        minmax(0, 0.98fr);
-
-    gap:
-        clamp(6px, 0.7vw, 10px);
-
-    overflow-x: hidden;
-    overflow-y: visible;
+    grid-template-columns: minmax(0, 1.02fr) minmax(0, 0.98fr);
+    gap: clamp(4px, 0.6vw, 8px);
+    overflow: hidden;
 }
 
 /* =========================
@@ -404,30 +247,15 @@ button:active {
 
 .problem-area,
 .answer-area {
-
     min-width: 0;
     min-height: 0;
-
-    border-radius: 30px;
-
-    padding:
-        clamp(8px, 0.9vw, 14px);
-
+    border-radius: clamp(20px, 2.2vw, 30px);
+    padding: clamp(8px, 0.9vw, 14px);
     overflow: hidden;
-
     position: relative;
-
-    background:
-        linear-gradient(
-            180deg,
-            rgba(255,255,255,0.075),
-            rgba(255,255,255,0.025)
-        );
-
+    background: linear-gradient(180deg, rgba(255,255,255,0.075), rgba(255,255,255,0.025));
     backdrop-filter: blur(26px);
-
-    box-shadow:
-        0 18px 44px rgba(0,0,0,0.34);
+    box-shadow: 0 18px 44px rgba(0,0,0,0.34);
 }
 
 /* =========================
@@ -435,16 +263,9 @@ button:active {
 ========================= */
 
 .problem-area {
-
     display: grid;
-
-    grid-template-rows:
-        auto
-        minmax(0, 1fr)
-        auto;
-
-    gap:
-        clamp(6px, 0.7dvh, 10px);
+    grid-template-rows: auto minmax(0, 1fr) auto;
+    gap: clamp(4px, 0.6dvh, 8px);
 }
 
 /* =========================
@@ -452,15 +273,9 @@ button:active {
 ========================= */
 
 .answer-area {
-
     display: grid;
-
-    grid-template-rows:
-        minmax(0, 1fr)
-        auto;
-
-    gap:
-        clamp(6px, 0.7dvh, 10px);
+    grid-template-rows: minmax(0, 1fr) auto;
+    gap: clamp(4px, 0.6dvh, 8px);
 }
 
 /* =========================
@@ -468,79 +283,110 @@ button:active {
 ========================= */
 
 .timer {
-
     text-align: center;
-
-    font-size:
-        clamp(60px, 8.8dvh, 108px);
-
+    font-size: clamp(44px, 6.8dvh, 92px);
     font-weight: 900;
-
     letter-spacing: 0.04em;
-
-    line-height: 0.9;
-
-    padding:
-        clamp(2px, 0.2dvh, 6px) 0;
-
+    line-height: 0.95;
+    padding: clamp(2px, 0.3dvh, 6px) 0;
     flex-shrink: 0;
-
     text-shadow:
         0 0 26px rgba(255,255,255,0.24),
         0 0 48px rgba(99,102,241,0.22);
 }
 
 /* =========================
-   Cube Container
+   Cube Container (3D)
 ========================= */
 
 .cube-container,
 .simulator-container {
-
     width: 100%;
     height: 100%;
-
     min-width: 0;
     min-height: 0;
-
-    border-radius: 28px;
-
+    border-radius: clamp(18px, 2vw, 26px);
     overflow: hidden;
-
     position: relative;
-
-    background:
-        radial-gradient(
-            circle at top,
-            rgba(255,255,255,0.12),
-            rgba(0,0,0,0.42)
-        );
-
-    box-shadow:
-        inset 0 1px 0 rgba(255,255,255,0.08),
-        0 20px 40px rgba(0,0,0,0.34);
+    background: radial-gradient(circle at top, rgba(255,255,255,0.12), rgba(0,0,0,0.42));
+    box-shadow: inset 0 1px 0 rgba(255,255,255,0.08), 0 20px 40px rgba(0,0,0,0.34);
 }
 
 /* =========================
-   2D Cube
+   Front Face Indicator
+   ※ .cube-container / .simulator-container の
+     position:relative 直下に appendChild される
+     → position:absolute で四隅に貼る
+========================= */
+
+.frontFaceIndicator {
+    position: absolute;
+    bottom: clamp(10px, 1.4dvh, 18px);
+    left: 50%;
+    transform: translateX(-50%);
+
+    /* サイズ：コンテナに対して相対指定 */
+    width: clamp(64px, 14%, 108px);
+    height: clamp(64px, 14%, 108px);
+
+    /* 視認性：薄いガラス感 */
+    border-radius: clamp(10px, 1.2vw, 16px);
+    background: linear-gradient(180deg, rgba(255,255,255,0.13), rgba(255,255,255,0.04));
+    backdrop-filter: blur(14px);
+    border: 1px solid rgba(255,255,255,0.14);
+    box-shadow:
+        0 8px 24px rgba(0,0,0,0.32),
+        inset 0 1px 0 rgba(255,255,255,0.12);
+
+    /* z-index: canvasより前面 */
+    z-index: 10;
+
+    /* コンテンツのためのレイアウト */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    /* pointer-events: なし（操作の邪魔をしない） */
+    pointer-events: none;
+
+    /* フェードイン */
+    opacity: 1;
+    transition: opacity 0.2s ease;
+}
+
+/* =========================
+   2D Cube wrapper
+   ※ --cube-size はここで定義し、
+     twoDCube・cube-visual 両方に継承させる
+     （前回: cube-visual 内定義では twoDCube の
+       padding が var() を解決できなかった）
 ========================= */
 
 .twoDCube {
-
     width: 100%;
     height: 100%;
-
     min-width: 0;
     min-height: 0;
+
+    /*
+     * Round 1 修正: CSS変数をここのスコープで定義
+     *   → padding の calc() が正しく解決される
+     */
+    --cube-size: clamp(44px, min(7.2vw, 7.6dvh), 92px);
+    --gap: max(4px, calc(var(--cube-size) * 0.014));
+    --face-size: calc(var(--cube-size) * 3 + var(--gap) * 2);
 
     display: flex;
     justify-content: center;
     align-items: center;
 
+    /*
+     * ストリップが外側に -0.35*cube-size 飛び出す
+     * padding で吸収 (変数をここで定義したので正しく機能する)
+     */
+    padding: calc(var(--cube-size) * 0.44);
+    box-sizing: border-box;
     overflow: hidden;
-
-    padding:
-        clamp(2px, 0.2vw, 4px);
 }
 
 /* =========================
@@ -548,64 +394,37 @@ button:active {
 ========================= */
 
 .cube-visual {
-
     position: relative;
-
     display: flex;
     justify-content: center;
     align-items: center;
-
     width: 100%;
     height: 100%;
-
     min-width: 0;
     min-height: 0;
 
-    aspect-ratio: 1;
-
-    max-width: 100%;
-    max-height: 100%;
-
-    --cube-size:
-        clamp(
-            78px,
-            min(12.8vw, 13.2dvh),
-            156px
-        );
-    
-    --gap:
-    max(
-        5px,
-        calc(var(--cube-size) * 0.016)
-        );
-        
-    --face-size:
-        calc(var(--cube-size) * 3 + var(--gap) * 2);
-    }
+    /*
+     * Round 2: 変数は twoDCube スコープから継承。
+     *   ここでの再定義は不要になったので削除。
+     *   contain: layout のみ残す。
+     */
+    contain: layout;
+}
 
 /* =========================
    Rotated Cube
 ========================= */
 
 .cube-rotated {
-
     position: relative;
-
-    width:
-        calc(var(--face-size) * 1.48);
-
-    height:
-        calc(var(--face-size) * 1.48);
-
+    width: calc(var(--face-size) * 1.48);
+    height: calc(var(--face-size) * 1.48);
     display: flex;
     justify-content: center;
     align-items: center;
-
-    transform:
-        rotate(45deg)
-        scale(1.2);
-
-    gap: var(--gap)
+    transform: rotate(45deg);
+    gap: var(--gap);
+    flex-shrink: 0;
 }
 
 /* =========================
@@ -613,23 +432,13 @@ button:active {
 ========================= */
 
 .upper-face-grid {
-
     position: absolute;
-
     top: 50%;
     left: 50%;
-
-    transform:
-        translate(-50%, -50%);
-
+    transform: translate(-50%, -50%);
     display: grid;
-
-    grid-template-columns:
-        repeat(3, var(--cube-size));
-
-    grid-template-rows:
-        repeat(3, var(--cube-size));
-
+    grid-template-columns: repeat(3, var(--cube-size));
+    grid-template-rows: repeat(3, var(--cube-size));
     gap: var(--gap);
 }
 
@@ -639,38 +448,22 @@ button:active {
 
 .cell,
 .strip {
-
-    border-radius:
-        calc(var(--cube-size) * 0.14);
-
-    background:
-        linear-gradient(
-            180deg,
-            rgba(255,255,255,0.28),
-            rgba(255,255,255,0.08)
-        );
-
-    border:
-        1px solid rgba(255,255,255,0.10);
-
+    border-radius: calc(var(--cube-size) * 0.14);
+    background: linear-gradient(180deg, rgba(255,255,255,0.28), rgba(255,255,255,0.08));
+    border: 1px solid rgba(255,255,255,0.10);
     box-shadow:
         inset 0 1px 0 rgba(255,255,255,0.18),
         0 0 14px rgba(255,255,255,0.06);
 }
 
 .cell {
-
     width: var(--cube-size);
     height: var(--cube-size);
 }
 
 .strip {
-
-    width:
-        calc(var(--cube-size) * 0.98);
-
-    height:
-        calc(var(--cube-size) * 0.98);
+    width: calc(var(--cube-size) * 0.98);
+    height: calc(var(--cube-size) * 0.98);
 }
 
 /* =========================
@@ -678,105 +471,74 @@ button:active {
 ========================= */
 
 .side-strips {
-
     position: absolute;
-
     display: flex;
-
     gap: var(--gap);
 }
 
-/* ---- Top ---- */
-
 .top-stripes {
-
-    top:
-        calc(var(--cube-size) * -0.35);
-
+    top: calc(var(--cube-size) * -0.35);
     left: 50%;
-
     transform: translateX(-50%);
 }
-
-/* ---- Bottom ---- */
 
 .bottom-stripes {
-
-    bottom:
-        calc(var(--cube-size) * -0.35);
-
+    bottom: calc(var(--cube-size) * -0.35);
     left: 50%;
-
     transform: translateX(-50%);
 }
 
-/* ---- Left ---- */
-
 .left-stripes {
-
-    left:
-        calc(var(--cube-size) * -0.35);
-
+    left: calc(var(--cube-size) * -0.35);
     top: 50%;
-
     flex-direction: column;
-
     transform: translateY(-50%);
 }
 
-/* ---- Right ---- */
-
 .right-stripes {
-
-    right:
-        calc(var(--cube-size) * -0.35);
-
+    right: calc(var(--cube-size) * -0.35);
     top: 50%;
-
     flex-direction: column;
-
     transform: translateY(-50%);
 }
 
 /* =========================
    Free Sim
+   Round 3: free-content を height:auto + flex:1 に統一
+   (height:0 は free-layout の height:100% が 0% を
+    参照してしまうバグを引き起こす)
 ========================= */
 
 .free-content {
-
     flex: 1;
-
     min-width: 0;
     min-height: 0;
-
     overflow: hidden;
+
+    /* display:flex で高さを子に伝播する */
+    display: flex;
+    flex-direction: column;
 }
 
 .free-layout {
-
-    width: 100%;
-    height: 100%;
-
+    flex: 1;
     min-width: 0;
     min-height: 0;
+    display: flex;
+    flex-direction: column;
 }
 
 .simulator-container-wrapper {
-
-    width: 100%;
-    height: 100%;
-
+    flex: 1;
     min-width: 0;
     min-height: 0;
-
     position: relative;
-
-    padding:
-        clamp(6px, 0.7vw, 12px);
-
-    border-radius: 32px;
-
+    padding: clamp(6px, 0.7vw, 12px);
+    border-radius: clamp(20px, 2.4vw, 32px);
     overflow: hidden;
+    background: linear-gradient(180deg, rgba(255,255,255,0.06), rgba(255,255,255,0.02));
+    border: 1px solid rgba(255,255,255,0.07);
+    box-shadow: 0 18px 60px rgba(0,0,0,0.42);
 }
 
 /* =========================
@@ -784,37 +546,26 @@ button:active {
 ========================= */
 
 .control-overlay {
-
     position: absolute;
-
     inset: 0;
-
-    padding:
-        clamp(10px, 1vw, 16px);
-
+    padding: clamp(10px, 1vw, 16px);
     pointer-events: none;
-
     display: flex;
     justify-content: space-between;
     align-items: flex-end;
 }
 
 .control-group {
-
     display: flex;
-
     gap: 8px;
-
     pointer-events: auto;
 }
 
 .left-controls {
-
     flex-direction: column;
 }
 
 .right-controls {
-
     align-items: center;
 }
 
@@ -824,59 +575,34 @@ button:active {
 
 .sim-button,
 .icon-button {
-
     color: white;
-
-    background:
-        linear-gradient(
-            180deg,
-            rgba(15,23,42,0.84),
-            rgba(15,23,42,0.64)
-        );
-
+    background: linear-gradient(180deg, rgba(15,23,42,0.84), rgba(15,23,42,0.64));
     backdrop-filter: blur(26px);
-
     box-shadow:
         0 12px 28px rgba(0,0,0,0.34),
         inset 0 1px 0 rgba(255,255,255,0.08);
 }
 
 .sim-button {
-
-    min-width: 118px;
-
-    height: 46px;
-
-    padding: 0 18px;
-
-    border-radius: 18px;
-
-    font-size: 14px;
-
+    min-width: 110px;
+    height: clamp(38px, 4.4dvh, 46px);
+    padding: 0 16px;
+    border-radius: 16px;
+    font-size: clamp(12px, 1.4vw, 14px);
     font-weight: 700;
 }
 
 .icon-button {
-
-    width: 52px;
-    height: 52px;
-
-    border-radius: 18px;
-
-    font-size: 22px;
+    width: clamp(40px, 4.6dvh, 52px);
+    height: clamp(40px, 4.6dvh, 52px);
+    border-radius: 16px;
+    font-size: 20px;
 }
 
 .icon-button:hover,
 .sim-button:hover {
-
     transform: translateY(-1px);
-
-    background:
-        linear-gradient(
-            180deg,
-            rgba(30,41,59,0.92),
-            rgba(15,23,42,0.74)
-        );
+    background: linear-gradient(180deg, rgba(30,41,59,0.92), rgba(15,23,42,0.74));
 }
 
 /* =========================
@@ -884,13 +610,268 @@ button:active {
 ========================= */
 
 .stop-button {
+    background: linear-gradient(180deg, rgba(220,38,38,0.44), rgba(127,29,29,0.36));
+}
 
-    background:
-        linear-gradient(
-            180deg,
-            rgba(220,38,38,0.44),
-            rgba(127,29,29,0.36)
-        );
+/* ==========================================================================
+   Settings System Component Extensions (Glassmorphism Concept)
+   ========================================================================== */
+
+/* 1. 画面全体の背景マスク（暗転＋ボケ） */
+.settings-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100dvh;
+    background: rgba(2, 6, 23, 0.45);
+    backdrop-filter: blur(0px);
+    -webkit-backdrop-filter: blur(0px);
+    z-index: 1000;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.24s cubic-bezier(0.4, 0, 0.2, 1),
+                backdrop-filter 0.24s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* アクティブ時：背景をボカす */
+.settings-overlay.is-active {
+    opacity: 1;
+    pointer-events: auto;
+    backdrop-filter: blur(24px);
+    -webkit-backdrop-filter: blur(24px);
+}
+
+/* 2. 設定画面のカード本体 */
+.settings-card {
+    width: clamp(280px, 85vw, 540px);
+    max-height: clamp(320px, 80dvh, 680px);
+    background: rgba(30, 41, 59, 0.5); /* 💡文字の視認性を守るため、グラス背景のベース色を補填 */
+    border-radius: clamp(12px, 2.2dvh, 24px);
+    padding: clamp(16px, 3dvh, 32px);
+    display: flex;
+    flex-direction: column;
+    transform: scale(0.92) translateY(15px);
+    transition: transform 0.28s cubic-bezier(0.34, 1.56, 0.64, 1);
+    box-shadow: 0 25px 70px rgba(0, 0, 0, 0.55), 
+                inset 0 1px 0 rgba(255, 255, 255, 0.12);
+}
+
+/* アクティブ時：ポップアップアニメーション */
+.settings-overlay.is-active .settings-card {
+    transform: scale(1) translateY(0);
+}
+
+/* 3. ヘッダーエリア */
+.settings-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    padding-bottom: clamp(10px, 1.6dvh, 16px);
+    margin-bottom: clamp(8px, 1.5dvh, 12px); /* 💡スクロール領域を広く取るため下部マージンを微調整 */
+}
+
+.settings-header h2 {
+    font-size: clamp(18px, 2.6dvh, 26px);
+    font-weight: 700;
+    color: #f8fafc;
+    letter-spacing: -0.02em;
+}
+
+/* ✕ 閉じるボタン */
+.close-button {
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    color: #94a3b8;
+    width: clamp(32px, 4.2dvh, 44px);
+    height: clamp(32px, 4.2dvh, 44px);
+    border-radius: 50%;
+    cursor: pointer;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 16px;
+    transition: background 0.2s, border-color 0.2s, color 0.2s, transform 0.2s;
+}
+
+.close-button:hover {
+    background: rgba(239, 68, 68, 0.2);
+    border-color: rgba(239, 68, 68, 0.4);
+    color: #fecaca;
+    transform: rotate(90deg);
+}
+
+/* 4. 📜 スクロール制御を受け持つボディエリア（二重定義を統合） */
+.settings-body {
+    flex: 1;
+    width: 100%;
+    max-height: clamp(200px, 55dvh, 480px); /* 💡カード内に確実に収めるためのインナースクロール上限 */
+    overflow-y: auto;
+    padding: 4px 12px 12px 4px;
+    min-height: 0;
+    -webkit-overflow-scrolling: touch; /* iOSでの慣性スクロール */
+}
+
+/* 🧼 グラスモーフィズム用カスタムスクロールバー */
+.settings-body::-webkit-scrollbar {
+    width: 6px;
+}
+.settings-body::-webkit-scrollbar-track {
+    background: transparent;
+}
+.settings-body::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.15);
+    border-radius: 10px;
+}
+.settings-body::-webkit-scrollbar-thumb:hover {
+    background: rgba(255, 255, 255, 0.35);
+}
+
+/* 📂 新設：サブタイトル（カテゴリ見出し） */
+.settings-section-title {
+    font-size: clamp(11px, 1.5dvh, 13px);
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: rgba(255, 255, 255, 0.5); /* 眩しくない透過白 */
+    margin: 20px 0 6px 2px;
+    font-weight: 600;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    padding-bottom: 6px;
+}
+
+/* 最初の見出しだけ上の余白を詰めて美しく */
+.settings-section-title:first-child {
+    margin-top: 4px;
+}
+
+/* 5. 各設定項目の行 */
+.settings-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: clamp(10px, 1.8dvh, 18px) 4px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+}
+
+.settings-row:last-child {
+    border-bottom: none;
+}
+
+.settings-label {
+    font-size: clamp(13px, 1.8dvh, 16px);
+    color: #cbd5e1;
+    font-weight: 500;
+}
+
+/* 6. 各種入力フォームのコントロール群 */
+.settings-select {
+    background: rgba(15, 23, 42, 0.6);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    color: #f1f5f9;
+    padding: 6px 12px;
+    border-radius: 8px;
+    font-size: clamp(12px, 1.6dvh, 15px);
+    outline: none;
+    cursor: pointer;
+    min-width: 120px;
+    text-align: center;
+    transition: border-color 0.2s;
+}
+
+.settings-select:focus {
+    border-color: rgba(99, 102, 241, 0.6);
+}
+
+.range-container {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.settings-range {
+    -webkit-appearance: none;
+    appearance: none;
+    width: clamp(100px, 15vw, 160px);
+    height: 4px;
+    background: rgba(255, 255, 255, 0.15);
+    border-radius: 2px;
+    outline: none;
+}
+
+.settings-range::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    background: #6366f1;
+    box-shadow: 0 0 10px rgba(99, 102, 241, 0.5);
+    cursor: pointer;
+    transition: transform 0.1s;
+}
+
+.settings-range::-webkit-slider-thumb:hover {
+    transform: scale(1.25);
+}
+
+.range-value {
+    font-size: 13px;
+    color: #6366f1;
+    font-family: monospace;
+    font-weight: bold;
+    min-width: 28px;
+    text-align: right;
+}
+
+/* トグルスイッチ（チェックボックス） */
+.toggle-switch {
+    position: relative;
+    display: inline-block;
+    width: 44px;
+    height: 24px;
+}
+
+.settings-checkbox {
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+.toggle-slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background-color: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 24px;
+    transition: 0.2s;
+}
+
+.toggle-slider:before {
+    position: absolute;
+    content: "";
+    height: 16px;
+    width: 16px;
+    left: 3px;
+    bottom: 3px;
+    background-color: #94a3b8;
+    border-radius: 50%;
+    transition: 0.2s;
+}
+
+.settings-checkbox:checked + .toggle-slider {
+    background-color: rgba(99, 102, 241, 0.25);
+    border-color: rgba(99, 102, 241, 0.5);
+}
+
+.settings-checkbox:checked + .toggle-slider:before {
+    transform: translateX(20px);
+    background-color: #818cf8;
+    box-shadow: 0 0 8px rgba(99, 102, 241, 0.6);
 }
 
 /* =========================
@@ -898,30 +879,19 @@ button:active {
 ========================= */
 
 @media (max-width: 980px) {
-
     .content {
-
         grid-template-columns: 1fr;
-
-        grid-template-rows:
-            minmax(260px, 0.92fr)
-            minmax(340px, 1.08fr);
+        grid-template-rows: minmax(0, 1fr) minmax(0, 1.2fr);
     }
 
     .timer {
-
-        font-size:
-            clamp(52px, 7.8dvh, 88px);
+        font-size: clamp(40px, 6.4dvh, 76px);
     }
 
-    .cube-visual {
-
-        --cube-size:
-            clamp(
-                62px,
-                min(14vw, 11.6dvh),
-                128px
-            );
+    /* Round 3: twoDCube でスコープを持つので
+       メディアクエリでも twoDCube に上書きする */
+    .twoDCube {
+        --cube-size: clamp(40px, min(13vw, 10dvh), 80px);
     }
 }
 
@@ -930,72 +900,57 @@ button:active {
 ========================= */
 
 @media (max-width: 768px) {
-
     .pll-page,
     .free-page {
-
         padding: 4px;
         gap: 4px;
     }
 
     .content {
-
         gap: 4px;
     }
 
     .problem-area,
     .answer-area {
-
         padding: 7px;
     }
 
     .header {
-
-        height: 48px;
-
-        border-radius: 18px;
+        height: 46px;
+        border-radius: 16px;
     }
 
     .problem-area,
     .answer-area,
     .simulator-container-wrapper {
-
-        border-radius: 22px;
+        border-radius: 20px;
     }
 
-    .cube-visual {
-
-        --cube-size:
-            clamp(
-                48px,
-                min(16vw, 10dvh),
-                96px
-            );
+    .twoDCube {
+        --cube-size: clamp(36px, min(14vw, 8.6dvh), 72px);
     }
 
     .timer {
-
-        font-size:
-            clamp(42px, 6.8dvh, 70px);
+        font-size: clamp(34px, 5.8dvh, 62px);
     }
 
     .sim-button {
-
-        min-width: 92px;
-
-        height: 40px;
-
-        border-radius: 15px;
+        min-width: 86px;
+        height: 38px;
+        border-radius: 14px;
     }
 
     .icon-button {
-
-        width: 42px;
-        height: 42px;
-
-        border-radius: 15px;
-
+        width: 40px;
+        height: 40px;
+        border-radius: 14px;
         font-size: 18px;
+    }
+
+    .frontFaceIndicator {
+        width: clamp(52px, 12%, 80px);
+        height: clamp(52px, 12%, 80px);
+        bottom: clamp(8px, 1.2dvh, 14px);
     }
 }
 
@@ -1004,54 +959,42 @@ button:active {
 ========================= */
 
 @media (max-height: 720px) {
-
     .pll-page,
     .free-page {
-
         gap: 4px;
         padding: 4px;
     }
 
     .content {
-
         gap: 4px;
     }
 
     .problem-area,
     .answer-area {
-
-        padding: 7px;
+        padding: 6px;
     }
 
     .header {
-
-        height: 46px;
+        height: 44px;
     }
-
-    /*
-      timer圧縮
-    */
 
     .timer {
-
-        font-size:
-            clamp(34px, 5.8dvh, 58px);
+        font-size: clamp(28px, 5dvh, 50px);
     }
 
-    .cube-visual {
-
-        --cube-size:
-            clamp(
-                36px,
-                min(8.2vw, 8.2dvh),
-                72px
-            );
+    .twoDCube {
+        --cube-size: clamp(32px, min(7vw, 7dvh), 64px);
     }
 
     .main-button,
     .submit-button,
     .menu-button {
+        height: 36px;
+    }
 
-        height: 38px;
+    .frontFaceIndicator {
+        width: clamp(48px, 11%, 72px);
+        height: clamp(48px, 11%, 72px);
+        bottom: 8px;
     }
 }

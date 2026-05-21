@@ -1,12 +1,7 @@
-/* =========================
-   Reset
-========================= */
-
 * {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
-
     user-select: none;
     -webkit-user-select: none;
     -webkit-tap-highlight-color: transparent;
@@ -14,33 +9,21 @@
 
 html,
 body {
-
     width: 100%;
     height: 100%;
-
     overflow: hidden;
-
     -webkit-text-size-adjust: 100%;
 }
 
 body {
-
-    font-family:
-        Inter,
-        system-ui,
-        sans-serif;
-
-    background:
-        radial-gradient(circle at top left, rgba(99,102,241,0.18), transparent 40%),
-        radial-gradient(circle at bottom right, rgba(14,165,233,0.12), transparent 45%),
-        linear-gradient(
-            160deg,
-            #020617 0%,
-            #07111f 45%,
-            #020617 100%
-        );
-
+    font-family: Inter, system-ui, sans-serif;
     color: white;
+    overflow: hidden;
+    overscroll-behavior: none;
+    background:
+        radial-gradient(circle at top left, rgba(99,102,241,0.22), transparent 24%),
+        radial-gradient(circle at bottom right, rgba(14,165,233,0.16), transparent 30%),
+        linear-gradient(160deg, #020617 0%, #07111f 48%, #020617 100%);
 }
 
 /* =========================
@@ -48,15 +31,16 @@ body {
 ========================= */
 
 #app {
-
     width: 100%;
+    height: 100vh;
     height: 100dvh;
-
     overflow: hidden;
+    display: flex;
+    flex-direction: column;
 }
 
 /* =========================
-   Shared Layout
+   Shared Page
 ========================= */
 
 .page,
@@ -64,10 +48,8 @@ body {
 .menu-page,
 .pll-page,
 .free-page {
-
     width: 100%;
     height: 100%;
-
     min-width: 0;
     min-height: 0;
 }
@@ -78,92 +60,10 @@ body {
 
 .home-page,
 .menu-page {
-
     display: flex;
-
     justify-content: center;
     align-items: center;
-
-    padding:
-        clamp(16px, 2vw, 28px);
-}
-
-/* =========================
-   Cards
-========================= */
-
-.card {
-
-    width:
-        min(92vw, 540px);
-
-    padding:
-        clamp(28px, 4vw, 46px);
-
-    border-radius: 34px;
-
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-
-    gap:
-        clamp(16px, 2vh, 24px);
-
-    text-align: center;
-
-    position: relative;
-
-    overflow: hidden;
-}
-
-.card::before {
-
-    content: "";
-
-    position: absolute;
-    inset: 0;
-
-    background:
-        linear-gradient(
-            135deg,
-            rgba(255,255,255,0.12),
-            transparent 45%
-        );
-
-    pointer-events: none;
-}
-
-.hero-card {
-
-    min-height:
-        min(70dvh, 560px);
-
-    justify-content: center;
-}
-
-.menu-card {
-
-    justify-content: center;
-}
-
-.title {
-
-    font-size:
-        clamp(38px, 5vw, 62px);
-
-    font-weight: 800;
-
-    letter-spacing: -0.04em;
-}
-
-.subtitle {
-
-    font-size:
-        clamp(15px, 1.7vw, 18px);
-
-    opacity: 0.82;
-
-    margin-bottom: 10px;
+    padding: clamp(12px, 2vw, 28px);
 }
 
 /* =========================
@@ -171,22 +71,61 @@ body {
 ========================= */
 
 .glass {
+    background: linear-gradient(180deg, rgba(255,255,255,0.10), rgba(255,255,255,0.035));
+    backdrop-filter: blur(30px);
+    border: 1px solid rgba(255,255,255,0.08);
+    box-shadow: 0 18px 60px rgba(0,0,0,0.42), inset 0 1px 0 rgba(255,255,255,0.08);
+}
 
-    background:
-        linear-gradient(
-            180deg,
-            rgba(255,255,255,0.10),
-            rgba(255,255,255,0.05)
-        );
+/* =========================
+   Cards
+========================= */
 
-    backdrop-filter: blur(24px);
+.card {
+    width: min(92vw, 560px);
+    padding: clamp(28px, 4vw, 48px);
+    border-radius: 36px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: clamp(16px, 2vh, 24px);
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+}
 
-    border:
-        1px solid rgba(255,255,255,0.08);
+.card::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(135deg, rgba(255,255,255,0.08), transparent 45%);
+    pointer-events: none;
+}
 
-    box-shadow:
-        0 12px 48px rgba(0,0,0,0.38),
-        inset 0 1px 0 rgba(255,255,255,0.08);
+.hero-card {
+    min-height: min(72dvh, 580px);
+    justify-content: center;
+}
+
+.menu-card {
+    justify-content: center;
+}
+
+/* =========================
+   Typography
+========================= */
+
+.title {
+    font-size: clamp(42px, 5vw, 68px);
+    font-weight: 900;
+    letter-spacing: -0.05em;
+    text-shadow: 0 0 28px rgba(255,255,255,0.12);
+}
+
+.subtitle {
+    font-size: clamp(15px, 1.8vw, 18px);
+    opacity: 0.82;
+    margin-bottom: 10px;
 }
 
 /* =========================
@@ -194,64 +133,48 @@ body {
 ========================= */
 
 button {
-
     cursor: pointer;
-
+    border: none;
+    color: white;
     transition:
         transform 0.14s ease,
-        background 0.14s ease,
-        opacity 0.14s ease;
+        opacity 0.14s ease,
+        background 0.18s ease,
+        box-shadow 0.18s ease;
+}
+
+button:hover {
+    background: rgba(255,255,255,0.5);
+    transform: translateY(-1px) scale(1.1);
 }
 
 button:active {
-
-    transform: scale(0.97);
+    transform: scale(0.9);
 }
 
 .main-button,
 .submit-button,
 .menu-button {
-
     width: 100%;
-
-    height:
-        clamp(48px, 5.6dvh, 58px);
-
-    border: none;
-
+    height: clamp(48px, 5.4dvh, 58px);
     border-radius: 18px;
-
-    background:
-        linear-gradient(
-            180deg,
-            rgba(255,255,255,0.18),
-            rgba(255,255,255,0.07)
-        );
-
-    color: white;
-
-    font-size:
-        clamp(14px, 1.8vw, 17px);
-
-    font-weight: 700;
-
+    font-size: clamp(14px, 1.7vw, 16px);
+    font-weight: 800;
     letter-spacing: 0.03em;
-
+    background: linear-gradient(180deg, rgba(255,255,255,0.22), rgba(255,255,255,0.08));
     backdrop-filter: blur(18px);
+    box-shadow: 0 10px 24px rgba(0,0,0,0.24), inset 0 1px 0 rgba(255,255,255,0.16);
+}
 
-    box-shadow:
-        0 10px 28px rgba(0,0,0,0.22),
-        inset 0 1px 0 rgba(255,255,255,0.16);
+.main-button:hover,
+.submit-button:hover,
+.menu-button:hover {
+    transform: translateY(-1px);
+    background: linear-gradient(180deg, rgba(255,255,255,0.28), rgba(255,255,255,0.10));
 }
 
 .menu-button {
-
     max-width: 320px;
-}
-
-.back-button {
-
-    opacity: 0.84;
 }
 
 /* =========================
@@ -260,16 +183,10 @@ button:active {
 
 .pll-page,
 .free-page {
-
     display: flex;
     flex-direction: column;
-
-    gap:
-        clamp(10px, 1.2dvh, 14px);
-
-    padding:
-        clamp(10px, 1.4vw, 18px);
-
+    gap: clamp(4px, 0.5dvh, 8px);
+    padding: clamp(4px, 0.45vw, 8px);
     overflow: hidden;
 }
 
@@ -278,81 +195,49 @@ button:active {
 ========================= */
 
 .header {
-
-    height:
-        clamp(56px, 7dvh, 70px);
-
+    height: clamp(48px, 5.6dvh, 62px);
     flex-shrink: 0;
-
-    border-radius: 24px;
-
-    padding:
-        0 clamp(12px, 1.4vw, 18px);
-
+    border-radius: clamp(16px, 1.8vw, 22px);
+    padding: 0 clamp(10px, 1vw, 18px);
     display: flex;
     align-items: center;
     justify-content: space-between;
-
-    gap: 12px;
+    gap: 10px;
+    background: linear-gradient(180deg, rgba(255,255,255,0.12), rgba(255,255,255,0.05));
+    backdrop-filter: blur(24px);
+    box-shadow: 0 10px 30px rgba(0,0,0,0.32);
 }
 
 .header h1 {
-
     flex: 1;
-
     text-align: center;
-
-    font-size:
-        clamp(18px, 2vw, 28px);
-
+    font-size: clamp(16px, 1.8vw, 24px);
+    font-weight: 800;
     white-space: nowrap;
-
     overflow: hidden;
     text-overflow: ellipsis;
 }
 
 .header button {
-
-    width:
-        clamp(40px, 4.5dvh, 46px);
-
-    height:
-        clamp(40px, 4.5dvh, 46px);
-
+    width: clamp(36px, 4dvh, 44px);
+    height: clamp(36px, 4dvh, 44px);
     flex-shrink: 0;
-
-    border: none;
-
-    border-radius: 14px;
-
-    background:
-        rgba(255,255,255,0.10);
-
-    color: white;
-
-    font-size: 17px;
+    border-radius: 13px;
+    background: rgba(255,255,255,0.10);
+    font-size: 16px;
 }
 
 /* =========================
-   PLL Content
+   Content
 ========================= */
 
 .content {
-
     flex: 1;
-
     min-width: 0;
     min-height: 0;
-
     display: grid;
-
-    grid-template-columns:
-        minmax(0, 1.15fr)
-        minmax(340px, 0.85fr);
-
-    gap:
-        clamp(10px, 1vw, 16px);
-
+    grid-template-columns: minmax(0, 1.02fr) minmax(0, 0.98fr);
+    gap: clamp(4px, 0.6vw, 8px);
     overflow: hidden;
 }
 
@@ -362,41 +247,35 @@ button:active {
 
 .problem-area,
 .answer-area {
-
     min-width: 0;
     min-height: 0;
-
-    border-radius: 30px;
-
-    padding:
-        clamp(12px, 1.6vw, 20px);
-
+    border-radius: clamp(20px, 2.2vw, 30px);
+    padding: clamp(8px, 0.9vw, 14px);
     overflow: hidden;
+    position: relative;
+    background: linear-gradient(180deg, rgba(255,255,255,0.075), rgba(255,255,255,0.025));
+    backdrop-filter: blur(26px);
+    box-shadow: 0 18px 44px rgba(0,0,0,0.34);
 }
+
+/* =========================
+   Problem Area
+========================= */
 
 .problem-area {
-
     display: grid;
-
-    grid-template-rows:
-        auto
-        minmax(0, 1fr)
-        auto;
-
-    gap:
-        clamp(10px, 1.2vh, 16px);
+    grid-template-rows: auto minmax(0, 1fr) auto;
+    gap: clamp(4px, 0.6dvh, 8px);
 }
 
+/* =========================
+   Answer Area
+========================= */
+
 .answer-area {
-
     display: grid;
-
-    grid-template-rows:
-        minmax(0, 1fr)
-        auto;
-
-    gap:
-        clamp(10px, 1.2vh, 16px);
+    grid-template-rows: minmax(0, 1fr) auto;
+    gap: clamp(4px, 0.6dvh, 8px);
 }
 
 /* =========================
@@ -404,105 +283,100 @@ button:active {
 ========================= */
 
 .timer {
-
     text-align: center;
-
-    font-size:
-        clamp(28px, 3.6dvh, 42px);
-
-    font-weight: 800;
-
+    font-size: clamp(48px, 7.2dvh, 96px);
+    font-weight: 900;
     letter-spacing: 0.04em;
+    line-height: 0.95;
+    padding: clamp(2px, 0.3dvh, 6px) 0;
+    flex-shrink: 0;
+    text-shadow:
+        0 0 26px rgba(255,255,255,0.24),
+        0 0 48px rgba(99,102,241,0.22);
 }
 
 /* =========================
-   Cube Container
+   Cube Container (3D)
 ========================= */
 
 .cube-container,
 .simulator-container {
-
     width: 100%;
     height: 100%;
-
     min-width: 0;
     min-height: 0;
-
-    border-radius: 24px;
-
+    border-radius: clamp(18px, 2vw, 26px);
     overflow: hidden;
-
-    background:
-        radial-gradient(
-            circle at top,
-            rgba(255,255,255,0.08),
-            rgba(0,0,0,0.26)
-        );
-
     position: relative;
+    background: radial-gradient(circle at top, rgba(255,255,255,0.12), rgba(0,0,0,0.42));
+    box-shadow: inset 0 1px 0 rgba(255,255,255,0.08), 0 20px 40px rgba(0,0,0,0.34);
 }
 
 /* =========================
-   2D Cube
+   2D Cube wrapper
+   ※ ストリップが外側に -0.35*cube-size 飛び出すので
+      padding で吸収する
 ========================= */
 
 .twoDCube {
-
     width: 100%;
     height: 100%;
-
     min-width: 0;
     min-height: 0;
-
     display: flex;
     justify-content: center;
     align-items: center;
 
+    /* ストリップのはみ出し分を padding で吸収 */
+    padding: calc(var(--cube-size, 72px) * 0.42);
+    box-sizing: border-box;
     overflow: hidden;
 }
 
+/* =========================
+   Cube Visual
+========================= */
+
 .cube-visual {
-
     position: relative;
-
     display: flex;
     justify-content: center;
     align-items: center;
+    width: 100%;
+    height: 100%;
+    min-width: 0;
+    min-height: 0;
 
-    aspect-ratio: 1;
+    /*
+     * Round 1 修正:
+     *   旧 clamp(78px, min(12.8vw, 13.2dvh), 156px)
+     *   → vw/dvh比率を大幅縮小 + 上限を96pxに抑制
+     *   → cube-rotated の diagonal (×1.48) + strip (-0.35) を考慮
+     *      実占有幅 ≈ face-size × 1.48 + cube-size × 0.7
+     *      ≤ 親の available width に収まるよう逆算
+     */
+    --cube-size: clamp(44px, min(7.2vw, 7.6dvh), 92px);
+    --gap: max(4px, calc(var(--cube-size) * 0.014));
+    --face-size: calc(var(--cube-size) * 3 + var(--gap) * 2);
 
-    --cube-size:
-        clamp(
-            26px,
-            min(5.2vw, 5.4dvh),
-            58px
-        );
-
-    --gap:
-        calc(var(--cube-size) * 0.08);
-
-    --face-size:
-        calc(var(--cube-size) * 3 + var(--gap) * 2);
-
-    width:
-        calc(var(--face-size) * 1.85);
-
-    height:
-        calc(var(--face-size) * 1.85);
+    /* Round 3: コンテナを超えた描画を封じ込める */
+    contain: layout;
 }
 
 /* =========================
-   Rotated Cube Group
+   Rotated Cube
 ========================= */
 
 .cube-rotated {
-
     position: relative;
-
-    width: var(--face-size);
-    height: var(--face-size);
-
+    width: calc(var(--face-size) * 1.48);
+    height: calc(var(--face-size) * 1.48);
+    display: flex;
+    justify-content: center;
+    align-items: center;
     transform: rotate(45deg);
+    gap: var(--gap);
+    flex-shrink: 0;
 }
 
 /* =========================
@@ -510,126 +384,73 @@ button:active {
 ========================= */
 
 .upper-face-grid {
-
     position: absolute;
-
     top: 50%;
     left: 50%;
-
-    transform:
-        translate(-50%, -50%);
-
+    transform: translate(-50%, -50%);
     display: grid;
-
-    grid-template-columns:
-        repeat(3, var(--cube-size));
-
-    grid-template-rows:
-        repeat(3, var(--cube-size));
-
+    grid-template-columns: repeat(3, var(--cube-size));
+    grid-template-rows: repeat(3, var(--cube-size));
     gap: var(--gap);
-}
-
-.cell {
-
-    width: var(--cube-size);
-    height: var(--cube-size);
-
-    border-radius:
-        calc(var(--cube-size) * 0.18);
-
-    background:
-        linear-gradient(
-            180deg,
-            rgba(255,255,255,0.16),
-            rgba(255,255,255,0.08)
-        );
-
-    border:
-        1px solid rgba(255,255,255,0.08);
 }
 
 /* =========================
-   Strips
+   Cells
 ========================= */
 
-.side-strips {
+.cell,
+.strip {
+    border-radius: calc(var(--cube-size) * 0.14);
+    background: linear-gradient(180deg, rgba(255,255,255,0.28), rgba(255,255,255,0.08));
+    border: 1px solid rgba(255,255,255,0.10);
+    box-shadow:
+        inset 0 1px 0 rgba(255,255,255,0.18),
+        0 0 14px rgba(255,255,255,0.06);
+}
 
-    position: absolute;
-
-    display: flex;
-
-    gap: var(--gap);
+.cell {
+    width: var(--cube-size);
+    height: var(--cube-size);
 }
 
 .strip {
-
-    width: var(--cube-size);
-    height: var(--cube-size);
-
-    border-radius:
-        calc(var(--cube-size) * 0.18);
-
-    background:
-        linear-gradient(
-            180deg,
-            rgba(255,255,255,0.16),
-            rgba(255,255,255,0.08)
-        );
-
-    border:
-        1px solid rgba(255,255,255,0.08);
+    width: calc(var(--cube-size) * 0.98);
+    height: calc(var(--cube-size) * 0.98);
 }
 
-/* ---- Top ---- */
+/* =========================
+   Side Strips
+========================= */
+
+.side-strips {
+    position: absolute;
+    display: flex;
+    gap: var(--gap);
+}
 
 .top-stripes {
-
-    top:
-        calc(var(--cube-size) * -1.12);
-
+    top: calc(var(--cube-size) * -0.35);
     left: 50%;
-
     transform: translateX(-50%);
 }
-
-/* ---- Bottom ---- */
 
 .bottom-stripes {
-
-    bottom:
-        calc(var(--cube-size) * -1.12);
-
+    bottom: calc(var(--cube-size) * -0.35);
     left: 50%;
-
     transform: translateX(-50%);
 }
 
-/* ---- Left ---- */
-
 .left-stripes {
-
-    left:
-        calc(var(--cube-size) * -1.12);
-
+    left: calc(var(--cube-size) * -0.35);
     top: 50%;
-
     flex-direction: column;
-
     transform: translateY(-50%);
 }
 
-/* ---- Right ---- */
-
 .right-stripes {
-
-    right:
-        calc(var(--cube-size) * -1.12);
-
+    right: calc(var(--cube-size) * -0.35);
     top: 50%;
-
     flex-direction: column;
-
     transform: translateY(-50%);
 }
 
@@ -638,121 +459,211 @@ button:active {
 ========================= */
 
 .free-content {
-
     flex: 1;
-
     min-width: 0;
+    /* Round 2 修正: height:0 を明示してflexで伸びる構造を完結させる */
     min-height: 0;
-
+    height: 0;
     overflow: hidden;
 }
 
 .free-layout {
-
     width: 100%;
     height: 100%;
-
     min-width: 0;
     min-height: 0;
+    display: flex;
+    flex-direction: column;
 }
 
 .simulator-container-wrapper {
-
-    width: 100%;
-    height: 100%;
-
+    /* Round 2: flex:1 + height:0 でheightチェーン完結 */
+    flex: 1;
     min-width: 0;
     min-height: 0;
-
+    height: 0;
     position: relative;
-
-    padding:
-        clamp(10px, 1vw, 14px);
-
-    border-radius: 30px;
-
+    padding: clamp(6px, 0.7vw, 12px);
+    border-radius: clamp(20px, 2.4vw, 32px);
     overflow: hidden;
+    /* Round 2: simulator-container-wrapper から .glass を外し
+       下の simulator-container だけに適用 → 二重blur解消
+       ※ HTMLの class="glass simulator-container-wrapper" から glass を削除すること */
+    background: linear-gradient(180deg, rgba(255,255,255,0.06), rgba(255,255,255,0.02));
+    border: 1px solid rgba(255,255,255,0.07);
+    box-shadow: 0 18px 60px rgba(0,0,0,0.42);
 }
 
+/* =========================
+   Controls
+========================= */
+
 .control-overlay {
-
     position: absolute;
-
     inset: 0;
-
-    padding:
-        clamp(12px, 1.4vw, 18px);
-
+    padding: clamp(10px, 1vw, 16px);
     pointer-events: none;
-
     display: flex;
     justify-content: space-between;
     align-items: flex-end;
 }
 
 .control-group {
-
     display: flex;
-
-    gap: 10px;
-
+    gap: 8px;
     pointer-events: auto;
 }
 
 .left-controls {
-
     flex-direction: column;
 }
 
 .right-controls {
-
     align-items: center;
 }
 
+/* =========================
+   Floating Buttons
+========================= */
+
 .sim-button,
 .icon-button {
-
-    border: none;
-
-    background:
-        rgba(15,23,42,0.62);
-
-    backdrop-filter: blur(18px);
-
     color: white;
-
+    background: linear-gradient(180deg, rgba(15,23,42,0.84), rgba(15,23,42,0.64));
+    backdrop-filter: blur(26px);
     box-shadow:
-        0 8px 24px rgba(0,0,0,0.28);
+        0 12px 28px rgba(0,0,0,0.34),
+        inset 0 1px 0 rgba(255,255,255,0.08);
 }
 
 .sim-button {
-
-    min-width: 120px;
-
-    height: 48px;
-
-    padding: 0 20px;
-
+    min-width: 110px;
+    height: clamp(38px, 4.4dvh, 46px);
+    padding: 0 16px;
     border-radius: 16px;
-
-    font-size: 14px;
-
+    font-size: clamp(12px, 1.4vw, 14px);
     font-weight: 700;
 }
 
 .icon-button {
-
-    width: 52px;
-    height: 52px;
-
+    width: clamp(40px, 4.6dvh, 52px);
+    height: clamp(40px, 4.6dvh, 52px);
     border-radius: 16px;
-
-    font-size: 22px;
+    font-size: 20px;
 }
 
-.stop-button {
+.icon-button:hover,
+.sim-button:hover {
+    transform: translateY(-1px);
+    background: linear-gradient(180deg, rgba(30,41,59,0.92), rgba(15,23,42,0.74));
+}
 
-    font-size: 18px;
+/* =========================
+   Stop Button
+========================= */
+
+.stop-button {
+    background: linear-gradient(180deg, rgba(220,38,38,0.44), rgba(127,29,29,0.36));
+}
+
+/* =========================
+   Settings
+========================= */
+
+.settings-overlay {
+    position: fixed;
+    inset: 0;
+    z-index: 9999;
+    display: flex;
+    justify-content: flex-end;
+}
+
+.settings-overlay.hidden {
+    display: none;
+}
+
+.settings-backdrop {
+    position: absolute;
+    inset: 0;
+    background: rgba(0,0,0,0.1);
+    backdrop-filter: blur(6px);
+}
+
+.settings-panel {
+    position: relative;
+    width: min(420px, 90vw);
+    height: 100%;
+    padding: 24px;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+    border-left: 1px solid rgba(255,255,255,0.12);
+    animation: settingsSlide 0.24s ease;
+}
+
+@keyframes settingsSlide {
+    from { transform: translateX(100%); opacity: 0; }
+    to   { transform: translateX(0);    opacity: 1; }
+}
+
+.settings-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.settings-title {
+    font-size: 1.4rem;
+    font-weight: 700;
+}
+
+.settings-close-button {
+    width: 42px;
+    height: 42px;
+    border: none;
+    border-radius: 12px;
+    color: rgb(215,0,21);
+    cursor: pointer;
+    font-size: 1.1rem;
+}
+
+.settings-sections {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+}
+
+.settings-section {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.settings-section-title {
+    font-size: 0.95rem;
+    opacity: 0.7;
+}
+
+.settings-item {
+    min-height: 52px;
+    padding: 0 16px;
+    border: none;
+    border-radius: 16px;
+    cursor: pointer;
+    font-size: 1rem;
+    text-align: left;
+    background: rgba(255,255,255,0.08);
+    color: white;
+}
+
+.settings-close-button:hover {
+    background: rgba(255,255,255,0.5);
+    transform: translateY(-1px);
+}
+
+.settings-close-button:active {
+    transform: translateY(+2px);
 }
 
 /* =========================
@@ -760,24 +671,18 @@ button:active {
 ========================= */
 
 @media (max-width: 980px) {
-
     .content {
-
         grid-template-columns: 1fr;
+        /* Round 2 修正: 最低高さ固定を廃止 → dvhに追従 */
+        grid-template-rows: minmax(0, 1fr) minmax(0, 1.2fr);
+    }
 
-        grid-template-rows:
-            minmax(280px, 0.9fr)
-            minmax(0, 1.1fr);
+    .timer {
+        font-size: clamp(42px, 6.8dvh, 80px);
     }
 
     .cube-visual {
-
-        --cube-size:
-            clamp(
-                22px,
-                min(6vw, 5dvh),
-                46px
-            );
+        --cube-size: clamp(40px, min(13vw, 10dvh), 80px);
     }
 }
 
@@ -786,39 +691,51 @@ button:active {
 ========================= */
 
 @media (max-width: 768px) {
+    .pll-page,
+    .free-page {
+        padding: 4px;
+        gap: 4px;
+    }
+
+    .content {
+        gap: 4px;
+    }
+
+    .problem-area,
+    .answer-area {
+        padding: 7px;
+    }
 
     .header {
-
-        border-radius: 20px;
+        height: 46px;
+        border-radius: 16px;
     }
 
     .problem-area,
     .answer-area,
     .simulator-container-wrapper {
-
-        border-radius: 22px;
+        border-radius: 20px;
     }
 
     .cube-visual {
+        --cube-size: clamp(36px, min(14vw, 8.6dvh), 72px);
+    }
 
-        --cube-size:
-            clamp(
-                18px,
-                min(7vw, 4.5dvh),
-                38px
-            );
+    .timer {
+        font-size: clamp(36px, 6dvh, 64px);
     }
 
     .sim-button {
-
-        min-width: 96px;
-        height: 42px;
+        min-width: 86px;
+        height: 38px;
+        border-radius: 14px;
     }
 
     .icon-button {
-
-        width: 44px;
-        height: 44px;
+        width: 40px;
+        height: 40px;
+        border-radius: 14px;
+        font-size: 18px;
     }
 }
 
@@ -827,51 +744,57 @@ button:active {
 ========================= */
 
 @media (max-height: 720px) {
-
     .pll-page,
     .free-page {
-
-        gap: 6px;
-
-        padding: 6px;
+        gap: 4px;
+        padding: 4px;
     }
 
     .content {
+        gap: 4px;
+    }
 
-        gap: 6px;
+    .problem-area,
+    .answer-area {
+        padding: 6px;
+    }
+
+    .header {
+        height: 44px;
+    }
+
+    .timer {
+        font-size: clamp(30px, 5.2dvh, 52px);
     }
 
     .cube-visual {
-
-        --cube-size:
-            clamp(
-                15px,
-                min(5vw, 3.8dvh),
-                30px
-            );
+        --cube-size: clamp(32px, min(7vw, 7dvh), 64px);
     }
 
     .main-button,
     .submit-button,
     .menu-button {
-
-        height: 40px;
-    }
-
-    .timer {
-
-        font-size:
-            clamp(22px, 3dvh, 32px);
+        height: 36px;
     }
 }
 
 UIを見直して、没入感のあるUI、ちょうどよいサイズ、配置にしてください。
 画面(ブラウザの標準バーを除く)依存でしっかりと収まるようにしてください。
-現在の問題:
+現在の問題:frontFaceIndicatorの高さが０になってしまった。
+改善案:
 他の問題がないかも探り、合った場合は出力して、修正してください。
-見直しと生成を３回繰り返し、３回目に出来上がったものを出力してください。 
+見直しと生成を３回繰り返し、３回目に出来上がったものを全て出力してください。 
 htmlはこちらです。必要であればhtmlも変更可能です。変更した場合はそれも出力してください。
 
+Simclassの中身。jsが問題？
+        if (renderFrontFace) {
+            const frontFaceIndicator = document.createElement("div")
+            frontFaceIndicator.id = "frontFaceIndicator"
+            frontFaceIndicator.className = "frontFaceIndicator"
+            this.container.appendChild(frontFaceIndicator)
+            this.frontFaceIndicator = frontFaceIndicator
+        }
+    
 ---
 homePage
         this.element = document.createElement("div")

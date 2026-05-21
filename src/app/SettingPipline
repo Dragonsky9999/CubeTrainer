@@ -1,0 +1,22 @@
+import { configManager } from "./config/ConfigManager.js";
+import { simConfig } from "../../Sim/src/settings/SimulatorConfig.js";
+
+export function initSimulatorSync() {
+    //  1. ページを開いた瞬間、アプリ側の現在の設定をSim側へ一斉に初期同期
+    simConfig.set("animationSpeed", configManager.get("animationSpeed"));
+    simConfig.set("tpsLimit", configManager.get("tpsLimit"));
+    simConfig.set("showFrontIndicator", configManager.get("showFrontIndicator"));
+
+    //  2. アプリ側の設定変更をリアルタイムで監視し、Sim側へ即座に横流しする（パイプライン）
+    configManager.onChange("animationSpeed", (value) => {
+        simConfig.set("animationSpeed", value); 
+    });
+
+    configManager.onChange("tpsLimit", (value) => {
+        simConfig.set("tpsLimit", value);
+    });
+
+    configManager.onChange("showFrontIndicator", (value) => {
+        simConfig.set("showFrontIndicator", value);
+    });
+}

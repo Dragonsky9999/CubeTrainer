@@ -6,15 +6,15 @@ import { PLLTrainerPage } from "./pages/PLLTrainerPage.js"
 import { FreeSimulatorPage } from "./pages/FreeSimulatorPage.js"
 
 export class App {
-
+    
     start() {
-
+        
         this.root = document.getElementById("app")
-
+        
         this.pageManager = new PageManager(this.root)
-
+        
         this.createPages()
-
+        
         this.pageManager.show("home")
     }
 

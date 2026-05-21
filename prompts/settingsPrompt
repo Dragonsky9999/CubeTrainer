@@ -1,0 +1,909 @@
+目的：全体のUIに合わせた没入感のあるUIを持った設定画面を作りたい。
+構想：各ページの設定からは各ページの設定＆一般の設定。menuの設定からはすべての設定を開けるようにしたい。
+現在の問題:
+要望:設定システムをゼロから構築。各ページに合わせられるような設計を考えてください。設定は一つの場所で管理し、そこで追加、編集できるようにしたい。そのファイルを編集するだけで、反映できるようにしたい。また、設定をいじった場合の処理を追加できるような工夫をしてください。
+目的と構想をもとに、現在の問題を解決し、要望を実現するようなものを出力してください。
+他の問題がないかも探り、存在した場合は出力して、修正してください。
+見直しと生成を３回繰り返し、３回目に出来上がったものを全て出力してください。 
+
+---
+このCSSの特徴を詳しく解説します。
+
+全体設計思想
+「画面に完全に収まる、スクロールしないUI」 を絶対条件として設計されています。overflow: hidden が body・#app・各ページクラスに重複して設定されており、いかなる状況でもコンテンツが画面外にはみ出さないことを強制しています。overscroll-behavior: none でブラウザのバウンススクロールも封じており、ネイティブアプリに近い挙動を目指しています。
+
+レスポンシブ戦略：clamp() の徹底活用
+このCSSの最大の特徴が clamp(最小値, 推奨値, 最大値) の徹底した使用です。固定ピクセル値がほぼ存在せず、あらゆるサイズ指定が流動的です。
+cssfont-size: clamp(44px, 6.8dvh, 92px);
+height: clamp(48px, 5.6dvh, 62px);
+--cube-size: clamp(44px, min(7.2vw, 7.6dvh), 92px);
+特に dvh（Dynamic Viewport Height）を推奨値の単位として採用している点が重要です。vh ではなく dvh を使うことで、モバイルブラウザのアドレスバーの表示・非表示による高さ変動に追従します。vw と dvh を min() で組み合わせる手法も多用しており、幅が狭い場合も高さが狭い場合も、どちらか厳しい方の制約に自動的に従う設計です。
+
+高さ管理：flex チェーンによる完全な高さ伝播
+100dvh から末端要素まで高さが途切れなく伝わるよう、flex の連鎖が丁寧に組まれています。
+#app (100dvh, flex column)
+  └ .free-page (flex:1, flex column)
+      └ .free-content (flex:1, flex column)
+          └ .free-layout (flex:1, flex column)
+              └ .simulator-container-wrapper (flex:1)
+                  └ .simulator-container (width/height: 100%)
+各階層で min-height: 0 を明示しているのも重要です。flexアイテムはデフォルトで min-height: auto を持つため、コンテンツサイズを下限として膨張しようとします。これを 0 に明示することで、子要素がコンテナを突き破るのを防いでいます。min-width: 0 も同様の理由で各所に設定されています。
+
+CSS変数によるキューブサイズ管理
+2Dキューブ表示のサイズ体系が CSS カスタムプロパティで一元管理されています。
+css.twoDCube {
+    --cube-size: clamp(44px, min(7.2vw, 7.6dvh), 92px);
+    --gap: max(4px, calc(var(--cube-size) * 0.014));
+    --face-size: calc(var(--cube-size) * 3 + var(--gap) * 2);
+}
+--gap は --cube-size に比例して算出され、--face-size はさらに --gap を参照して計算されます。変数間の依存関係を CSS 内で完結させており、JS 側でサイズ計算を持たなくて済む設計です。変数の定義スコープを .twoDCube に置いているのには理由があり、この要素の padding でも同じ変数を参照するため、スコープが一致していないと calc() が解決できないという問題を回避しています。
+メディアクエリでの上書きも .twoDCube クラスで行っており、変数のスコープを一貫させています。
+
+2Dキューブの幾何学的レイアウト
+cube-rotated を45度回転させ、その外側に position: absolute でストリップ（側面の1行分）を配置することで、擬似的な3D等角投影ビューを純粋なCSSで実現しています。
+ストリップは親要素の外側に calc(var(--cube-size) * -0.35) だけはみ出す設計になっており、これを .twoDCube 側の padding: calc(var(--cube-size) * 0.44) で吸収しています。クリッピングではなく余白で受け止める方式なので、描画が切れません。contain: layout を cube-visual に付与することでレイアウトの封じ込めも行っています。
+
+グラスモーフィズムデザイン
+.glass クラスが視覚的なベースを作り、全UIコンポーネントにガラス質感を与えています。
+css.glass {
+    background: linear-gradient(180deg, rgba(255,255,255,0.10), rgba(255,255,255,0.035));
+    backdrop-filter: blur(30px);
+    border: 1px solid rgba(255,255,255,0.08);
+    box-shadow: 0 18px 60px rgba(0,0,0,0.42), inset 0 1px 0 rgba(255,255,255,0.08);
+}
+backdrop-filter: blur() は背景のぼかしによる透過感を生み出し、inset 0 1px 0 rgba(255,255,255,0.08) という内側シャドウが上端に微細な光の反射を表現しています。background のグラデーションは上から下に向けて透明度が増しており、ガラスの上部が明るく見える光学的特性を模倣しています。
+ただしこの設計は backdrop-filter を多用するため GPU 負荷が高く、各コンポーネントが独立してブラー処理を持つ設計になっています。simulator-container-wrapper と simulator-container の二重適用は意図的に排除されており、HTMLから glass クラスを一方に限定することでブラーの重複を防いでいます。
+
+ページ構成とグリッドレイアウト
+PLLTrainerページは2カラムグリッドで構成されています。
+css.content {
+    grid-template-columns: minmax(0, 1.02fr) minmax(0, 0.98fr);
+}
+1fr ではなく minmax(0, 1.02fr) を使うのは前述の最小幅問題への対処で、カラムが内容によって膨張しないよう下限を0に固定しています。微妙に非対称な比率（1.02 vs 0.98）は、問題エリアをわずかに広く取る意図が感じられます。
+問題エリア内部は3段グリッドで、タイマー・3Dキューブ・ボタンを縦に並べています。
+css.problem-area {
+    grid-template-rows: auto minmax(0, 1fr) auto;
+}
+上下の auto がタイマーとボタンを内容サイズに合わせ、中央の minmax(0, 1fr) が残りのスペースを全てキューブに与えます。
+
+ブレークポイント戦略
+3段階のブレークポイントが設定されています。
+
+max-width: 980px（タブレット）：2カラムを1カラムに変換
+max-width: 768px（モバイル）：余白・角丸・フォントサイズを縮小
+max-height: 720px（低身長画面）：幅に依存せず高さが足りない場合に圧縮
+
+横幅だけでなく max-height ブレークポイントを持つのが特徴的です。横長の低解像度画面や、キーボードが展開したモバイル画面など、高さが制約になるケースに対応しています。タブレットBPでは grid-template-rows を minmax(0, 1fr) minmax(0, 1.2fr) とし、最低高さ制約を持たせず dvh に追従させています。
+
+frontFaceIndicator の位置設計
+Three.jsのcanvasと同じ position: relative のコンテナ内に position: absolute で配置されます。
+css.frontFaceIndicator {
+    position: absolute;
+    bottom: clamp(10px, 1.4dvh, 18px);
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 10;
+    pointer-events: none;
+}
+z-index: 10 でcanvasより前面に出し、pointer-events: none で操作の干渉をなくしています。left: 50% + translateX(-50%) による水平センタリングは、width がコンテナ比率指定（clamp(64px, 14%, 108px)）でも正確に中央揃えが成立します。サイズが 14% のコンテナ相対指定なので、キューブコンテナのサイズが変わっても違和感なくスケールします。
+
+アニメーションとインタラクション
+ボタンのトランジションは4プロパティを明示指定しています。
+cssbutton {
+    transition:
+        transform 0.14s ease,
+        opacity 0.14s ease,
+        background 0.18s ease,
+        box-shadow 0.18s ease;
+}
+transition: all を避けて対象プロパティを明示することで、意図しないプロパティへのトランジション適用と、レイアウト変化時のパフォーマンス劣化を回避しています。transformとopacityは0.14s、backgroundとbox-shadowは0.18sとわずかに遅くすることで、押し込み感が自然に見える時差が作られています。
+設定パネルのスライドインアニメーションはCSSアニメーションで実装されており、JSに依存しない点も特徴です。
+
+背景デザイン
+bodyの背景は3層のグラデーション合成です。
+cssbackground:
+    radial-gradient(circle at top left, rgba(99,102,241,0.22), transparent 24%),
+    radial-gradient(circle at bottom right, rgba(14,165,233,0.16), transparent 30%),
+    linear-gradient(160deg, #020617 0%, #07111f 48%, #020617 100%);
+左上にインディゴ、右下にシアンの放射グラデーションを配置し、ベースの線形グラデーションと重ねることで深みのある宇宙的な暗色空間を作り出しています。各放射グラデーションの透明度は意図的に低く抑えられており（0.22、0.16）、主張しすぎず奥行き感だけを添える設計です。
+
+---
+PageManager
+export class PageManager {
+
+    constructor(root) {
+        this.root = root
+        this.pages = {}
+    }
+
+    register(name, page) {
+
+        this.pages[name] = page
+
+        const element = page.render()
+        page.element = element
+
+        element.classList.add("page")
+        element.style.display = "none"
+
+        this.root.appendChild(element)
+
+        page.mount?.()
+    }
+
+    show(name) {
+
+        Object.values(this.pages).forEach(page => {
+            page.element.style.display = "none"
+            page.deactivate?.()
+        })
+
+        const page = this.pages[name]
+
+        page.element.style.display = "flex"
+        page.activate?.()
+    }
+
+}
+---
+pgaeはこちらです。必要であればhtmlも変更可能です。変更した場合はそれも出力してください。
+---
+homePage
+    export class HomePage {
+
+    constructor(pageManager) {
+        this.pageManager = pageManager
+    }
+
+    render() {
+
+        this.element = document.createElement("div")
+
+        this.element.classList.add("home-page")
+
+        this.element.innerHTML = `
+            <div class="glass card hero-card">
+                <h1 class="title">Cube Trainer</h1>
+                <p class="subtitle">
+                    Train Smarter, Solve Faster
+                </p>
+
+                <button class="main-button" id="startButton">
+                    START
+                </button>
+            </div>
+        `
+
+        this.element
+            .querySelector("#startButton")
+            .addEventListener("click", () => {
+                this.pageManager.show("menu")
+            })
+
+        return this.element
+    }
+
+    set() {
+        
+    }
+}    `
+
+---
+MenuPage
+ export class MenuPage {
+
+    constructor(pageManager) {
+        this.pageManager = pageManager    
+    }
+
+    render() {
+
+        this.element = document.createElement("div")
+
+        this.element.classList.add("menu-page")
+
+        this.element.innerHTML = `
+            <div class="header">
+                <button id="settingsButton">
+            </div>
+
+            <div class="glass card menu-card">
+
+                <h1 class="title">Menu</h1>
+
+                <button class="menu-button" id="pllButton">
+                    PLL Trainer
+                </button>
+
+                <button class="menu-button" id="freeButton">
+                    Free Simulator
+                </button>
+
+                <button class="menu-button back-button" id="backButton">
+                    Back
+                </button>
+            </div>
+        `
+
+        this.element
+            .querySelector("#pllButton")
+            .addEventListener("click", () => {
+                this.pageManager.show("pll")
+            })
+
+        this.element
+            .querySelector("#freeButton")
+            .addEventListener("click", () => {
+                this.pageManager.show("free")
+            })
+
+        this.element
+            .querySelector("#backButton")
+            .addEventListener("click", () => {
+                this.pageManager.show("home")
+            })
+
+        return this.element
+    }
+
+    set(){
+        
+    }
+}
+---
+PLL Trainer
+
+import { Sim } from "../../../Sim/src/app/index.js"
+import { cubeColors, faceIndexMap } from "../../../Sim/src/data/data.js"
+import { PllAlgs } from "../../../Sim/src/domain/index.js"
+
+export class PLLTrainerPage {
+
+    constructor(pageManager) {
+        this.pageManager = pageManager
+
+        this.loop = new Loop((time) => {
+
+            this.timer.update()
+            this.cells.update(this.Sim.frontIndex)
+
+            this.timerEl.innerHTML = this.timer.format()
+        })
+
+    }
+
+    render() {
+
+        this.element = document.createElement("div")
+
+        this.element.classList.add("pll-page")
+
+        this.element.innerHTML = `
+
+            <header class="glass header">
+
+                <button id="backButton">←</button>
+
+                <h1>PLL Trainer</h1>
+
+                <button id="settingsButton">⚙</button>
+            </header>
+
+            <main class="content">
+
+                <section class="glass problem-area">
+
+                    <div class="timer">00:00.000</div>
+
+                    <div class="cube-container" id="pllCube"></div>
+
+                    <button class="main-button" id="nextButton">
+                        NEXT
+                    </button>
+
+                </section>
+
+                <section class="glass answer-area">
+
+                    <div class="twoDCube">
+
+                        <div class="cube-visual">
+
+                            <div class="cube-rotated">
+
+                                <div class="side-strips top-stripes">
+                                    <div class="strip top-cell"></div>
+                                    <div class="strip top-cell"></div>
+                                    <div class="strip top-cell"></div>
+                                </div>
+
+                                <div class="side-strips left-stripes">
+                                    <div class="strip left-cell"></div>
+                                    <div class="strip left-cell"></div>
+                                    <div class="strip left-cell"></div>
+                                </div>
+
+                                <div class="upper-face-grid center-stripes">
+                                    ${Array.from({ length: 9 }, () =>
+                                        `<div class="cell center-cell"></div>`
+                                    ).join("")}
+                                </div>
+
+                                <div class="side-strips right-stripes">
+                                    <div class="strip right-cell"></div>
+                                    <div class="strip right-cell"></div>
+                                    <div class="strip right-cell"></div>
+                                </div>
+
+                                <div class="side-strips bottom-stripes">
+                                    <div class="strip bottom-cell"></div>
+                                    <div class="strip bottom-cell"></div>
+                                    <div class="strip bottom-cell"></div>
+                                </div>
+
+                            </div>
+
+                        </div>
+                    </div>
+
+                    <button class="submit-button">
+                        SUBMIT
+                    </button>
+
+                </section>
+
+            </main>
+        `
+
+        return this.element
+    }
+
+    mount(){
+        this.timer = new Timer()
+        this.timerEl = this.element.querySelector(".timer")
+        
+        this.cells = new Cells(this.element)
+        this.cells.init(this.element)
+
+        this.cells.cellMap = new Map()
+
+        const dirs = ["top","left","right","bottom"]
+        dirs.forEach(dir => {
+            this.cells[dir].forEach(cell => {
+                this.cells.cellMap.set(cell.dom, cell)
+            })
+        })
+
+        this.setupCube()
+        this.setupEvents()
+    }
+    
+    activate() {
+        this.nextProblem()
+        this.loop.start()
+    }
+
+    deactivate(){
+        this.loop.stop()
+    }
+
+    setupEvents() {
+
+        const sceneContainer = this.element.querySelector("#pllCube")
+
+        this.element
+            .querySelector("#backButton")
+            .addEventListener("click", () => {
+                this.pageManager.show("menu")
+            })
+
+        this.element
+            .querySelector("#nextButton")
+            .addEventListener("click", () => {
+                this.nextProblem()
+            })
+
+        this.element
+            .querySelector(".submit-button")
+            .addEventListener("click", () => {
+                this.submit()
+            })
+
+        const dirs = ["top","left","right","bottom"]
+            dirs.forEach(dir => {
+                this.cells[dir].forEach(c => {
+                    c.dom.addEventListener("click", () => {
+                        this.cells.changeColor(c)
+                    })
+                })
+            })
+
+        this.element.addEventListener("wheel", (e) => {
+            const target = this.cells.cellMap.get(e.target)
+        
+            if (target){
+                e.preventDefault()
+                this.cells.changeColor(target,{dir:Math.sign(e.deltaY)})
+            }
+            
+        }, {passive:false})
+    }
+
+    setupCube() {
+
+        const sceneContainer = this.element.querySelector("#pllCube")
+
+        this.Sim = new Sim(sceneContainer, {renderFrontFace:false})
+
+        this.Sim.enableKeyboard = false
+        this.Sim.loop.start()
+
+        const cubies = this.Sim.cube.Cubies
+
+        const types = {"corner":8,"edge":12,"center":6}
+        for (const [type, length] of Object.entries(types)){
+            for (let i=0;i<length;i++){
+                cubies.state[type][i].sticker = false
+            }
+        }
+        for (let i=0;i<4;i++){
+            cubies.state.corner[i].sticker = true
+            cubies.state.edge[i].sticker = true
+        }    
+        cubies.state.center[2].sticker = true
+    }
+ 
+    nextProblem(){
+        this.cells.reset()
+        
+        const AUF = ["U","U'","U2",""][Math.floor(Math.random() * 4)]
+        if (AUF != "") this.Sim.applyMove(AUF)
+            
+        const tmp = PLLIndex[Math.floor(Math.random() * 21)]
+        const PLL = PllAlgs[tmp][0]
+        this.Sim.reset()
+        this.Sim.applyMoves(PLL)
+        this.Sim.renderer.camera.position.set(1.49 * 2, 1.49 * 2, 1.49 *2)
+ 
+        this.timer.reset()
+        this.timer.start()
+        this.cells.setCorrectColor(this.Sim.cube)
+    }
+
+    submit(){
+        const result = this.checkAnswer()
+        this.showResult(result)
+    }
+
+    checkAnswer(){
+        const correctCells = []
+        const wrongCells = []
+
+        const dirs = ["top","left","right","bottom"]
+        dirs.forEach((tlrb,i) => {
+            for (const cell of this.cells[tlrb]){
+                if (cell.isCorrect()){
+                    correctCells.push(cell.index+(i*10))
+                }else {
+                    wrongCells.push(cell.index+(i*10))
+                }
+            }
+        })
+
+        return {
+            correct: wrongCells.length === 0,
+            correctCells: correctCells,
+            wrongCells: wrongCells,
+        }
+    }
+
+    showResult(result){
+        const [correct,correctCells,wrongCells] = Object.values(result)
+        const dirs = ["top","left","right","bottom"]
+        dirs.forEach(dir => {
+            this.cells[dir].forEach(cell => {
+                cell.highlightColor()
+            })
+        })
+
+        if (correct){
+            this.timer.stop()
+            setTimeout(() => {
+                this.nextProblem()
+            }, 2000);
+        }
+    }
+}
+
+function toHexColor(num) {
+    return "#" + num.toString(16).padStart(6, "0")
+}
+
+const faceToColors = {
+    "+X":toHexColor(cubeColors[0]), "-X":toHexColor(cubeColors[1]),
+    "+Y":toHexColor(cubeColors[2]), "-Y":toHexColor(cubeColors[3]),
+    "+Z":toHexColor(cubeColors[4]), "-Z":toHexColor(cubeColors[5]),
+}
+
+const PLLIndex = {
+    0:"Ua",
+    1:"Ub",
+    2:"Aa",
+    3:"Ab",
+    4:"H",
+    5:"Z",
+    6:"E",
+    7:"F",
+    8:"Ja",
+    9:"Jb",
+    10:"Ra",
+    11:"Rb",
+    12:"T",
+    13:"Y",
+    14:"V",
+    15:"Na",
+    16:"Nb",
+    17:"Ga",
+    18:"Gb",
+    19:"Gc",
+    20:"Gd",
+}
+
+class Cells {
+    constructor(element){
+        this.element = element
+
+        this.top = []
+        this.left = []
+        this.right = []
+        this.bottom = []
+        this.center = []
+    }
+
+    init(){
+        const dirs = ["top","left","right","bottom","center"]
+        dirs.forEach(dir => {
+            const doms = this.element.querySelectorAll(`.${dir}-cell`)
+            this[dir] = Array.from(doms).map((dom,i) => new Cell(dom,i))
+        })
+
+        this.center.forEach(centerCell => {
+            centerCell.setUserColor(toHexColor(cubeColors[2]))
+            centerCell.setCorrectColor(toHexColor(cubeColors[2]))
+        })
+    }
+
+    setCorrectColor(cube){
+        const cubeState = cube.state
+        const cubieState = cube.Cubies.state
+        
+        for (let i=0;i<3;i++) this["top"][i].setCorrectColor([faceToColors[cubieState.corner[cubeState.CP[2]].colors[2]],faceToColors[cubieState.edge[cubeState.EP[3]].colors[1]],faceToColors[cubieState.corner[cubeState.CP[3]].colors[1]]][i])
+        for (let i=0;i<3;i++) this["left"][i].setCorrectColor([faceToColors[cubieState.corner[cubeState.CP[2]].colors[0]],faceToColors[cubieState.edge[cubeState.EP[2]].colors[0]],faceToColors[cubieState.corner[cubeState.CP[1]].colors[0]]][i])
+        for (let i=0;i<3;i++) this["right"][i].setCorrectColor([faceToColors[cubieState.corner[cubeState.CP[3]].colors[0]],faceToColors[cubieState.edge[cubeState.EP[0]].colors[0]],faceToColors[cubieState.corner[cubeState.CP[0]].colors[0]]][i])
+        for (let i=0;i<3;i++) this["bottom"][i].setCorrectColor([faceToColors[cubieState.corner[cubeState.CP[1]].colors[1]],faceToColors[cubieState.edge[cubeState.EP[1]].colors[1]],faceToColors[cubieState.corner[cubeState.CP[0]].colors[2]]][i])
+
+        for (let i=0; i<3;i++){
+            this["right"][i].isopen = true
+            this["bottom"][i].isopen = true
+        }
+    }
+
+    reset(){
+        const dirs = ["top","left","right","bottom"]
+        dirs.forEach(dir => {
+            this[dir].forEach(cell => {
+                cell.reset()
+            })
+        })
+    }
+
+    update(frontIndex){
+        const dirs = ["top","left","right","bottom"]
+        dirs.forEach(dir => {
+            this[dir].forEach(cell => {
+                if (cell.isopen) cell.setUserColor(cell.correctColor)
+            })
+        })
+
+        const faceToSideCells = {4:"bottom",0:"right",5:"top",1:"left"}
+        const faceIndex = frontIndex
+        this[faceToSideCells[faceIndex]].forEach(cell => {
+            if (cell.isopen) return
+            cell.isopen = true
+        })        
+    }
+    
+    changeColor(cell, { dir = 1 } = {}) {
+        if (cell.isfinished) return
+        cell.dom.textContent = ""
+
+        const sideIndex = [4, 0, 5, 1]
+        const sideColors = sideIndex.map(i => toHexColor(cubeColors[i]))
+
+        if (!cell.userColor) {
+                const first = dir === 1 ? 0 : 3
+                cell.setUserColor(sideColors[first])
+                return
+            }
+            
+            let i = sideColors.indexOf(cell.userColor)
+            
+            if (i === -1) i = 0  // 保険
+            
+            const next = (i + dir + 4) % 4
+            
+            cell.setUserColor(sideColors[next])
+        }
+    
+}
+
+class Cell{
+    constructor(dom, index){
+        this.dom = dom
+        this.index = index
+
+        this.dom.style.fontSize = "35px"
+        this.dom.style.fontWeight = "bold"
+        this.dom.style.display = "flex"
+        this.color = "green"
+        this.dom.style.fontFamily = "Arial Black"
+        this.dom.style.justifyContent = "center"
+        this.dom.style.alignItems = "center"
+
+        this.userColor = null
+        this.correctColor = null
+
+        this.isopen = null
+        this.isfinished = false
+    }
+
+    setUserColor(color){
+        this.userColor = color
+        this.dom.style.background = color
+    }
+
+    setCorrectColor(color){
+        this.correctColor = color
+    }
+
+    isCorrect(){
+        return this.userColor === this.correctColor
+    }
+
+    highlightColor(){
+        if (this.isCorrect()){
+            this.dom.textContent = "✓"
+            this.dom.style.color = "green"
+            this.dom.style.boxShadow = "0 0 20px #00ff00"
+            this.isfinished = true
+        }else {
+            this.setUserColor(null)
+            this.dom.textContent = "❌"
+            this.dom.style.boxShadow = "0 0 20px #ff3333"
+        }
+    }
+
+    reset(){
+        this.dom.style.background = null
+        this.correctColor = null
+        this.dom.textContent = null
+        this.dom.style.boxShadow = null
+        this.userColor = null
+        this.correctColor = null
+        this.isopen = null
+        this.isfinished = false
+    }
+}
+
+
+class Loop {
+
+    constructor(callback) {
+        this.callback = callback
+        this.running = false
+        this.id = null
+    }
+
+    start() {
+        if (this.running) return
+
+        this.running = true
+
+        const tick = (time) => {
+
+            if (!this.running) return
+
+            this.callback(time)
+
+            this.id = requestAnimationFrame(tick)
+        }
+
+        this.id = requestAnimationFrame(tick)
+    }
+
+    stop() {
+        this.running = false
+        cancelAnimationFrame(this.id)
+    }
+}
+
+class Timer {
+    constructor() {
+        this.time = null
+        this.startTime = 0
+        this.elapsed = 0
+        this.running = false
+        this.started = false
+    }
+
+    start() {
+        if (this.running) return
+
+        this.time = performance.now()
+        this.startTime = this.time
+        this.running = true
+    }
+
+    update() {
+        if (!this.running) return
+
+        this.elapsed = this.time - this.startTime
+        this.time = performance.now()
+    }
+
+    stop() {
+        if (!this.running) return
+
+        this.elapsed = this.time - this.startTime
+        this.running = false
+    }
+
+    reset() {
+        this.startTime = 0
+        this.elapsed = 0
+        this.running = false
+    }
+    
+    format() {
+        
+        const ms = Math.floor(this.elapsed % 1000)
+        const sec = Math.floor(this.elapsed / 1000) % 60
+        const min = Math.floor(this.elapsed / 60000)
+
+        return `${String(min).padStart(2,"0")}:${String(sec).padStart(2,"0")}.${String(ms).padStart(3,"0")}`
+    }
+}
+---
+FreeSim
+       import { Sim } from "../../../Sim/src/app/index.js"
+
+export class FreeSimulatorPage {
+
+    constructor(pageManager) {
+        this.pageManager = pageManager
+    }
+
+    render() {
+
+        this.element = document.createElement("div")
+
+        this.element.classList.add("free-page")
+
+        this.element.innerHTML = `
+
+            <header class="glass header">
+
+                <button id="backButton">←</button>
+
+                <h1>Free Simulator</h1>
+
+                <button id="settingsButton">⚙</button>
+            </header>
+
+            <main class="free-content">
+
+                <div class="free-layout">
+
+                    <div class="simulator-container-wrapper">
+
+                        <div
+                            class="glass simulator-container"
+                            id="freeCube">
+                        </div>
+
+                        <div class="control-overlay">
+
+                            <div class="control-group left-controls">
+
+                                <button class="sim-button" id="resetButton">
+                                    Reset
+                                </button>
+
+                                <button class="sim-button" id="scrambleButton">
+                                    Scramble
+                                </button>
+                            </div>
+
+                            <div class="control-group right-controls">
+
+                                <button class="icon-button" id="undoButton">
+                                    ↶
+                                </button>
+
+                                <button class="icon-button stop-button" id="stopButton">
+                                    ■
+                                </button>
+
+                                <button class="icon-button" id="redoButton">
+                                    ↷
+                                </button>
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </main>
+        `
+        
+        
+        return this.element
+    }
+    
+    mount(){
+        this.setupCube()
+        this.setupEvent()
+    }  
+
+    activate(){
+        this.Sim.reset()
+        this.Sim.enableKeyboard = true
+    }
+
+    deactivate(){
+        this.Sim.reset()
+        this.Sim.enableKeyboard = false
+    }
+    
+    setupEvent(){
+
+        this.element
+            .querySelector("#backButton")
+            .addEventListener("click", () => {
+                this.pageManager.show("menu")
+            })
+
+        this.element.querySelector("#resetButton").addEventListener("click", () => {
+            this.Sim.reset()
+        })
+
+        this.element.querySelector("#scrambleButton").addEventListener("click", () => {
+            this.Sim.scramble()
+        })
+
+        this.element.querySelector("#undoButton").addEventListener("click", () => {
+            this.Sim.undo()
+        })
+        
+        this.element.querySelector("#stopButton").addEventListener("click", () => {
+            this.Sim.stop()
+        })
+
+        this.element.querySelector("#redoButton").addEventListener("click", () => {
+            this.Sim.redo()
+        })
+    }
+
+    setupCube() {
+
+        const sceneContainer = this.element.querySelector("#freeCube")
+
+        this.Sim = new Sim(sceneContainer)
+
+        this.Sim.loop.start()
+        this.Sim.applyMove("z")
+        this.Sim.applyMove("z")
+    }
+}
