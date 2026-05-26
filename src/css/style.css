@@ -94,51 +94,42 @@ body {
     overflow: hidden;
 }
 
+/*
+ * card-header: メニュー画面上部のタイトル＋ボタン行
+ * - position:relative ベースの通常フロー
+ * - 左：空スペース確保(ボタン幅分)、中央：タイトル、右：設定ボタン
+ */
 .card-header {
-
-    width:80%;
-    min-height:3.5rem;
-
-    padding:0 1rem;
-
-    display:flex;
-    align-items:center;
-
-    position:relative;
-
-    border-radius:1rem;
-
-    background:
-    rgba(255,255,255,0.001);
-
-    border:
-        1px solid rgba(255,255,255,0.12);
-
-    backdrop-filter:
-        blur(10px);
-
-    -webkit-backdrop-filter:
-        blur(10px);
+    width: 100%;
+    min-height: 4rem;
+    padding: 0 4px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+    position: relative;
 }
 
-.card-header-center{
-
-    position:absolute;
-
-    left:50%;
-    transform:translateX(-50%);
-
-    font-size:
-        clamp(1rem,2vw,1.25rem);
-
-    font-weight:600;
+/* 左側のスペーサー（ボタンと同幅で中央タイトルを真ん中に保つ） */
+.card-header-spacer {
+    width: clamp(36px, 4dvh, 44px);
+    flex-shrink: 0;
 }
 
-.card-header-right{
-    margin-left:auto;
+.card-header-center {
+    flex: 1;
+    text-align: center;
+    font-size: clamp(1.8rem, 3.5vw, 2.4rem);  /* clamp( が抜けていた */
+    font-weight: 800;
+    letter-spacing: -0.02em;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
-
+.card-header-right {
+    flex-shrink: 0;
+}
 
 .card::before {
     content: "";
@@ -155,6 +146,7 @@ body {
 
 .menu-card {
     justify-content: center;
+    gap: clamp(12px, 1.6vh, 20px);
 }
 
 /* =========================
@@ -217,10 +209,6 @@ button:active {
 .menu-button:hover {
     transform: translateY(-1px);
     background: linear-gradient(180deg, rgba(255,255,255,0.28), rgba(255,255,255,0.10));
-}
-
-.menu-button {
-    max-width: 320px;
 }
 
 /* =========================
@@ -360,9 +348,6 @@ button:active {
 
 /* =========================
    Front Face Indicator
-   ※ .cube-container / .simulator-container の
-     position:relative 直下に appendChild される
-     → position:absolute で四隅に貼る
 ========================= */
 
 .frontFaceIndicator {
@@ -371,11 +356,9 @@ button:active {
     left: 50%;
     transform: translateX(-50%);
 
-    /* サイズ：コンテナに対して相対指定 */
     width: clamp(64px, 14%, 108px);
     height: clamp(64px, 14%, 108px);
 
-    /* 視認性：薄いガラス感 */
     border-radius: clamp(10px, 1.2vw, 16px);
     background: linear-gradient(180deg, rgba(255,255,255,0.13), rgba(255,255,255,0.04));
     backdrop-filter: blur(14px);
@@ -384,28 +367,20 @@ button:active {
         0 8px 24px rgba(0,0,0,0.32),
         inset 0 1px 0 rgba(255,255,255,0.12);
 
-    /* z-index: canvasより前面 */
     z-index: 10;
 
-    /* コンテンツのためのレイアウト */
     display: flex;
     justify-content: center;
     align-items: center;
 
-    /* pointer-events: なし（操作の邪魔をしない） */
     pointer-events: none;
 
-    /* フェードイン */
     opacity: 1;
     transition: opacity 0.2s ease;
 }
 
 /* =========================
    2D Cube wrapper
-   ※ --cube-size はここで定義し、
-     twoDCube・cube-visual 両方に継承させる
-     （前回: cube-visual 内定義では twoDCube の
-       padding が var() を解決できなかった）
 ========================= */
 
 .twoDCube {
@@ -414,10 +389,6 @@ button:active {
     min-width: 0;
     min-height: 0;
 
-    /*
-     * Round 1 修正: CSS変数をここのスコープで定義
-     *   → padding の calc() が正しく解決される
-     */
     --cube-size: clamp(44px, min(7.2vw, 7.6dvh), 92px);
     --gap: max(4px, calc(var(--cube-size) * 0.014));
     --face-size: calc(var(--cube-size) * 3 + var(--gap) * 2);
@@ -426,10 +397,6 @@ button:active {
     justify-content: center;
     align-items: center;
 
-    /*
-     * ストリップが外側に -0.35*cube-size 飛び出す
-     * padding で吸収 (変数をここで定義したので正しく機能する)
-     */
     padding: calc(var(--cube-size) * 0.44);
     box-sizing: border-box;
     overflow: hidden;
@@ -448,12 +415,6 @@ button:active {
     height: 100%;
     min-width: 0;
     min-height: 0;
-
-    /*
-     * Round 2: 変数は twoDCube スコープから継承。
-     *   ここでの再定義は不要になったので削除。
-     *   contain: layout のみ残す。
-     */
     contain: layout;
 }
 
@@ -550,9 +511,6 @@ button:active {
 
 /* =========================
    Free Sim
-   Round 3: free-content を height:auto + flex:1 に統一
-   (height:0 は free-layout の height:100% が 0% を
-    参照してしまうバグを引き起こす)
 ========================= */
 
 .free-content {
@@ -560,8 +518,6 @@ button:active {
     min-width: 0;
     min-height: 0;
     overflow: hidden;
-
-    /* display:flex で高さを子に伝播する */
     display: flex;
     flex-direction: column;
 }
@@ -660,10 +616,9 @@ button:active {
 }
 
 /* ==========================================================================
-   Settings System Component Extensions (Glassmorphism Concept)
+   Settings System
    ========================================================================== */
 
-/* 1. 画面全体の背景マスク（暗転＋ボケ） */
 .settings-overlay {
     position: absolute;
     top: 0;
@@ -683,7 +638,6 @@ button:active {
                 backdrop-filter 0.24s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-/* アクティブ時：背景をボカす */
 .settings-overlay.is-active {
     opacity: 1;
     pointer-events: auto;
@@ -691,34 +645,31 @@ button:active {
     -webkit-backdrop-filter: blur(24px);
 }
 
-/* 2. 設定画面のカード本体 */
 .settings-card {
     width: clamp(280px, 85vw, 540px);
     max-height: clamp(320px, 80dvh, 680px);
-    background: rgba(30, 41, 59, 0.5); /* 💡文字の視認性を守るため、グラス背景のベース色を補填 */
+    background: rgba(30, 41, 59, 0.5);
     border-radius: clamp(12px, 2.2dvh, 24px);
     padding: clamp(16px, 3dvh, 32px);
     display: flex;
     flex-direction: column;
     transform: scale(0.92) translateY(15px);
     transition: transform 0.28s cubic-bezier(0.34, 1.56, 0.64, 1);
-    box-shadow: 0 25px 70px rgba(0, 0, 0, 0.55), 
+    box-shadow: 0 25px 70px rgba(0, 0, 0, 0.55),
                 inset 0 1px 0 rgba(255, 255, 255, 0.12);
 }
 
-/* アクティブ時：ポップアップアニメーション */
 .settings-overlay.is-active .settings-card {
     transform: scale(1) translateY(0);
 }
 
-/* 3. ヘッダーエリア */
 .settings-header {
     display: flex;
     justify-content: space-between;
     align-items: center;
     border-bottom: 1px solid rgba(255, 255, 255, 0.08);
     padding-bottom: clamp(10px, 1.6dvh, 16px);
-    margin-bottom: clamp(8px, 1.5dvh, 12px); /* 💡スクロール領域を広く取るため下部マージンを微調整 */
+    margin-bottom: clamp(8px, 1.5dvh, 12px);
 }
 
 .settings-header h2 {
@@ -728,7 +679,6 @@ button:active {
     letter-spacing: -0.02em;
 }
 
-/* ✕ 閉じるボタン */
 .close-button {
     background: rgba(255, 255, 255, 0.05);
     border: 1px solid rgba(255, 255, 255, 0.1);
@@ -751,18 +701,16 @@ button:active {
     transform: rotate(90deg);
 }
 
-/* 4. 📜 スクロール制御を受け持つボディエリア（二重定義を統合） */
 .settings-body {
     flex: 1;
     width: 100%;
-    max-height: clamp(200px, 55dvh, 480px); /* 💡カード内に確実に収めるためのインナースクロール上限 */
+    max-height: clamp(200px, 55dvh, 480px);
     overflow-y: auto;
     padding: 4px 12px 12px 4px;
     min-height: 0;
-    -webkit-overflow-scrolling: touch; /* iOSでの慣性スクロール */
+    -webkit-overflow-scrolling: touch;
 }
 
-/* 🧼 グラスモーフィズム用カスタムスクロールバー */
 .settings-body::-webkit-scrollbar {
     width: 6px;
 }
@@ -777,24 +725,21 @@ button:active {
     background: rgba(255, 255, 255, 0.35);
 }
 
-/* 📂 新設：サブタイトル（カテゴリ見出し） */
 .settings-section-title {
     font-size: clamp(11px, 1.5dvh, 13px);
     text-transform: uppercase;
     letter-spacing: 0.06em;
-    color: rgba(255, 255, 255, 0.5); /* 眩しくない透過白 */
+    color: rgba(255, 255, 255, 0.5);
     margin: 20px 0 6px 2px;
     font-weight: 600;
     border-bottom: 1px solid rgba(255, 255, 255, 0.08);
     padding-bottom: 6px;
 }
 
-/* 最初の見出しだけ上の余白を詰めて美しく */
 .settings-section-title:first-child {
     margin-top: 4px;
 }
 
-/* 5. 各設定項目の行 */
 .settings-row {
     display: flex;
     justify-content: space-between;
@@ -813,7 +758,6 @@ button:active {
     font-weight: 500;
 }
 
-/* 6. 各種入力フォームのコントロール群 */
 .settings-select {
     background: rgba(15, 23, 42, 0.6);
     border: 1px solid rgba(255, 255, 255, 0.1);
@@ -873,7 +817,6 @@ button:active {
     text-align: right;
 }
 
-/* トグルスイッチ（チェックボックス） */
 .toggle-switch {
     position: relative;
     display: inline-block;
@@ -920,6 +863,151 @@ button:active {
     box-shadow: 0 0 8px rgba(99, 102, 241, 0.6);
 }
 
+/* ==========================================================================
+   Description System
+========================================================================== */
+
+.description-overlay {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100dvh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: rgba(2, 6, 23, .45);
+    backdrop-filter: blur(0px);
+    -webkit-backdrop-filter: blur(0px);
+    opacity: 0;
+    pointer-events: none;
+    z-index: 1000;
+    transition:
+        opacity .24s cubic-bezier(.4,0,.2,1),
+        backdrop-filter .24s cubic-bezier(.4,0,.2,1);
+}
+
+.description-overlay.is-active {
+    opacity: 1;
+    pointer-events: auto;
+    backdrop-filter: blur(24px);
+    -webkit-backdrop-filter: blur(24px);
+}
+
+.description-card {
+    width: clamp(300px, 85vw, 580px);
+    max-height: clamp(340px, 80dvh, 700px);
+    padding: clamp(18px, 3dvh, 32px);
+    border-radius: clamp(14px, 2.4dvh, 28px);
+    display: flex;
+    flex-direction: column;
+    background: rgba(30, 41, 59, .5);
+    transform: scale(.92) translateY(15px);
+    transition: transform .28s cubic-bezier(.34,1.56,.64,1);
+    box-shadow:
+        0 25px 70px rgba(0,0,0,.55),
+        inset 0 1px 0 rgba(255,255,255,.12);
+}
+
+.description-overlay.is-active .description-card {
+    transform: scale(1) translateY(0);
+}
+
+.description-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid rgba(255,255,255,.08);
+    padding-bottom: clamp(10px, 1.6dvh, 16px);
+    margin-bottom: clamp(10px, 1.6dvh, 16px);
+}
+
+.description-header h2 {
+    font-size: clamp(18px, 2.6dvh, 26px);
+    font-weight: 700;
+    color: #f8fafc;
+    letter-spacing: -.02em;
+}
+
+.description-body {
+    flex: 1;
+    min-height: 0;
+    overflow-y: auto;
+    padding: 4px 12px 12px 4px;
+    -webkit-overflow-scrolling: touch;
+}
+
+.description-body::-webkit-scrollbar {
+    width: 6px;
+}
+
+.description-body::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+.description-body::-webkit-scrollbar-thumb {
+    background: rgba(255,255,255,.15);
+    border-radius: 10px;
+}
+
+.description-body::-webkit-scrollbar-thumb:hover {
+    background: rgba(255,255,255,.35);
+}
+
+
+/* =======================
+   Description section
+======================= */
+
+.description-section {
+    margin-bottom: 22px;
+}
+
+.description-section:last-child {
+    margin-bottom: 0;
+}
+
+.description-subtitle {
+    font-size: clamp(12px, 1.7dvh, 14px);
+    text-transform: uppercase;
+    letter-spacing: .06em;
+    color: rgba(255,255,255,.52);
+    margin-bottom: 10px;
+    padding-bottom: 6px;
+    border-bottom: 1px solid rgba(255,255,255,.08);
+}
+
+.descriptions-content {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    color: #cbd5e1;
+    border-radius: 14px;
+    padding: 10px 12px;
+    background: rgba(255,255,255,.04);
+    border: 1px solid rgba(255,255,255,.05);
+}
+
+.descriptions-content p {
+    font-size: clamp(13px, 1.8dvh, 16px);
+    line-height: 1.7;
+}
+
+
+/* =======================
+   Mobile
+======================= */
+
+@media (max-width:768px) {
+    .description-card {
+        width: 92vw;
+        padding: 16px;
+    }
+
+    .description-body {
+        padding-right: 8px;
+    }
+}
+
 /* =========================
    Tablet
 ========================= */
@@ -934,8 +1022,6 @@ button:active {
         font-size: clamp(40px, 6.4dvh, 76px);
     }
 
-    /* Round 3: twoDCube でスコープを持つので
-       メディアクエリでも twoDCube に上書きする */
     .twoDCube {
         --cube-size: clamp(40px, min(13vw, 10dvh), 80px);
     }

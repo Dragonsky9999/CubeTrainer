@@ -1,11 +1,13 @@
 import { configManager } from "../config/ConfigManager.js"
 import { SettingsOverlay } from "../ui/SettingsOverlay.js"
+import { DescriptionOverlay } from "../ui/DescriptionOverlay.js"
 
 export class MenuPage {
     constructor(pageManager) {
         this.pageManager = pageManager
         this.element = null
         this.settingsOverlay = new SettingsOverlay(configManager)
+        this.DescriptionOverlay = new DescriptionOverlay()
     }
 
     render() {
@@ -15,10 +17,10 @@ export class MenuPage {
         this.element.innerHTML = `
         <div class="glass card menu-card">
             <div class="card-header">
-                <div class="card-header-center">
-                    <h1 class="title">Menu</h1>
-                </div>
+                <div class="card-header-spacer"></div>
+                <div class="card-header-center">Menu</div>
                 <div class="card-header-right">
+                    <button id="descriptionButton" class=icon-button>?</button>
                     <button id="settingsButton" class="icon-button">⚙</button>
                 </div>
             </div>
@@ -41,6 +43,9 @@ export class MenuPage {
         
         this.element.querySelector("#settingsButton").addEventListener("click", () => {
             this.settingsOverlay.open(this.element, "all")
+        })
+        this.element.querySelector("#descriptionButton").addEventListener("click", () => {
+            this.DescriptionOverlay.open(this.element,"FreeSim")
         })
     }
 }

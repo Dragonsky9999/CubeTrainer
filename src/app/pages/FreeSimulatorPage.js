@@ -1,11 +1,13 @@
 import { Sim } from "../../../Sim/src/app/index.js"
 import { SettingsOverlay } from "../ui/SettingsOverlay.js"
 import { ConfigManager, configManager } from "../config/ConfigManager.js"
+import { DescriptionOverlay } from "../ui/DescriptionOverlay.js"
 
 export class FreeSimulatorPage {
     constructor(pageManager) {
         this.pageManager = pageManager
         this.settingsOverlay = new SettingsOverlay(configManager)
+        this.descriptionOverlay = new DescriptionOverlay()
     }
 
     render() {
@@ -16,6 +18,7 @@ export class FreeSimulatorPage {
             <header class="glass header">
                 <button id="backButton">←</button>
                 <h1>Free Simulator</h1>
+                <button id="descriptionsButton">?</button>
                 <button id="settingsButton">⚙</button>
             </header>
             <main class="free-content">
@@ -80,6 +83,9 @@ export class FreeSimulatorPage {
         // シミュレータ専用設定（simulatorカテゴリのみ抽出）
         this.element.querySelector("#settingsButton").addEventListener("click", () => {
             this.settingsOverlay.open(this.element, "freeSim")
+        })
+        this.element.querySelector("#descriptionsButton").addEventListener("click", () => {
+            this.descriptionOverlay.open(this.element, "FreeSim")
         })
     }
 

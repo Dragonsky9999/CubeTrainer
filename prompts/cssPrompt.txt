@@ -94,6 +94,52 @@ body {
     overflow: hidden;
 }
 
+.card-header {
+
+    width:80%;
+    min-height:3.5rem;
+
+    padding:0 1rem;
+
+    display:flex;
+    align-items:center;
+
+    position:relative;
+
+    border-radius:1rem;
+
+    background:
+    rgba(255,255,255,0.001);
+
+    border:
+        1px solid rgba(255,255,255,0.12);
+
+    backdrop-filter:
+        blur(10px);
+
+    -webkit-backdrop-filter:
+        blur(10px);
+}
+
+.card-header-center{
+
+    position:absolute;
+
+    left:50%;
+    transform:translateX(-50%);
+
+    font-size:
+        clamp(1rem,2vw,1.25rem);
+
+    font-weight:600;
+}
+
+.card-header-right{
+    margin-left:auto;
+}
+
+
+
 .card::before {
     content: "";
     position: absolute;
@@ -156,7 +202,7 @@ button:active {
 .submit-button,
 .menu-button {
     width: 100%;
-    height: clamp(48px, 5.4dvh, 58px);
+    height: clamp(44px, 5dvh, 56px);
     border-radius: 18px;
     font-size: clamp(14px, 1.7vw, 16px);
     font-weight: 800;
@@ -284,7 +330,7 @@ button:active {
 
 .timer {
     text-align: center;
-    font-size: clamp(48px, 7.2dvh, 96px);
+    font-size: clamp(44px, 6.8dvh, 92px);
     font-weight: 900;
     letter-spacing: 0.04em;
     line-height: 0.95;
@@ -313,9 +359,53 @@ button:active {
 }
 
 /* =========================
+   Front Face Indicator
+   ※ .cube-container / .simulator-container の
+     position:relative 直下に appendChild される
+     → position:absolute で四隅に貼る
+========================= */
+
+.frontFaceIndicator {
+    position: absolute;
+    bottom: clamp(10px, 1.4dvh, 18px);
+    left: 50%;
+    transform: translateX(-50%);
+
+    /* サイズ：コンテナに対して相対指定 */
+    width: clamp(64px, 14%, 108px);
+    height: clamp(64px, 14%, 108px);
+
+    /* 視認性：薄いガラス感 */
+    border-radius: clamp(10px, 1.2vw, 16px);
+    background: linear-gradient(180deg, rgba(255,255,255,0.13), rgba(255,255,255,0.04));
+    backdrop-filter: blur(14px);
+    border: 1px solid rgba(255,255,255,0.14);
+    box-shadow:
+        0 8px 24px rgba(0,0,0,0.32),
+        inset 0 1px 0 rgba(255,255,255,0.12);
+
+    /* z-index: canvasより前面 */
+    z-index: 10;
+
+    /* コンテンツのためのレイアウト */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    /* pointer-events: なし（操作の邪魔をしない） */
+    pointer-events: none;
+
+    /* フェードイン */
+    opacity: 1;
+    transition: opacity 0.2s ease;
+}
+
+/* =========================
    2D Cube wrapper
-   ※ ストリップが外側に -0.35*cube-size 飛び出すので
-      padding で吸収する
+   ※ --cube-size はここで定義し、
+     twoDCube・cube-visual 両方に継承させる
+     （前回: cube-visual 内定義では twoDCube の
+       padding が var() を解決できなかった）
 ========================= */
 
 .twoDCube {
@@ -323,12 +413,24 @@ button:active {
     height: 100%;
     min-width: 0;
     min-height: 0;
+
+    /*
+     * Round 1 修正: CSS変数をここのスコープで定義
+     *   → padding の calc() が正しく解決される
+     */
+    --cube-size: clamp(44px, min(7.2vw, 7.6dvh), 92px);
+    --gap: max(4px, calc(var(--cube-size) * 0.014));
+    --face-size: calc(var(--cube-size) * 3 + var(--gap) * 2);
+
     display: flex;
     justify-content: center;
     align-items: center;
 
-    /* ストリップのはみ出し分を padding で吸収 */
-    padding: calc(var(--cube-size, 72px) * 0.42);
+    /*
+     * ストリップが外側に -0.35*cube-size 飛び出す
+     * padding で吸収 (変数をここで定義したので正しく機能する)
+     */
+    padding: calc(var(--cube-size) * 0.44);
     box-sizing: border-box;
     overflow: hidden;
 }
@@ -348,18 +450,10 @@ button:active {
     min-height: 0;
 
     /*
-     * Round 1 修正:
-     *   旧 clamp(78px, min(12.8vw, 13.2dvh), 156px)
-     *   → vw/dvh比率を大幅縮小 + 上限を96pxに抑制
-     *   → cube-rotated の diagonal (×1.48) + strip (-0.35) を考慮
-     *      実占有幅 ≈ face-size × 1.48 + cube-size × 0.7
-     *      ≤ 親の available width に収まるよう逆算
+     * Round 2: 変数は twoDCube スコープから継承。
+     *   ここでの再定義は不要になったので削除。
+     *   contain: layout のみ残す。
      */
-    --cube-size: clamp(44px, min(7.2vw, 7.6dvh), 92px);
-    --gap: max(4px, calc(var(--cube-size) * 0.014));
-    --face-size: calc(var(--cube-size) * 3 + var(--gap) * 2);
-
-    /* Round 3: コンテナを超えた描画を封じ込める */
     contain: layout;
 }
 
@@ -456,20 +550,24 @@ button:active {
 
 /* =========================
    Free Sim
+   Round 3: free-content を height:auto + flex:1 に統一
+   (height:0 は free-layout の height:100% が 0% を
+    参照してしまうバグを引き起こす)
 ========================= */
 
 .free-content {
     flex: 1;
     min-width: 0;
-    /* Round 2 修正: height:0 を明示してflexで伸びる構造を完結させる */
     min-height: 0;
-    height: 0;
     overflow: hidden;
+
+    /* display:flex で高さを子に伝播する */
+    display: flex;
+    flex-direction: column;
 }
 
 .free-layout {
-    width: 100%;
-    height: 100%;
+    flex: 1;
     min-width: 0;
     min-height: 0;
     display: flex;
@@ -477,18 +575,13 @@ button:active {
 }
 
 .simulator-container-wrapper {
-    /* Round 2: flex:1 + height:0 でheightチェーン完結 */
     flex: 1;
     min-width: 0;
     min-height: 0;
-    height: 0;
     position: relative;
     padding: clamp(6px, 0.7vw, 12px);
     border-radius: clamp(20px, 2.4vw, 32px);
     overflow: hidden;
-    /* Round 2: simulator-container-wrapper から .glass を外し
-       下の simulator-container だけに適用 → 二重blur解消
-       ※ HTMLの class="glass simulator-container-wrapper" から glass を削除すること */
     background: linear-gradient(180deg, rgba(255,255,255,0.06), rgba(255,255,255,0.02));
     border: 1px solid rgba(255,255,255,0.07);
     box-shadow: 0 18px 60px rgba(0,0,0,0.42);
@@ -566,104 +659,265 @@ button:active {
     background: linear-gradient(180deg, rgba(220,38,38,0.44), rgba(127,29,29,0.36));
 }
 
-/* =========================
-   Settings
-========================= */
+/* ==========================================================================
+   Settings System Component Extensions (Glassmorphism Concept)
+   ========================================================================== */
 
+/* 1. 画面全体の背景マスク（暗転＋ボケ） */
 .settings-overlay {
-    position: fixed;
-    inset: 0;
-    z-index: 9999;
-    display: flex;
-    justify-content: flex-end;
-}
-
-.settings-overlay.hidden {
-    display: none;
-}
-
-.settings-backdrop {
     position: absolute;
-    inset: 0;
-    background: rgba(0,0,0,0.1);
-    backdrop-filter: blur(6px);
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100dvh;
+    background: rgba(2, 6, 23, 0.45);
+    backdrop-filter: blur(0px);
+    -webkit-backdrop-filter: blur(0px);
+    z-index: 1000;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.24s cubic-bezier(0.4, 0, 0.2, 1),
+                backdrop-filter 0.24s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-.settings-panel {
-    position: relative;
-    width: min(420px, 90vw);
-    height: 100%;
-    padding: 24px;
-    overflow-y: auto;
+/* アクティブ時：背景をボカす */
+.settings-overlay.is-active {
+    opacity: 1;
+    pointer-events: auto;
+    backdrop-filter: blur(24px);
+    -webkit-backdrop-filter: blur(24px);
+}
+
+/* 2. 設定画面のカード本体 */
+.settings-card {
+    width: clamp(280px, 85vw, 540px);
+    max-height: clamp(320px, 80dvh, 680px);
+    background: rgba(30, 41, 59, 0.5); /* 💡文字の視認性を守るため、グラス背景のベース色を補填 */
+    border-radius: clamp(12px, 2.2dvh, 24px);
+    padding: clamp(16px, 3dvh, 32px);
     display: flex;
     flex-direction: column;
-    gap: 24px;
-    border-left: 1px solid rgba(255,255,255,0.12);
-    animation: settingsSlide 0.24s ease;
+    transform: scale(0.92) translateY(15px);
+    transition: transform 0.28s cubic-bezier(0.34, 1.56, 0.64, 1);
+    box-shadow: 0 25px 70px rgba(0, 0, 0, 0.55), 
+                inset 0 1px 0 rgba(255, 255, 255, 0.12);
 }
 
-@keyframes settingsSlide {
-    from { transform: translateX(100%); opacity: 0; }
-    to   { transform: translateX(0);    opacity: 1; }
+/* アクティブ時：ポップアップアニメーション */
+.settings-overlay.is-active .settings-card {
+    transform: scale(1) translateY(0);
 }
 
+/* 3. ヘッダーエリア */
 .settings-header {
     display: flex;
-    align-items: center;
     justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    padding-bottom: clamp(10px, 1.6dvh, 16px);
+    margin-bottom: clamp(8px, 1.5dvh, 12px); /* 💡スクロール領域を広く取るため下部マージンを微調整 */
 }
 
-.settings-title {
-    font-size: 1.4rem;
+.settings-header h2 {
+    font-size: clamp(18px, 2.6dvh, 26px);
     font-weight: 700;
+    color: #f8fafc;
+    letter-spacing: -0.02em;
 }
 
-.settings-close-button {
-    width: 42px;
-    height: 42px;
-    border: none;
-    border-radius: 12px;
-    color: rgb(215,0,21);
+/* ✕ 閉じるボタン */
+.close-button {
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    color: #94a3b8;
+    width: clamp(32px, 4.2dvh, 44px);
+    height: clamp(32px, 4.2dvh, 44px);
+    border-radius: 50%;
     cursor: pointer;
-    font-size: 1.1rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 16px;
+    transition: background 0.2s, border-color 0.2s, color 0.2s, transform 0.2s;
 }
 
-.settings-sections {
-    display: flex;
-    flex-direction: column;
-    gap: 24px;
+.close-button:hover {
+    background: rgba(239, 68, 68, 0.2);
+    border-color: rgba(239, 68, 68, 0.4);
+    color: #fecaca;
+    transform: rotate(90deg);
 }
 
-.settings-section {
+/* 4. 📜 スクロール制御を受け持つボディエリア（二重定義を統合） */
+.settings-body {
+    flex: 1;
+    width: 100%;
+    max-height: clamp(200px, 55dvh, 480px); /* 💡カード内に確実に収めるためのインナースクロール上限 */
+    overflow-y: auto;
+    padding: 4px 12px 12px 4px;
+    min-height: 0;
+    -webkit-overflow-scrolling: touch; /* iOSでの慣性スクロール */
+}
+
+/* 🧼 グラスモーフィズム用カスタムスクロールバー */
+.settings-body::-webkit-scrollbar {
+    width: 6px;
+}
+.settings-body::-webkit-scrollbar-track {
+    background: transparent;
+}
+.settings-body::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.15);
+    border-radius: 10px;
+}
+.settings-body::-webkit-scrollbar-thumb:hover {
+    background: rgba(255, 255, 255, 0.35);
+}
+
+/* 📂 新設：サブタイトル（カテゴリ見出し） */
+.settings-section-title {
+    font-size: clamp(11px, 1.5dvh, 13px);
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: rgba(255, 255, 255, 0.5); /* 眩しくない透過白 */
+    margin: 20px 0 6px 2px;
+    font-weight: 600;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    padding-bottom: 6px;
+}
+
+/* 最初の見出しだけ上の余白を詰めて美しく */
+.settings-section-title:first-child {
+    margin-top: 4px;
+}
+
+/* 5. 各設定項目の行 */
+.settings-row {
     display: flex;
-    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+    padding: clamp(10px, 1.8dvh, 18px) 4px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+}
+
+.settings-row:last-child {
+    border-bottom: none;
+}
+
+.settings-label {
+    font-size: clamp(13px, 1.8dvh, 16px);
+    color: #cbd5e1;
+    font-weight: 500;
+}
+
+/* 6. 各種入力フォームのコントロール群 */
+.settings-select {
+    background: rgba(15, 23, 42, 0.6);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    color: #f1f5f9;
+    padding: 6px 12px;
+    border-radius: 8px;
+    font-size: clamp(12px, 1.6dvh, 15px);
+    outline: none;
+    cursor: pointer;
+    min-width: 120px;
+    text-align: center;
+    transition: border-color 0.2s;
+}
+
+.settings-select:focus {
+    border-color: rgba(99, 102, 241, 0.6);
+}
+
+.range-container {
+    display: flex;
+    align-items: center;
     gap: 12px;
 }
 
-.settings-section-title {
-    font-size: 0.95rem;
-    opacity: 0.7;
+.settings-range {
+    -webkit-appearance: none;
+    appearance: none;
+    width: clamp(100px, 15vw, 160px);
+    height: 4px;
+    background: rgba(255, 255, 255, 0.15);
+    border-radius: 2px;
+    outline: none;
 }
 
-.settings-item {
-    min-height: 52px;
-    padding: 0 16px;
-    border: none;
-    border-radius: 16px;
+.settings-range::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    background: #6366f1;
+    box-shadow: 0 0 10px rgba(99, 102, 241, 0.5);
     cursor: pointer;
-    font-size: 1rem;
-    text-align: left;
-    background: rgba(255,255,255,0.08);
-    color: white;
+    transition: transform 0.1s;
 }
 
-.settings-close-button:hover {
-    background: rgba(255,255,255,0.5);
-    transform: translateY(-1px);
+.settings-range::-webkit-slider-thumb:hover {
+    transform: scale(1.25);
 }
 
-.settings-close-button:active {
-    transform: translateY(+2px);
+.range-value {
+    font-size: 13px;
+    color: #6366f1;
+    font-family: monospace;
+    font-weight: bold;
+    min-width: 28px;
+    text-align: right;
+}
+
+/* トグルスイッチ（チェックボックス） */
+.toggle-switch {
+    position: relative;
+    display: inline-block;
+    width: 44px;
+    height: 24px;
+}
+
+.settings-checkbox {
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+.toggle-slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background-color: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 24px;
+    transition: 0.2s;
+}
+
+.toggle-slider:before {
+    position: absolute;
+    content: "";
+    height: 16px;
+    width: 16px;
+    left: 3px;
+    bottom: 3px;
+    background-color: #94a3b8;
+    border-radius: 50%;
+    transition: 0.2s;
+}
+
+.settings-checkbox:checked + .toggle-slider {
+    background-color: rgba(99, 102, 241, 0.25);
+    border-color: rgba(99, 102, 241, 0.5);
+}
+
+.settings-checkbox:checked + .toggle-slider:before {
+    transform: translateX(20px);
+    background-color: #818cf8;
+    box-shadow: 0 0 8px rgba(99, 102, 241, 0.6);
 }
 
 /* =========================
@@ -673,15 +927,16 @@ button:active {
 @media (max-width: 980px) {
     .content {
         grid-template-columns: 1fr;
-        /* Round 2 修正: 最低高さ固定を廃止 → dvhに追従 */
         grid-template-rows: minmax(0, 1fr) minmax(0, 1.2fr);
     }
 
     .timer {
-        font-size: clamp(42px, 6.8dvh, 80px);
+        font-size: clamp(40px, 6.4dvh, 76px);
     }
 
-    .cube-visual {
+    /* Round 3: twoDCube でスコープを持つので
+       メディアクエリでも twoDCube に上書きする */
+    .twoDCube {
         --cube-size: clamp(40px, min(13vw, 10dvh), 80px);
     }
 }
@@ -717,12 +972,12 @@ button:active {
         border-radius: 20px;
     }
 
-    .cube-visual {
+    .twoDCube {
         --cube-size: clamp(36px, min(14vw, 8.6dvh), 72px);
     }
 
     .timer {
-        font-size: clamp(36px, 6dvh, 64px);
+        font-size: clamp(34px, 5.8dvh, 62px);
     }
 
     .sim-button {
@@ -736,6 +991,12 @@ button:active {
         height: 40px;
         border-radius: 14px;
         font-size: 18px;
+    }
+
+    .frontFaceIndicator {
+        width: clamp(52px, 12%, 80px);
+        height: clamp(52px, 12%, 80px);
+        bottom: clamp(8px, 1.2dvh, 14px);
     }
 }
 
@@ -764,10 +1025,10 @@ button:active {
     }
 
     .timer {
-        font-size: clamp(30px, 5.2dvh, 52px);
+        font-size: clamp(28px, 5dvh, 50px);
     }
 
-    .cube-visual {
+    .twoDCube {
         --cube-size: clamp(32px, min(7vw, 7dvh), 64px);
     }
 
@@ -776,212 +1037,132 @@ button:active {
     .menu-button {
         height: 36px;
     }
+
+    .frontFaceIndicator {
+        width: clamp(48px, 11%, 72px);
+        height: clamp(48px, 11%, 72px);
+        bottom: 8px;
+    }
 }
 
-UIを見直して、没入感のあるUI、ちょうどよいサイズ、配置にしてください。
-画面(ブラウザの標準バーを除く)依存でしっかりと収まるようにしてください。
-現在の問題:frontFaceIndicatorの高さが０になってしまった。
+全体のイメージは変えずに、以下を実行して下さい。
+現在の問題:menu画面のタイトル、設定らへんが不自然。
 改善案:
 他の問題がないかも探り、合った場合は出力して、修正してください。
 見直しと生成を３回繰り返し、３回目に出来上がったものを全て出力してください。 
 htmlはこちらです。必要であればhtmlも変更可能です。変更した場合はそれも出力してください。
 
-Simclassの中身。jsが問題？
-        if (renderFrontFace) {
-            const frontFaceIndicator = document.createElement("div")
-            frontFaceIndicator.id = "frontFaceIndicator"
-            frontFaceIndicator.className = "frontFaceIndicator"
-            this.container.appendChild(frontFaceIndicator)
-            this.frontFaceIndicator = frontFaceIndicator
-        }
-    
 ---
 homePage
         this.element = document.createElement("div")
-
         this.element.classList.add("home-page")
 
         this.element.innerHTML = `
             <div class="glass card hero-card">
                 <h1 class="title">Cube Trainer</h1>
-                <p class="subtitle">
-                    Train Smarter, Solve Faster
-                </p>
-
-                <button class="main-button" id="startButton">
-                    START
-                </button>
+                <p class="subtitle">Train Smarter, Solve Faster</p>
+                <button class="main-button" id="startButton">START</button>
             </div>
         `
 
 ---
 MenuPage
         this.element = document.createElement("div")
-
         this.element.classList.add("menu-page")
 
         this.element.innerHTML = `
-            <div class="glass card menu-card">
-
-                <h1 class="title">Menu</h1>
-
-                <button class="menu-button" id="pllButton">
-                    PLL Trainer
-                </button>
-
-                <button class="menu-button" id="freeButton">
-                    Free Simulator
-                </button>
-
-                <button class="menu-button back-button" id="backButton">
-                    Back
-                </button>
+        <div class="glass card menu-card">
+            <div class="card-header">
+                <div class="card-header-center">
+                    <h1 class="title">Menu</h1>
+                </div>
+                <div class="card-header-right">
+                    <button id="settingsButton" class="icon-button">⚙</button>
+                </div>
+            </div>
+                <button class="menu-button" id="pllButton">PLL Trainer</button>
+                <button class="menu-button" id="freeButton">Free Simulator</button>
+                <button class="menu-button back-button" id="backButton">Back</button>
             </div>
         `
 ---
 PLL Trainer
         this.element = document.createElement("div")
-
         this.element.classList.add("pll-page")
 
         this.element.innerHTML = `
-
             <header class="glass header">
-
                 <button id="backButton">←</button>
-
                 <h1>PLL Trainer</h1>
-
                 <button id="settingsButton">⚙</button>
             </header>
-
             <main class="content">
-
                 <section class="glass problem-area">
-
                     <div class="timer">00:00.000</div>
-
                     <div class="cube-container" id="pllCube"></div>
-
-                    <button class="main-button" id="nextButton">
-                        NEXT
-                    </button>
-
+                    <button class="main-button" id="nextButton">NEXT</button>
                 </section>
-
                 <section class="glass answer-area">
-
                     <div class="twoDCube">
-
                         <div class="cube-visual">
-
                             <div class="cube-rotated">
-
                                 <div class="side-strips top-stripes">
                                     <div class="strip top-cell"></div>
                                     <div class="strip top-cell"></div>
                                     <div class="strip top-cell"></div>
                                 </div>
-
                                 <div class="side-strips left-stripes">
                                     <div class="strip left-cell"></div>
                                     <div class="strip left-cell"></div>
                                     <div class="strip left-cell"></div>
                                 </div>
-
                                 <div class="upper-face-grid center-stripes">
-                                    ${Array.from({ length: 9 }, () =>
-                                        `<div class="cell center-cell"></div>`
-                                    ).join("")}
+                                    ${Array.from({ length: 9 }, () => `<div class="cell center-cell"></div>`).join("")}
                                 </div>
-
                                 <div class="side-strips right-stripes">
                                     <div class="strip right-cell"></div>
                                     <div class="strip right-cell"></div>
                                     <div class="strip right-cell"></div>
                                 </div>
-
                                 <div class="side-strips bottom-stripes">
                                     <div class="strip bottom-cell"></div>
                                     <div class="strip bottom-cell"></div>
                                     <div class="strip bottom-cell"></div>
                                 </div>
-
                             </div>
-
                         </div>
                     </div>
-
-                    <button class="submit-button">
-                        SUBMIT
-                    </button>
-
+                    <button class="submit-button">SUBMIT</button>
                 </section>
-
             </main>
         `
-
 ---
 FreeSim
         this.element = document.createElement("div")
-
         this.element.classList.add("free-page")
 
         this.element.innerHTML = `
-
             <header class="glass header">
-
                 <button id="backButton">←</button>
-
                 <h1>Free Simulator</h1>
-
-                <button>⚙</button>
+                <button id="settingsButton">⚙</button>
             </header>
-
             <main class="free-content">
-
                 <div class="free-layout">
-
-                    <div class="glass simulator-container-wrapper">
-
-                        <div
-                            class="glass simulator-container"
-                            id="freeCube">
-                        </div>
-
+                    <div class="simulator-container-wrapper">
+                        <div class="glass simulator-container" id="freeCube"></div>
                         <div class="control-overlay">
-
                             <div class="control-group left-controls">
-
-                                <button class="sim-button" id="resetButton">
-                                    Reset
-                                </button>
-
-                                <button class="sim-button" id="scrambleButton">
-                                    Scramble
-                                </button>
+                                <button class="sim-button" id="resetButton">Reset</button>
+                                <button class="sim-button" id="scrambleButton">Scramble</button>
                             </div>
-
                             <div class="control-group right-controls">
-
-                                <button class="icon-button" id="undoButton">
-                                    ↶
-                                </button>
-
-                                <button class="icon-button stop-button" id="stopButton">
-                                    ■
-                                </button>
-
-                                <button class="icon-button" id="redoButton">
-                                    ↷
-                                </button>
+                                <button class="icon-button" id="undoButton">↶</button>
+                                <button class="icon-button stop-button" id="stopButton">■</button>
+                                <button class="icon-button" id="redoButton">↷</button>
                             </div>
-
                         </div>
-
                     </div>
-
                 </div>
-
             </main>
         `

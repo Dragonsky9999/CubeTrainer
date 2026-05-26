@@ -48,16 +48,14 @@ Simulatorでは、3Dルービックキューブシミュレータそのものを
 
 など、キューブ操作の基盤システムを実装しています。
 
-内部設計では、「Cubeのみが状態を保持する」という構造を採用しています。
-
-Rendererは表示のみ、
+内部設計では、Rendererは表示のみ、
 Animatorはアニメーションのみを担当するなど、
 各要素の責務を分離することで、
 拡張性や保守性を高めています。
 
 また、
 
-Input → MoveOrchestrator → Cube → Renderer
+Input → Sim → Cube → Renderer
 
 という統一された処理構造を採用しています。
 
@@ -66,17 +64,6 @@ Input → MoveOrchestrator → Cube → Renderer
 
 これにより、視点変更後でも直感的に操作でき、
 従来のキューブアプリにはない操作感を実現しています。
-
-現在は、
-
-・回転アニメーション
-・Moveシステム
-・ViewRotation基盤
-・入力処理
-・3D描画
-・2D UI同期
-
-などを中心に開発を進めています。
 
 ------------------------------------------------------------
 
@@ -92,6 +79,7 @@ Input → MoveOrchestrator → Cube → Renderer
 - PageManager管理
 - UIイベント接続
 - 起動管理
+-config maneger
 
 ------------------------------------------------------------
 
@@ -154,3 +142,28 @@ tree構造
     └── main.js
 
 ------------------------------------------------------------
+# アプリ進捗
+
+## 全体
+・ページ遷移
+・UI統一
+・設定Manager
+
+## PLLTrainer
+・problemArea&answerArea
+・正誤判定
+
+## freeSim
+・キー入力
+・scramble,reset,undo,redoボタン
+
+# App側課題
+・Simと設定同期
+・description 
+・学習記録
+
+# Sim側課題
+・Moveクラス実装
+・設定システム構築
+・入力処理(ドラッグで)
+・(多分割)(かなり後で)

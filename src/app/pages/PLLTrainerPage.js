@@ -1,35 +1,38 @@
-import { Sim } from "../../../Sim/src/app/index.js";
-import { cubeColors } from "../../../Sim/src/data/data.js";
-import { PllAlgs } from "../../../Sim/src/domain/index.js";
-import { SettingsOverlay } from "../ui/SettingsOverlay.js";
-import { configManager } from "../config/ConfigManager.js";
+import { Sim } from "../../../Sim/src/app/index.js"
+import { cubeColors } from "../../../Sim/src/data/data.js"
+import { PllAlgs } from "../../../Sim/src/domain/index.js"
+import { SettingsOverlay } from "../ui/SettingsOverlay.js"
+import { configManager } from "../config/ConfigManager.js"
+import { DescriptionOverlay } from "../ui/DescriptionOverlay.js"
 
 export class PLLTrainerPage {
     constructor(pageManager) {
-        this.pageManager = pageManager;
-        this.settingsOverlay = new SettingsOverlay(configManager);
+        this.pageManager = pageManager
+        this.settingsOverlay = new SettingsOverlay(configManager)
+        this.descriptionsOverlay = new DescriptionOverlay()
 
         this.loop = new Loop((time) => {
-            this.timer.update();
+            this.timer.update()
             
             // 安全対策：Simが未初期化、または破棄された状態でのクラッシュを回避
             if (this.Sim && typeof this.Sim.frontIndex !== 'undefined') {
-                this.cells.update(this.Sim.frontIndex);
+                this.cells.update(this.Sim.frontIndex)
             }
 
             // 設定システム連動：ミリ秒の表示/非表示の切り替え
-            this.timerEl.innerHTML = this.timer.format(configManager.get("showTimerMillis"));
-        });
+            this.timerEl.innerHTML = this.timer.format(configManager.get("showTimerMillis"))
+        })
     }
 
     render() {
-        this.element = document.createElement("div");
-        this.element.classList.add("pll-page");
+        this.element = document.createElement("div")
+        this.element.classList.add("pll-page")
 
         this.element.innerHTML = `
             <header class="glass header">
                 <button id="backButton">←</button>
                 <h1>PLL Trainer</h1>
+                <button id="descriptionsButton">?</button>
                 <button id="settingsButton">⚙</button>
             </header>
             <main class="content">
@@ -71,348 +74,353 @@ export class PLLTrainerPage {
                     <button class="submit-button">SUBMIT</button>
                 </section>
             </main>
-        `;
-        return this.element;
+        `
+        return this.element
     }
 
     mount() {
-        this.timer = new Timer();
-        this.timerEl = this.element.querySelector(".timer");
+        this.timer = new Timer()
+        this.timerEl = this.element.querySelector(".timer")
         
-        this.cells = new Cells(this.element);
-        this.cells.init();
+        this.cells = new Cells(this.element)
+        this.cells.init()
 
-        this.cells.cellMap = new Map();
-        const dirs = ["top", "left", "right", "bottom"];
+        this.cells.cellMap = new Map()
+        const dirs = ["top", "left", "right", "bottom"]
         dirs.forEach(dir => {
             this.cells[dir].forEach(cell => {
-                this.cells.cellMap.set(cell.dom, cell);
-            });
-        });
+                this.cells.cellMap.set(cell.dom, cell)
+            })
+        })
 
-        this.setupCube();
-        this.setupEvents();
-        this.setupConfigHooks();
+        this.setupCube()
+        this.setupEvents()
+        this.setupConfigHooks()
     }
     
     // 設定変更時のリアクティブ処理
     setupConfigHooks() {
         configManager.onChange("animationSpeed", (value) => {
             if (this.Sim && this.Sim.animator) {
-                this.Sim.animator.duration = value;
+                this.Sim.animator.duration = value
             }
-        });
+        })
     }
 
     activate() {
-        this.nextProblem();
-        this.loop.start();
+        this.nextProblem()
+        this.loop.start()
     }
 
     deactivate() {
-        this.loop.stop();
+        this.loop.stop()
     }
+    
 
     setupEvents() {
         this.element.querySelector("#backButton").addEventListener("click", () => {
-            this.pageManager.show("menu");
-        });
+            this.pageManager.show("menu")
+        })
 
         this.element.querySelector("#nextButton").addEventListener("click", () => {
-            this.nextProblem();
-        });
+            this.nextProblem()
+        })
 
         this.element.querySelector(".submit-button").addEventListener("click", () => {
-            this.submit();
-        });
+            this.submit()
+        })
 
         // ページ専用の設定（trainerカテゴリのみ抽出）
         this.element.querySelector("#settingsButton").addEventListener("click", () => {
-            this.settingsOverlay.open(this.element, "PLLTrainer");
-        });
+            this.settingsOverlay.open(this.element, "PLLTrainer")
+        })
+        
+        this.element.querySelector("#descriptionsButton").addEventListener("click", () => {
+            this.descriptionsOverlay.open(this.element, "PLLTrainer")
+        })
 
-        const dirs = ["top", "left", "right", "bottom"];
+        const dirs = ["top", "left", "right", "bottom"]
         dirs.forEach(dir => {
             this.cells[dir].forEach(c => {
                 c.dom.addEventListener("click", () => {
-                    this.cells.changeColor(c);
-                });
-            });
-        });
+                    this.cells.changeColor(c)
+                })
+            })
+        })
 
         this.element.addEventListener("wheel", (e) => {
-            const target = this.cells.cellMap.get(e.target);
+            const target = this.cells.cellMap.get(e.target)
             if (target) {
-                e.preventDefault();
-                this.cells.changeColor(target, { dir: Math.sign(e.deltaY) });
+                e.preventDefault()
+                this.cells.changeColor(target, { dir: Math.sign(e.deltaY) })
             }
-        }, { passive: false });
+        }, { passive: false })
     }
 
     setupCube() {
-        const sceneContainer = this.element.querySelector("#pllCube");
-        this.Sim = new Sim(sceneContainer, { renderFrontFace: false });
-        this.Sim.enableKeyboard = false;
-        this.Sim.loop.start();
+        const sceneContainer = this.element.querySelector("#pllCube")
+        this.Sim = new Sim(sceneContainer, { renderFrontFace: false })
+        this.Sim.enableKeyboard = false
+        this.Sim.loop.start()
 
-        const cubies = this.Sim.cube.Cubies;
-        const types = { "corner": 8, "edge": 12, "center": 6 };
+        const cubies = this.Sim.cube.Cubies
+        const types = { "corner": 8, "edge": 12, "center": 6 }
         for (const [type, length] of Object.entries(types)) {
             for (let i = 0; i < length; i++) {
-                cubies.state[type][i].sticker = false;
+                cubies.state[type][i].sticker = false
             }
         }
         for (let i = 0; i < 4; i++) {
-            cubies.state.corner[i].sticker = true;
-            cubies.state.edge[i].sticker = true;
+            cubies.state.corner[i].sticker = true
+            cubies.state.edge[i].sticker = true
         }    
-        cubies.state.center[2].sticker = true;
+        cubies.state.center[2].sticker = true
     }
  
     nextProblem() {
-        this.cells.reset();
+        this.cells.reset()
         
-        const AUF = ["U", "U'", "U2", ""][Math.floor(Math.random() * 4)];
-        if (AUF !== "") this.Sim.applyMove(AUF);
+        const AUF = ["U", "U'", "U2", ""][Math.floor(Math.random() * 4)]
+        if (AUF !== "") this.Sim.applyMove(AUF)
             
         // バグ修正: PLLIndex（連想配列）のキー配列を取得して安全にランダム抽出
-        const keys = Object.keys(PLLIndex);
-        const tmp = keys[Math.floor(Math.random() * keys.length)];
-        const PLL = PllAlgs[PLLIndex[tmp]][0];
+        const keys = Object.keys(PLLIndex)
+        const tmp = keys[Math.floor(Math.random() * keys.length)]
+        const PLL = PllAlgs[PLLIndex[tmp]][0]
 
-        this.Sim.reset();
-        this.Sim.applyMoves(PLL);
-        this.Sim.renderer.camera.position.set(1.49 * 2, 1.49 * 2, 1.49 * 2);
+        this.Sim.reset()
+        this.Sim.applyMoves(PLL)
+        this.Sim.renderer.camera.position.set(1.49 * 2, 1.49 * 2, 1.49 * 2)
  
-        this.timer.reset();
-        this.timer.start();
-        this.cells.setCorrectColor(this.Sim.cube);
+        this.timer.reset()
+        this.timer.start()
+        this.cells.setCorrectColor(this.Sim.cube)
     }
 
     submit() {
-        const result = this.checkAnswer();
-        this.showResult(result);
+        const result = this.checkAnswer()
+        this.showResult(result)
     }
 
     checkAnswer() {
-        const correctCells = [];
-        const wrongCells = [];
-        const dirs = ["top", "left", "right", "bottom"];
+        const correctCells = []
+        const wrongCells = []
+        const dirs = ["top", "left", "right", "bottom"]
 
         dirs.forEach((tlrb, i) => {
             for (const cell of this.cells[tlrb]) {
                 if (cell.isCorrect()) {
-                    correctCells.push(cell.index + (i * 10));
+                    correctCells.push(cell.index + (i * 10))
                 } else {
-                    wrongCells.push(cell.index + (i * 10));
+                    wrongCells.push(cell.index + (i * 10))
                 }
             }
-        });
+        })
 
         return {
             correct: wrongCells.length === 0,
             correctCells: correctCells,
             wrongCells: wrongCells,
-        };
+        }
     }
 
     showResult(result) {
-        const { correct } = result;
-        const dirs = ["top", "left", "right", "bottom"];
+        const { correct } = result
+        const dirs = ["top", "left", "right", "bottom"]
         dirs.forEach(dir => {
             this.cells[dir].forEach(cell => {
-                cell.highlightColor();
-            });
-        });
+                cell.highlightColor()
+            })
+        })
 
         if (correct) {
-            this.timer.stop();
+            this.timer.stop()
             setTimeout(() => {
-                this.nextProblem();
-            }, 2000);
+                this.nextProblem()
+            }, 2000)
         }
     }
 }
 
 function toHexColor(num) {
-    return "#" + num.toString(16).padStart(6, "0");
+    return "#" + num.toString(16).padStart(6, "0")
 }
 
 const faceToColors = {
     "+X": toHexColor(cubeColors[0]), "-X": toHexColor(cubeColors[1]),
     "+Y": toHexColor(cubeColors[2]), "-Y": toHexColor(cubeColors[3]),
     "+Z": toHexColor(cubeColors[4]), "-Z": toHexColor(cubeColors[5]),
-};
+}
 
 const PLLIndex = {
     0: "Ua", 1: "Ub", 2: "Aa", 3: "Ab", 4: "H", 5: "Z", 6: "E", 7: "F",
     8: "Ja", 9: "Jb", 10: "Ra", 11: "Rb", 12: "T", 13: "Y", 14: "V",
     15: "Na", 16: "Nb", 17: "Ga", 18: "Gb", 19: "Gc", 20: "Gd",
-};
+}
 
 class Cells {
     constructor(element) {
-        this.element = element;
-        this.top = []; this.left = []; this.right = []; this.bottom = []; this.center = [];
+        this.element = element
+        this.top = []; this.left = []; this.right = []; this.bottom = []; this.center = []
     }
 
     init() {
-        const dirs = ["top", "left", "right", "bottom", "center"];
+        const dirs = ["top", "left", "right", "bottom", "center"]
         dirs.forEach(dir => {
-            const doms = this.element.querySelectorAll(`.${dir}-cell`);
-            this[dir] = Array.from(doms).map((dom, i) => new Cell(dom, i));
-        });
+            const doms = this.element.querySelectorAll(`.${dir}-cell`)
+            this[dir] = Array.from(doms).map((dom, i) => new Cell(dom, i))
+        })
 
         this.center.forEach(centerCell => {
-            centerCell.setUserColor(toHexColor(cubeColors[2]));
-            centerCell.setCorrectColor(toHexColor(cubeColors[2]));
-        });
+            centerCell.setUserColor(toHexColor(cubeColors[2]))
+            centerCell.setCorrectColor(toHexColor(cubeColors[2]))
+        })
     }
 
     setCorrectColor(cube) {
-        const cubeState = cube.state;
-        const cubieState = cube.Cubies.state;
+        const cubeState = cube.state
+        const cubieState = cube.Cubies.state
         
-        for (let i = 0; i < 3; i++) this["top"][i].setCorrectColor([faceToColors[cubieState.corner[cubeState.CP[2]].colors[2]], faceToColors[cubieState.edge[cubeState.EP[3]].colors[1]], faceToColors[cubieState.corner[cubeState.CP[3]].colors[1]]][i]);
-        for (let i = 0; i < 3; i++) this["left"][i].setCorrectColor([faceToColors[cubieState.corner[cubeState.CP[2]].colors[0]], faceToColors[cubieState.edge[cubeState.EP[2]].colors[0]], faceToColors[cubieState.corner[cubeState.CP[1]].colors[0]]][i]);
-        for (let i = 0; i < 3; i++) this["right"][i].setCorrectColor([faceToColors[cubieState.corner[cubeState.CP[3]].colors[0]], faceToColors[cubieState.edge[cubeState.EP[0]].colors[0]], faceToColors[cubieState.corner[cubeState.CP[0]].colors[0]]][i]);
-        for (let i = 0; i < 3; i++) this["bottom"][i].setCorrectColor([faceToColors[cubieState.corner[cubeState.CP[1]].colors[1]], faceToColors[cubieState.edge[cubeState.EP[1]].colors[1]], faceToColors[cubieState.corner[cubeState.CP[0]].colors[2]]][i]);
+        for (let i = 0; i < 3; i++) this["top"][i].setCorrectColor([faceToColors[cubieState.corner[cubeState.CP[2]].colors[2]], faceToColors[cubieState.edge[cubeState.EP[3]].colors[1]], faceToColors[cubieState.corner[cubeState.CP[3]].colors[1]]][i])
+        for (let i = 0; i < 3; i++) this["left"][i].setCorrectColor([faceToColors[cubieState.corner[cubeState.CP[2]].colors[0]], faceToColors[cubieState.edge[cubeState.EP[2]].colors[0]], faceToColors[cubieState.corner[cubeState.CP[1]].colors[0]]][i])
+        for (let i = 0; i < 3; i++) this["right"][i].setCorrectColor([faceToColors[cubieState.corner[cubeState.CP[3]].colors[0]], faceToColors[cubieState.edge[cubeState.EP[0]].colors[0]], faceToColors[cubieState.corner[cubeState.CP[0]].colors[0]]][i])
+        for (let i = 0; i < 3; i++) this["bottom"][i].setCorrectColor([faceToColors[cubieState.corner[cubeState.CP[1]].colors[1]], faceToColors[cubieState.edge[cubeState.EP[1]].colors[1]], faceToColors[cubieState.corner[cubeState.CP[0]].colors[2]]][i])
 
         for (let i = 0; i < 3; i++) {
-            this["right"][i].isopen = true;
-            this["bottom"][i].isopen = true;
+            this["right"][i].isopen = true
+            this["bottom"][i].isopen = true
         }
     }
 
     reset() {
-        const dirs = ["top", "left", "right", "bottom"];
+        const dirs = ["top", "left", "right", "bottom"]
         dirs.forEach(dir => {
-            this[dir].forEach(cell => cell.reset());
-        });
+            this[dir].forEach(cell => cell.reset())
+        })
     }
 
     update(frontIndex) {
-        const dirs = ["top", "left", "right", "bottom"];
+        const dirs = ["top", "left", "right", "bottom"]
         dirs.forEach(dir => {
             this[dir].forEach(cell => {
-                if (cell.isopen) cell.setUserColor(cell.correctColor);
-            });
-        });
+                if (cell.isopen) cell.setUserColor(cell.correctColor)
+            })
+        })
 
-        const faceToSideCells = { 4: "bottom", 0: "right", 5: "top", 1: "left" };
+        const faceToSideCells = { 4: "bottom", 0: "right", 5: "top", 1: "left" }
         this[faceToSideCells[frontIndex]].forEach(cell => {
-            if (cell.isopen) return;
-            cell.isopen = true;
-        });        
+            if (cell.isopen) return
+            cell.isopen = true
+        })        
     }
     
     changeColor(cell, { dir = 1 } = {}) {
-        if (cell.isfinished) return;
-        cell.dom.textContent = "";
+        if (cell.isfinished) return
+        cell.dom.textContent = ""
 
-        const sideIndex = [4, 0, 5, 1];
-        const sideColors = sideIndex.map(i => toHexColor(cubeColors[i]));
+        const sideIndex = [4, 0, 5, 1]
+        const sideColors = sideIndex.map(i => toHexColor(cubeColors[i]))
 
         if (!cell.userColor) {
-            const first = dir === 1 ? 0 : 3;
-            cell.setUserColor(sideColors[first]);
-            return;
+            const first = dir === 1 ? 0 : 3
+            cell.setUserColor(sideColors[first])
+            return
         }
             
-        let i = sideColors.indexOf(cell.userColor);
-        if (i === -1) i = 0;
-        const next = (i + dir + 4) % 4;
-        cell.setUserColor(sideColors[next]);
+        let i = sideColors.indexOf(cell.userColor)
+        if (i === -1) i = 0
+        const next = (i + dir + 4) % 4
+        cell.setUserColor(sideColors[next])
     }
 }
 
 class Cell {
     constructor(dom, index) {
-        this.dom = dom;
-        this.index = index;
-        this.dom.style.fontSize = "35px";
-        this.dom.style.fontWeight = "bold";
-        this.dom.style.display = "flex";
-        this.dom.style.fontFamily = "Arial Black";
-        this.dom.style.justifyContent = "center";
-        this.dom.style.alignItems = "center";
-        this.reset();
+        this.dom = dom
+        this.index = index
+        this.dom.style.fontSize = "35px"
+        this.dom.style.fontWeight = "bold"
+        this.dom.style.display = "flex"
+        this.dom.style.fontFamily = "Arial Black"
+        this.dom.style.justifyContent = "center"
+        this.dom.style.alignItems = "center"
+        this.reset()
     }
 
     setUserColor(color) {
-        this.userColor = color;
-        this.dom.style.background = color;
+        this.userColor = color
+        this.dom.style.background = color
     }
 
     setCorrectColor(color) {
-        this.correctColor = color;
+        this.correctColor = color
     }
 
     isCorrect() {
-        return this.userColor === this.correctColor;
+        return this.userColor === this.correctColor
     }
 
     highlightColor() {
         if (this.isCorrect()) {
-            this.dom.textContent = "✓";
-            this.dom.style.color = "green";
-            this.dom.style.boxShadow = "0 0 20px #00ff00";
-            this.isfinished = true;
+            this.dom.textContent = "✓"
+            this.dom.style.color = "green"
+            this.dom.style.boxShadow = "0 0 20px #00ff00"
+            this.isfinished = true
         } else {
-            this.setUserColor(null);
-            this.dom.textContent = "❌";
-            this.dom.style.boxShadow = "0 0 20px #ff3333";
+            this.setUserColor(null)
+            this.dom.textContent = "❌"
+            this.dom.style.boxShadow = "0 0 20px #ff3333"
         }
     }
 
     reset() {
-        this.dom.style.background = null;
-        this.dom.textContent = null;
-        this.dom.style.boxShadow = null;
-        this.userColor = null;
-        this.correctColor = null;
-        this.isopen = null;
-        this.isfinished = false;
+        this.dom.style.background = null
+        this.dom.textContent = null
+        this.dom.style.boxShadow = null
+        this.userColor = null
+        this.correctColor = null
+        this.isopen = null
+        this.isfinished = false
     }
 }
 
 class Loop {
     constructor(callback) {
-        this.callback = callback;
-        this.running = false;
-        this.id = null;
+        this.callback = callback
+        this.running = false
+        this.id = null
     }
     start() {
-        if (this.running) return;
-        this.running = true;
+        if (this.running) return
+        this.running = true
         const tick = (time) => {
-            if (!this.running) return;
-            this.callback(time);
-            this.id = requestAnimationFrame(tick);
-        };
-        this.id = requestAnimationFrame(tick);
+            if (!this.running) return
+            this.callback(time)
+            this.id = requestAnimationFrame(tick)
+        }
+        this.id = requestAnimationFrame(tick)
     }
     stop() {
-        this.running = false;
-        cancelAnimationFrame(this.id);
+        this.running = false
+        cancelAnimationFrame(this.id)
     }
 }
 
 class Timer {
-    constructor() { this.reset(); }
-    start() { if (this.running) return; this.startTime = performance.now() - this.elapsed; this.running = true; }
-    update() { if (!this.running) return; this.elapsed = performance.now() - this.startTime; }
-    stop() { if (!this.running) return; this.update(); this.running = false; }
-    reset() { this.startTime = 0; this.elapsed = 0; this.running = false; }
+    constructor() { this.reset() }
+    start() { if (this.running) return this.startTime = performance.now() - this.elapsed; this.running = true }
+    update() { if (!this.running) return this.elapsed = performance.now() - this.startTime }
+    stop() { if (!this.running) return this.update(); this.running = false }
+    reset() { this.startTime = 0; this.elapsed = 0; this.running = false }
     
     // 引数でミリ秒精度を丸める拡張を実装
     format(showMillis = true) {
-        const ms = Math.floor(this.elapsed % 1000);
-        const sec = Math.floor(this.elapsed / 1000) % 60;
-        const min = Math.floor(this.elapsed / 60000);
+        const ms = Math.floor(this.elapsed % 1000)
+        const sec = Math.floor(this.elapsed / 1000) % 60
+        const min = Math.floor(this.elapsed / 60000)
         if (!showMillis) {
-            return `${String(min).padStart(2, "0")}:${String(sec).padStart(2, "0")}`;
+            return `${String(min).padStart(2, "0")}:${String(sec).padStart(2, "0")}`
         }
-        return `${String(min).padStart(2, "0")}:${String(sec).padStart(2, "0")}.${String(ms).padStart(3, "0")}`;
+        return `${String(min).padStart(2, "0")}:${String(sec).padStart(2, "0")}.${String(ms).padStart(3, "0")}`
     }
 }

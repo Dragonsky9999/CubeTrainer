@@ -1,7 +1,7 @@
 export class ConfigManager {
     constructor() {
         if (ConfigManager.instance) {
-            return ConfigManager.instance;
+            return ConfigManager.instance
         }
 
         // 1. 全設定項目の一元定義 (ここを編集するだけで項目を追加・変更可能)
@@ -19,60 +19,60 @@ export class ConfigManager {
             scrambleLength: { category: "PLLTrainer", label: "Scramble Length", type: "range", min: 10, max: 30, step: 1, value: 20 },
             inspectionTime: { category: "PLLTrainer", label: "Inspection (sec)", type: "select", options: ["None", "8", "15"], value: "None" },
             showTimerMillis: { category: "PLLTrainer", label: "Show Milliseconds", type: "boolean", value: true }
-        };
+        }
 
         // 実行時状態の保存
-        this.settings = {};
+        this.settings = {}
         Object.keys(this.configSchema).forEach(key => {
-            this.settings[key] = this.configSchema[key].value;
-        });
+            this.settings[key] = this.configSchema[key].value
+        })
 
         // リスナー（コールバック群）の保持
-        this.listeners = new Map();
+        this.listeners = new Map()
 
-        ConfigManager.instance = this;
+        ConfigManager.instance = this
     }
 
     // 値の取得
     get(key) {
-        return this.settings[key];
+        return this.settings[key]
     }
 
     // 値の設定とリスナーへの通知
     set(key, value) {
-        if (this.settings[key] === value) return;
+        if (this.settings[key] === value) return
         
         // 型の整合性を維持
         if (this.configSchema[key].type === "range") {
-            value = Number(value);
+            value = Number(value)
         } else if (this.configSchema[key].type === "boolean") {
-            value = value === true || value === "true";
+            value = value === true || value === "true"
         }
 
-        this.settings[key] = value;
+        this.settings[key] = value
 
         // 個別キーの変更を通知
         if (this.listeners.has(key)) {
-            this.listeners.get(key).forEach(callback => callback(value));
+            this.listeners.get(key).forEach(callback => callback(value))
         }
         // 全体変更リスナーの通知
         if (this.listeners.has("*")) {
-            this.listeners.get("*").forEach(callback => callback(key, value));
+            this.listeners.get("*").forEach(callback => callback(key, value))
         }
     }
 
     // スキーマの取得（UI生成用）
     getSchema() {
-        return this.configSchema;
+        return this.configSchema
     }
 
     // 設定変更時のフック処理（各ページやSimから登録する）
     onChange(key, callback) {
         if (!this.listeners.has(key)) {
-            this.listeners.set(key, []);
+            this.listeners.set(key, [])
         }
-        this.listeners.get(key).push(callback);
+        this.listeners.get(key).push(callback)
     }
 }
 
-export const configManager = new ConfigManager();
+export const configManager = new ConfigManager()
