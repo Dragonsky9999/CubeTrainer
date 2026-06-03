@@ -100,10 +100,10 @@ export class PLLTrainerPage {
     
     // 設定変更時のリアクティブ処理
     setupConfigHooks() {
-        configManager.onChange("animationSpeed", (value) => {
-            if (this.Sim && this.Sim.animator) {
-                this.Sim.animator.duration = value
-            }
+        configManager.onChange("answerCellAngle", (value) => {
+            const cubeRotate = this.element.querySelector(".cube-rotated")
+            if (value == "0") cubeRotate.style.transform = "rotate(0deg)"
+            if (value == "45") cubeRotate.style.transform = "rotate(45deg)"
         })
     }
 
@@ -159,8 +159,9 @@ export class PLLTrainerPage {
 
     setupCube() {
         const sceneContainer = this.element.querySelector("#pllCube")
-        this.Sim = new Sim(sceneContainer, { renderFrontFace: false })
+        this.Sim = new Sim(sceneContainer)
         this.Sim.enableKeyboard = false
+        this.Sim.settingsManager.set("renderFrontFace", false)
         this.Sim.loop.start()
 
         const cubies = this.Sim.cube.Cubies
@@ -408,19 +409,17 @@ class Loop {
 
 class Timer {
     constructor() { this.reset() }
-    start() { if (this.running) return this.startTime = performance.now() - this.elapsed; this.running = true }
-    update() { if (!this.running) return this.elapsed = performance.now() - this.startTime }
-    stop() { if (!this.running) return this.update(); this.running = false }
+    start() { if (!this.running) this.startTime = performance.now(); this.running = true }
+    update() { if (this.running) this.elapsed = performance.now() - this.startTime }
+    stop() { this.update(); this.running = false }
     reset() { this.startTime = 0; this.elapsed = 0; this.running = false }
     
     // 引数でミリ秒精度を丸める拡張を実装
     format(showMillis = true) {
-        const ms = Math.floor(this.elapsed % 1000)
-        const sec = Math.floor(this.elapsed / 1000) % 60
-        const min = Math.floor(this.elapsed / 60000)
-        if (!showMillis) {
-            return `${String(min).padStart(2, "0")}:${String(sec).padStart(2, "0")}`
-        }
-        return `${String(min).padStart(2, "0")}:${String(sec).padStart(2, "0")}.${String(ms).padStart(3, "0")}`
+        const ms = String(Math.floor(this.elapsed % 1000)).padStart(3, "0")
+        const sec = String(Math.floor(this.elapsed / 1000) % 60).padStart(2, "0")
+        const min = String(Math.floor(this.elapsed / 60000)).padStart(2, "0")
+        if (!showMillis) return `<span>${min}</span><span class="timer-sep">:</span><span>${sec}</span>`
+        return `<span>${min}</span><span class="timer-sep">:</span><span>${sec}</span><span class="timer-sep">.</span><span>${ms}</span>`
     }
 }

@@ -11,14 +11,12 @@ export class ConfigManager {
             soundVolume: { category: "general", label: "Sound Volume", type: "range", min: 0, max: 100, step: 5, value: 50 },
             
             // freeSim設定
-            tpsLimit: { category: "freeSim", label: "TPS Limit (UPS)", type: "select", options: ["60", "120", "Unlimited"], value: "Unlimited" },
-            animationSpeed: { category: "freeSim", label: "Rotation Speed (ms)", type: "range", min: 50, max: 500, step: 25, value: 150 },
+            animationDuration: { category: "freeSim", label: "Animate duration (ms)", type: "range", min: 50, max: 500, step: 25, value: 250 },
             showFrontIndicator: { category: "freeSim", label: "Show Front Guide", type: "boolean", value: true },
 
             // PLLTrainer設定
-            scrambleLength: { category: "PLLTrainer", label: "Scramble Length", type: "range", min: 10, max: 30, step: 1, value: 20 },
-            inspectionTime: { category: "PLLTrainer", label: "Inspection (sec)", type: "select", options: ["None", "8", "15"], value: "None" },
-            showTimerMillis: { category: "PLLTrainer", label: "Show Milliseconds", type: "boolean", value: true }
+            showTimerMillis: { category: "PLLTrainer", label: "Show Milliseconds", type: "boolean", value: true },
+            answerCellAngle: { category: "PLLTrainer", label: "Answer grid angle", type: "select", options: ["0", "45"], value: "45"},
         }
 
         // 実行時状態の保存

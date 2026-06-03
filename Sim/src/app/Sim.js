@@ -4,11 +4,14 @@ import { InputController } from "../input/index.js"
 import { updateFrontFace } from "../render/index.js"
 import { moveDefs } from "../domain/index.js"
 import { flipSuffix } from "../input/index.js"
+import { SimulatorConfig } from "../settings/SimulatorConfig.js"
 
 export class Sim {
-    constructor(container,{ renderFrontFace = true } = {}){
+    constructor(container){
         this.container = container
         this.enableKeyboard = true
+
+        this.settingsManager = new SimulatorConfig()
         
         //cube&renderer作成
         this.cube = new Cube()
@@ -32,15 +35,7 @@ export class Sim {
         this.loop = new Loop((time) => {
             this.update()
         })
-
-        if (renderFrontFace) {
-            const frontFaceIndicator = document.createElement("div")
-            frontFaceIndicator.id = "frontFaceIndicator"
-            frontFaceIndicator.className = "frontFaceIndicator"
-            this.container.appendChild(frontFaceIndicator)
-            this.frontFaceIndicator = frontFaceIndicator
-        }
-    
+            
         this.input = new InputController()
         window.addEventListener("keydown", e => {
             if (!this.enableKeyboard) return
@@ -53,6 +48,15 @@ export class Sim {
             if (!this.enableKeyboard) return
             this.input.handleKeyUp(e)
         })
+
+        this.bindConfig()
+    }
+
+    bindConfig() {
+        for (const [key, def] of Object.entries(this.settingsManager.schema)) {
+            this.settingsManager.onChange(key, v => def.apply(v, this))
+            def.apply(this.settingsManager.get(key),this)
+        }
     }
 
     enqueue(move,{recordHistory = true, clearRedo = true} = {}){
@@ -191,7 +195,24 @@ export class Sim {
         
         this.frontIndex = this.renderer.bestFace
         this.face = this.cube.state.CenterP[this.frontIndex]
-        if (this.frontFaceIndicator) updateFrontFace(this.face,this.frontFaceIndicator)
+        if (this.isRenderFrontFace) updateFrontFace(this.face,this.frontFaceIndicator)
+        
+    }
+
+
+
+
+    //設定
+    setShowFrontFace(value){
+        this.isRenderFrontFace = value
+        if (this.isRenderFrontFace){
+            this.frontFaceIndicator = document.createElement("div")
+            this.frontFaceIndicator.id = "frontFaceIndicator"
+            this.frontFaceIndicator.className = "frontFaceIndicator"
+            this.container.appendChild(this.frontFaceIndicator)
+        }else {
+            this.frontFaceIndicator.remove()
+        }
     }
 }
 

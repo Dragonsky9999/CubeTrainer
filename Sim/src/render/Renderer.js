@@ -58,6 +58,12 @@ export class Renderer {
         
         // -- resize検知 --//
         this.initResizeObserver(container)
+
+
+
+
+        //各種値
+        this.duration = 250;
     }
 
     initResizeObserver(container) {
@@ -117,7 +123,7 @@ export class Renderer {
 
             const axis = new THREE.Vector3(...def.axis)
 
-            const duration = 250
+            const duration = this.duration
             const start = performance.now()
 
             let prevAngle = 0
@@ -167,6 +173,14 @@ export class Renderer {
 
         this.scene.clear()
         this.renderer.domElement.remove()
+    }
+
+
+
+
+    //各種値set
+    setDuration(v){
+        this.duration = v
     }
 }
 

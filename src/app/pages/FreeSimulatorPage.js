@@ -50,12 +50,11 @@ export class FreeSimulatorPage {
     }  
 
     setupConfigHooks() {
-        // 設定システム連動: ガイド表示のリアルタイム切り替えフック
-        configManager.onChange("showFrontIndicator", (value) => {
-            if (this.Sim && this.Sim.renderer) {
-                // シミュレータ側のIndicator表示フラグを制御
-                this.Sim.renderFrontFace = value
-            }
+        configManager.onChange("animationDuration", (value) => {
+                this.Sim.settingsManager.set("duration", value)
+        })
+        configManager.onChange("showFrontIndicator", (value) => {    
+            this.Sim.settingsManager.set("renderFrontFace", value)
         })
     }
 

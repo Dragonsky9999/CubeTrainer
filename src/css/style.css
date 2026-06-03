@@ -316,7 +316,9 @@ button:active {
    Timer
 ========================= */
 
+
 .timer {
+    font-family: 'Chakra Petch', 'Oswald', sans-serif;
     text-align: center;
     font-size: clamp(44px, 6.8dvh, 92px);
     font-weight: 900;
@@ -328,6 +330,7 @@ button:active {
         0 0 26px rgba(255,255,255,0.24),
         0 0 48px rgba(99,102,241,0.22);
 }
+
 
 /* =========================
    Cube Container (3D)

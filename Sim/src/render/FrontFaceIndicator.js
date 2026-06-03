@@ -13,4 +13,3 @@ const colorMap = {
     4: cubeColors[4],
     5: cubeColors[5],
 }
-

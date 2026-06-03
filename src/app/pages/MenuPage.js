@@ -45,7 +45,7 @@ export class MenuPage {
             this.settingsOverlay.open(this.element, "all")
         })
         this.element.querySelector("#descriptionButton").addEventListener("click", () => {
-            this.DescriptionOverlay.open(this.element,"FreeSim")
+            this.DescriptionOverlay.open(this.element)
         })
     }
 }
